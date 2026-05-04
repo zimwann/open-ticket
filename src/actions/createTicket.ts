@@ -10,7 +10,7 @@ const lang = opendiscord.languages
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:create-ticket"))
     opendiscord.actions.get("opendiscord:create-ticket").workers.add([
-        new api.ODWorker("opendiscord:create-ticket",3,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:create-ticket",3,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
 
             await opendiscord.events.get("onTicketCreate").emit([user])
@@ -197,7 +197,7 @@ export const registerActions = async () => {
             instance.ticket = ticket
             opendiscord.tickets.add(ticket)
         }),
-        new api.ODWorker("opendiscord:send-ticket-message",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:send-ticket-message",2,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
@@ -207,7 +207,7 @@ export const registerActions = async () => {
             //check if ticket message is enabled
             if (!option.get("opendiscord:ticket-message-enabled").value) return
             try {
-                const msg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(source,{guild,channel,user,ticket})).message)
+                const msg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(origin,{guild,channel,user,ticket})).message)
                 
                 ticket.get("opendiscord:ticket-message").value = msg.id
 
@@ -225,7 +225,7 @@ export const registerActions = async () => {
             }
             await opendiscord.events.get("afterTicketCreated").emit([ticket,user,channel])
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
@@ -234,13 +234,13 @@ export const registerActions = async () => {
             //to logs
             if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.creation.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-logs").build(source,{guild,channel,user,ticket}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-logs").build(origin,{guild,channel,user,ticket}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(source,{guild,channel,user,ticket}))
+            if (generalConfig.data.system.messages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(origin,{guild,channel,user,ticket}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
@@ -251,7 +251,7 @@ export const registerActions = async () => {
                 {key:"userid",value:user.id,hidden:true},
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"option",value:option.id.value}
             ])
         })

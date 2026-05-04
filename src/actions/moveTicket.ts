@@ -9,7 +9,7 @@ const generalConfig = opendiscord.configs.get("opendiscord:general")
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:move-ticket"))
     opendiscord.actions.get("opendiscord:move-ticket").workers.add([
-        new api.ODWorker("opendiscord:move-ticket",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:move-ticket",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason,data} = params
             if (channel.isThread()) throw new api.ODSystemError("Unable to move ticket! Open Ticket doesn't support threads!")
 
@@ -184,27 +184,27 @@ export const registerActions = async () => {
             }
 
             //reply with new message
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:move-message").build(source,{guild,channel,user,ticket,reason,data})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:move-message").build(origin,{guild,channel,user,ticket,reason,data})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketMoved").emit([ticket,user,channel,reason])
 
             //update channel topic
             await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason,data} = params
 
             //to logs
             if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.moving.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source,{guild,channel,user,ticket,mode:"move",reason,additionalData:data}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"move",reason,additionalData:data}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.moving.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source,{guild,channel,user,ticket,mode:"move",reason,additionalData:data}))
+            if (creator && generalConfig.data.system.messages.moving.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"move",reason,additionalData:data}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
 
             opendiscord.log(user.displayName+" moved a ticket!","info",[
@@ -213,7 +213,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"reason",value:params.reason ?? "/"},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])

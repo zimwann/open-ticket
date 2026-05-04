@@ -10,7 +10,7 @@ const lang = opendiscord.languages
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:close-ticket"))
     opendiscord.actions.get("opendiscord:close-ticket").workers.add([
-        new api.ODWorker("opendiscord:close-ticket",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:close-ticket",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
             if (channel.isThread()) throw new api.ODSystemError("Unable to close ticket! Open Ticket doesn't support threads!")
 
@@ -25,7 +25,7 @@ export const registerActions = async () => {
             ticket.get("opendiscord:reopened-by").value = null
             ticket.get("opendiscord:reopened-on").value = null
 
-            if (source == "autoclose") ticket.get("opendiscord:autoclosed").value = true
+            if (origin == "autoclose") ticket.get("opendiscord:autoclosed").value = true
             ticket.get("opendiscord:open").value = false
             ticket.get("opendiscord:busy").value = true
 
@@ -126,27 +126,27 @@ export const registerActions = async () => {
             }
 
             //reply with new message
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:close-message").build(source,{guild,channel,user,ticket,reason})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:close-message").build(origin,{guild,channel,user,ticket,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketClosed").emit([ticket,user,channel,reason])
 
             //update channel topic
             await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
             if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.closing.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.closing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
+            if (creator && generalConfig.data.system.messages.closing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
 
             opendiscord.log(user.displayName+" closed a ticket!","info",[
@@ -155,7 +155,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"reason",value:params.reason ?? "/"},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -169,7 +169,7 @@ export const registerVerifyBars = async () => {
     //CLOSE TICKET TICKET MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-ticket-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-ticket-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:close-ticket-ticket-message").success.add([
-        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                                     
             //check permissions
@@ -231,7 +231,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:close-ticket-ticket-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -250,7 +250,7 @@ export const registerVerifyBars = async () => {
     //CLOSE TICKET REOPEN MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-reopen-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-reopen-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:close-ticket-reopen-message").success.add([
-        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                                     
             //check permissions
@@ -312,7 +312,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:close-ticket-reopen-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-reopen-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-reopen-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             const {verifybarMessage} = params
             if (!guild){

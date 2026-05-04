@@ -23,12 +23,12 @@ export const registerAllEmbeds = async () => {
     extraEmbeds()
 }
 
-/**Utility function to get the translated "method" from the source. Mostly used in error embeds. */
-const getMethodFromSource = (source:"slash"|"text"|"button"|"dropdown"|"modal"|"other"): string => {
-    if (source == "slash" || source == "text") return lang.getTranslation("params.lowercase.command")
-    else if (source == "button") return lang.getTranslation("params.lowercase.button")
-    else if (source == "dropdown") return lang.getTranslation("params.lowercase.dropdown")
-    else if (source == "modal") return lang.getTranslation("params.lowercase.modal")
+/**Utility function to get the translated "method" from the origin. Mostly used in error embeds. */
+const getMethodFromOrigin = (origin:"slash"|"text"|"button"|"dropdown"|"modal"|"other"): string => {
+    if (origin == "slash" || origin == "text") return lang.getTranslation("params.lowercase.command")
+    else if (origin == "button") return lang.getTranslation("params.lowercase.button")
+    else if (origin == "dropdown") return lang.getTranslation("params.lowercase.dropdown")
+    else if (origin == "modal") return lang.getTranslation("params.lowercase.modal")
     else return lang.getTranslation("params.lowercase.method")
 }
 //lang.getTranslation()
@@ -37,10 +37,10 @@ const errorEmbeds = () => {
     //ERROR
     embeds.add(new api.ODEmbed("opendiscord:error"))
     embeds.get("opendiscord:error").workers.add(
-        new api.ODWorker("opendiscord:error",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error",0,async (instance,params,origin) => {
             const {user,error,layout,customTitle} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",customTitle ?? lang.getTranslation("errors.titles.internalError")))
@@ -154,10 +154,10 @@ const errorEmbeds = () => {
     //ERROR NO PERMISSIONS
     embeds.add(new api.ODEmbed("opendiscord:error-no-permissions"))
     embeds.get("opendiscord:error-no-permissions").workers.add(
-        new api.ODWorker("opendiscord:error-no-permissions",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-no-permissions",0,async (instance,params,origin) => {
             const {user,permissions} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             const renderedPerms = permissions.map((perm) => {
                 if (perm == "developer") return "- "+lang.getTranslation("errors.permissions.developer")
@@ -180,10 +180,10 @@ const errorEmbeds = () => {
     //ERROR NO PERMISSIONS COOLDOWN
     embeds.add(new api.ODEmbed("opendiscord:error-no-permissions-cooldown"))
     embeds.get("opendiscord:error-no-permissions-cooldown").workers.add(
-        new api.ODWorker("opendiscord:error-no-permissions-cooldown",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-no-permissions-cooldown",0,async (instance,params,origin) => {
             const {user} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
@@ -196,10 +196,10 @@ const errorEmbeds = () => {
     //ERROR NO PERMISSIONS BLACKLISTED
     embeds.add(new api.ODEmbed("opendiscord:error-no-permissions-blacklisted"))
     embeds.get("opendiscord:error-no-permissions-blacklisted").workers.add(
-        new api.ODWorker("opendiscord:error-no-permissions-blacklisted",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-no-permissions-blacklisted",0,async (instance,params,origin) => {
             const {user} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
@@ -211,7 +211,7 @@ const errorEmbeds = () => {
     //ERROR NO PERMISSIONS LIMITS
     embeds.add(new api.ODEmbed("opendiscord:error-no-permissions-limits"))
     embeds.get("opendiscord:error-no-permissions-limits").workers.add(
-        new api.ODWorker("opendiscord:error-no-permissions-limits",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-no-permissions-limits",0,async (instance,params,origin) => {
             const {user,limit} = params
             
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
@@ -227,10 +227,10 @@ const errorEmbeds = () => {
     //ERROR RESPONDER TIMEOUT
     embeds.add(new api.ODEmbed("opendiscord:error-responder-timeout"))
     embeds.get("opendiscord:error-responder-timeout").workers.add(
-        new api.ODWorker("opendiscord:error-responder-timeout",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-responder-timeout",0,async (instance,params,origin) => {
             const {user} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.internalError")))
@@ -244,7 +244,7 @@ const errorEmbeds = () => {
     //ERROR TICKET UNKNOWN
     embeds.add(new api.ODEmbed("opendiscord:error-ticket-unknown"))
     embeds.get("opendiscord:error-ticket-unknown").workers.add(
-        new api.ODWorker("opendiscord:error-ticket-unknown",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-ticket-unknown",0,async (instance,params,origin) => {
             const {user} = params
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
@@ -258,7 +258,7 @@ const errorEmbeds = () => {
     //ERROR TICKET DEPRECATED
     embeds.add(new api.ODEmbed("opendiscord:error-ticket-deprecated"))
     embeds.get("opendiscord:error-ticket-deprecated").workers.add(
-        new api.ODWorker("opendiscord:error-ticket-deprecated",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-ticket-deprecated",0,async (instance,params,origin) => {
             const {user} = params
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
@@ -272,7 +272,7 @@ const errorEmbeds = () => {
     //ERROR OPTION UNKNOWN
     embeds.add(new api.ODEmbed("opendiscord:error-option-unknown"))
     embeds.get("opendiscord:error-option-unknown").workers.add(
-        new api.ODWorker("opendiscord:error-option-unknown",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-option-unknown",0,async (instance,params,origin) => {
             const {user} = params
 
             const renderedTicketOptions = opendiscord.options.getAll().map((option) => {
@@ -292,7 +292,7 @@ const errorEmbeds = () => {
     //ERROR PANEL UNKNOWN
     embeds.add(new api.ODEmbed("opendiscord:error-panel-unknown"))
     embeds.get("opendiscord:error-panel-unknown").workers.add(
-        new api.ODWorker("opendiscord:error-panel-unknown",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-panel-unknown",0,async (instance,params,origin) => {
             const {user} = params
 
             const renderedPanels = opendiscord.panels.getAll().map((panel) => {
@@ -312,10 +312,10 @@ const errorEmbeds = () => {
     //ERROR NOT IN GUILD
     embeds.add(new api.ODEmbed("opendiscord:error-not-in-guild"))
     embeds.get("opendiscord:error-not-in-guild").workers.add(
-        new api.ODWorker("opendiscord:error-not-in-guild",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-not-in-guild",0,async (instance,params,origin) => {
             const {user} = params
 
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.notInGuild")))
@@ -327,16 +327,16 @@ const errorEmbeds = () => {
     //ERROR CHANNEL RENAME
     embeds.add(new api.ODEmbed("opendiscord:error-channel-rename"))
     embeds.get("opendiscord:error-channel-rename").workers.add(
-        new api.ODWorker("opendiscord:error-channel-rename",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-channel-rename",0,async (instance,params,origin) => {
             const {channel,user,originalName,newName} = params
             
-            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin" || source == "ticket-priority" || source == "ticket-transfer") ? source : getMethodFromSource(source)
+            const method = (origin == "ticket-move" || origin == "ticket-pin" || origin == "ticket-rename" || origin == "ticket-unpin" || origin == "ticket-priority" || origin == "ticket-transfer") ? origin : getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.channelRename")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.channelRename"))
-            instance.setFooter(lang.getTranslationWithParams("errors.descriptions.channelRenameSource",[method]))
+            instance.setFooter(lang.getTranslationWithParams("errors.descriptions.channelRenameOrigin",[method]))
             instance.addFields(
                 {name:lang.getTranslation("params.uppercase.originalName")+":",value:"```#"+originalName+"```",inline:false},
                 {name:lang.getTranslation("params.uppercase.newName")+":",value:"```#"+newName+"```",inline:false}
@@ -347,10 +347,10 @@ const errorEmbeds = () => {
     //ERROR TICKET BUSY
     embeds.add(new api.ODEmbed("opendiscord:error-ticket-busy"))
     embeds.get("opendiscord:error-ticket-busy").workers.add(
-        new api.ODWorker("opendiscord:error-ticket-busy",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:error-ticket-busy",0,async (instance,params,origin) => {
             const {user} = params
             
-            const method = getMethodFromSource(source)
+            const method = getMethodFromOrigin(origin)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.busy")))
@@ -529,7 +529,7 @@ const ticketEmbeds = () => {
     //TICKET CREATED
     embeds.add(new api.ODEmbed("opendiscord:ticket-created"))
     embeds.get("opendiscord:ticket-created").workers.add(
-        new api.ODWorker("opendiscord:ticket-created",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-created",0,async (instance,params,origin) => {
             const {user} = params
 
             instance.setColor(generalConfig.data.mainColor)
@@ -543,7 +543,7 @@ const ticketEmbeds = () => {
     //TICKET CREATED DM
     embeds.add(new api.ODEmbed("opendiscord:ticket-created-dm"))
     embeds.get("opendiscord:ticket-created-dm").workers.add(
-        new api.ODWorker("opendiscord:ticket-created-dm",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-created-dm",0,async (instance,params,origin) => {
             const {user,ticket} = params
             const embedOptions = ticket.option.get("opendiscord:dm-message-embed").value
             
@@ -563,10 +563,10 @@ const ticketEmbeds = () => {
     //TICKET CREATED LOGS
     embeds.add(new api.ODEmbed("opendiscord:ticket-created-logs"))
     embeds.get("opendiscord:ticket-created-logs").workers.add(
-        new api.ODWorker("opendiscord:ticket-created-logs",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-created-logs",0,async (instance,params,origin) => {
             const {user,ticket} = params
             
-            const method = (source == "panel-button" || source == "panel-dropdown") ? lang.getTranslation("params.uppercase.panel") : (source == "slash" || source == "text") ? lang.getTranslation("params.uppercase.command") : lang.getTranslation("params.uppercase.system")
+            const method = (origin == "panel-button" || origin == "panel-dropdown") ? lang.getTranslation("params.uppercase.panel") : (origin == "slash" || origin == "text") ? lang.getTranslation("params.uppercase.command") : lang.getTranslation("params.uppercase.system")
             const blacklisted = opendiscord.blacklist.exists(user.id) ? lang.getTranslation("params.uppercase.true") : lang.getTranslation("params.uppercase.false")
 
             instance.setColor(generalConfig.data.mainColor)
@@ -586,7 +586,7 @@ const ticketEmbeds = () => {
     //TICKET MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:ticket-message"))
     embeds.get("opendiscord:ticket-message").workers.add(
-        new api.ODWorker("opendiscord:ticket-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-message",0,async (instance,params,origin) => {
             const {user,ticket} = params
             const embedOptions = ticket.option.get("opendiscord:ticket-message-embed").value
             
@@ -625,7 +625,7 @@ const ticketEmbeds = () => {
     //TICKET CLOSED
     embeds.add(new api.ODEmbed("opendiscord:close-message"))
     embeds.get("opendiscord:close-message").workers.add(
-        new api.ODWorker("opendiscord:close-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:close-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -639,7 +639,7 @@ const ticketEmbeds = () => {
     //TICKET REOPENED
     embeds.add(new api.ODEmbed("opendiscord:reopen-message"))
     embeds.get("opendiscord:reopen-message").workers.add(
-        new api.ODWorker("opendiscord:reopen-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:reopen-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -653,7 +653,7 @@ const ticketEmbeds = () => {
     //TICKET DELETED
     embeds.add(new api.ODEmbed("opendiscord:delete-message"))
     embeds.get("opendiscord:delete-message").workers.add(
-        new api.ODWorker("opendiscord:delete-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:delete-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -667,7 +667,7 @@ const ticketEmbeds = () => {
     //TICKET CLAIMED
     embeds.add(new api.ODEmbed("opendiscord:claim-message"))
     embeds.get("opendiscord:claim-message").workers.add(
-        new api.ODWorker("opendiscord:claim-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:claim-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -681,7 +681,7 @@ const ticketEmbeds = () => {
     //TICKET UNCLAIMED
     embeds.add(new api.ODEmbed("opendiscord:unclaim-message"))
     embeds.get("opendiscord:unclaim-message").workers.add(
-        new api.ODWorker("opendiscord:unclaim-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:unclaim-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -695,7 +695,7 @@ const ticketEmbeds = () => {
     //TICKET PINNED
     embeds.add(new api.ODEmbed("opendiscord:pin-message"))
     embeds.get("opendiscord:pin-message").workers.add(
-        new api.ODWorker("opendiscord:pin-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:pin-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -709,7 +709,7 @@ const ticketEmbeds = () => {
     //TICKET UNPINNED
     embeds.add(new api.ODEmbed("opendiscord:unpin-message"))
     embeds.get("opendiscord:unpin-message").workers.add(
-        new api.ODWorker("opendiscord:unpin-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:unpin-message",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -723,7 +723,7 @@ const ticketEmbeds = () => {
     //TICKET RENAMED
     embeds.add(new api.ODEmbed("opendiscord:rename-message"))
     embeds.get("opendiscord:rename-message").workers.add(
-        new api.ODWorker("opendiscord:rename-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:rename-message",0,async (instance,params,origin) => {
             const {user,ticket,reason,data} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -737,7 +737,7 @@ const ticketEmbeds = () => {
     //TICKET MOVED
     embeds.add(new api.ODEmbed("opendiscord:move-message"))
     embeds.get("opendiscord:move-message").workers.add(
-        new api.ODWorker("opendiscord:move-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:move-message",0,async (instance,params,origin) => {
             const {user,ticket,reason,data} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -751,7 +751,7 @@ const ticketEmbeds = () => {
     //TICKET USER ADDED
     embeds.add(new api.ODEmbed("opendiscord:add-message"))
     embeds.get("opendiscord:add-message").workers.add(
-        new api.ODWorker("opendiscord:add-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:add-message",0,async (instance,params,origin) => {
             const {user,ticket,reason,data} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -765,7 +765,7 @@ const ticketEmbeds = () => {
     //TICKET USER REMOVED
     embeds.add(new api.ODEmbed("opendiscord:remove-message"))
     embeds.get("opendiscord:remove-message").workers.add(
-        new api.ODWorker("opendiscord:remove-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:remove-message",0,async (instance,params,origin) => {
             const {user,ticket,reason,data} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -779,7 +779,7 @@ const ticketEmbeds = () => {
     //TICKET ACTION DM
     embeds.add(new api.ODEmbed("opendiscord:ticket-action-dm"))
     embeds.get("opendiscord:ticket-action-dm").workers.add(
-        new api.ODWorker("opendiscord:ticket-action-dm",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-action-dm",0,async (instance,params,origin) => {
             const {user,mode,ticket,reason,additionalData} = params
             const channel = await opendiscord.tickets.getTicketChannel(ticket)
             
@@ -828,7 +828,7 @@ const ticketEmbeds = () => {
     //TICKET ACTION LOGS
     embeds.add(new api.ODEmbed("opendiscord:ticket-action-logs"))
     embeds.get("opendiscord:ticket-action-logs").workers.add(
-        new api.ODWorker("opendiscord:ticket-action-logs",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-action-logs",0,async (instance,params,origin) => {
             const {user,mode,ticket,reason,additionalData} = params
             const channel = await opendiscord.tickets.getTicketChannel(ticket)
 
@@ -884,7 +884,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST VIEW
     embeds.add(new api.ODEmbed("opendiscord:blacklist-view"))
     embeds.get("opendiscord:blacklist-view").workers.add(
-        new api.ODWorker("opendiscord:blacklist-view",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-view",0,async (instance,params,origin) => {
             const {user} = params
 
             const renderedUsers: string[] = []
@@ -904,7 +904,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST GET
     embeds.add(new api.ODEmbed("opendiscord:blacklist-get"))
     embeds.get("opendiscord:blacklist-get").workers.add(
-        new api.ODWorker("opendiscord:blacklist-get",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-get",0,async (instance,params,origin) => {
             const {user,data} = params
             const blacklist = opendiscord.blacklist.get(data.id)
 
@@ -923,7 +923,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST ADD
     embeds.add(new api.ODEmbed("opendiscord:blacklist-add"))
     embeds.get("opendiscord:blacklist-add").workers.add(
-        new api.ODWorker("opendiscord:blacklist-add",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-add",0,async (instance,params,origin) => {
             const {user,data,reason} = params
             
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -937,7 +937,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST REMOVE
     embeds.add(new api.ODEmbed("opendiscord:blacklist-remove"))
     embeds.get("opendiscord:blacklist-remove").workers.add(
-        new api.ODWorker("opendiscord:blacklist-remove",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-remove",0,async (instance,params,origin) => {
             const {user,data,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -951,7 +951,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST DM
     embeds.add(new api.ODEmbed("opendiscord:blacklist-dm"))
     embeds.get("opendiscord:blacklist-dm").workers.add(
-        new api.ODWorker("opendiscord:blacklist-dm",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-dm",0,async (instance,params,origin) => {
             const {user,mode,data,reason} = params
             
             const title = (mode == "add") ? lang.getTranslation("actions.titles.blacklistAddDm") : lang.getTranslation("actions.titles.blacklistRemoveDm")
@@ -968,7 +968,7 @@ const blacklistEmbeds = () => {
     //BLACKLIST LOGS
     embeds.add(new api.ODEmbed("opendiscord:blacklist-logs"))
     embeds.get("opendiscord:blacklist-logs").workers.add(
-        new api.ODWorker("opendiscord:blacklist-logs",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:blacklist-logs",0,async (instance,params,origin) => {
             const {user,mode,data,reason} = params
             
             const title = (mode == "add") ? lang.getTranslation("actions.titles.blacklistAdd") : lang.getTranslation("actions.titles.blacklistRemove")
@@ -989,7 +989,7 @@ const transcriptEmbeds = () => {
     //TRANSCRIPT TEXT READY
     embeds.add(new api.ODEmbed("opendiscord:transcript-text-ready"))
     embeds.get("opendiscord:transcript-text-ready").workers.add(
-        new api.ODWorker("opendiscord:transcript-text-ready",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-text-ready",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler} = params
             const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
             
@@ -1007,11 +1007,11 @@ const transcriptEmbeds = () => {
                 }catch{}
             }
 
-            if (source == "channel") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdChannel",[lang.getTranslation("params.lowercase.text")]))
-            else if (source == "creator-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdCreator",[lang.getTranslation("params.lowercase.text")]))
-            else if (source == "participant-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdParticipant",[lang.getTranslation("params.lowercase.text")]))
-            else if (source == "active-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdActiveAdmin",[lang.getTranslation("params.lowercase.text")]))
-            else if (source == "every-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdEveryAdmin",[lang.getTranslation("params.lowercase.text")]))
+            if (origin == "channel") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdChannel",[lang.getTranslation("params.lowercase.text")]))
+            else if (origin == "creator-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdCreator",[lang.getTranslation("params.lowercase.text")]))
+            else if (origin == "participant-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdParticipant",[lang.getTranslation("params.lowercase.text")]))
+            else if (origin == "active-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdActiveAdmin",[lang.getTranslation("params.lowercase.text")]))
+            else if (origin == "every-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdEveryAdmin",[lang.getTranslation("params.lowercase.text")]))
             else instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdOther",[lang.getTranslation("params.lowercase.text")]))
         })
     )
@@ -1019,7 +1019,7 @@ const transcriptEmbeds = () => {
     //TRANSCRIPT HTML READY
     embeds.add(new api.ODEmbed("opendiscord:transcript-html-ready"))
     embeds.get("opendiscord:transcript-html-ready").workers.add(
-        new api.ODWorker("opendiscord:transcript-html-ready",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-html-ready",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler,result} = params
             const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
             
@@ -1038,11 +1038,11 @@ const transcriptEmbeds = () => {
                 }catch{}
             }
 
-            if (source == "channel") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdChannel",[lang.getTranslation("params.lowercase.html")]))
-            else if (source == "creator-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdCreator",[lang.getTranslation("params.lowercase.html")]))
-            else if (source == "participant-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdParticipant",[lang.getTranslation("params.lowercase.html")]))
-            else if (source == "active-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdActiveAdmin",[lang.getTranslation("params.lowercase.html")]))
-            else if (source == "every-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdEveryAdmin",[lang.getTranslation("params.lowercase.html")]))
+            if (origin == "channel") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdChannel",[lang.getTranslation("params.lowercase.html")]))
+            else if (origin == "creator-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdCreator",[lang.getTranslation("params.lowercase.html")]))
+            else if (origin == "participant-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdParticipant",[lang.getTranslation("params.lowercase.html")]))
+            else if (origin == "active-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdActiveAdmin",[lang.getTranslation("params.lowercase.html")]))
+            else if (origin == "every-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdEveryAdmin",[lang.getTranslation("params.lowercase.html")]))
             else instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdOther",[lang.getTranslation("params.lowercase.html")]))
         })
     )
@@ -1050,7 +1050,7 @@ const transcriptEmbeds = () => {
     //TRANSCRIPT HTML PROGRESS
     embeds.add(new api.ODEmbed("opendiscord:transcript-html-progress"))
     embeds.get("opendiscord:transcript-html-progress").workers.add(
-        new api.ODWorker("opendiscord:transcript-html-progress",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-html-progress",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler,remaining} = params
             
             const remainingDate = new Date(new Date().getTime()+remaining)
@@ -1076,7 +1076,7 @@ const transcriptEmbeds = () => {
     //TRANSCRIPT ERROR
     embeds.add(new api.ODEmbed("opendiscord:transcript-error"))
     embeds.get("opendiscord:transcript-error").workers.add(
-        new api.ODWorker("opendiscord:transcript-error",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-error",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler,reason} = params
             
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
@@ -1093,7 +1093,7 @@ const roleEmbeds = () => {
     //REACTION ROLE
     embeds.add(new api.ODEmbed("opendiscord:reaction-role"))
     embeds.get("opendiscord:reaction-role").workers.add(
-        new api.ODWorker("opendiscord:reaction-role",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:reaction-role",0,async (instance,params,origin) => {
             const {guild,user,role,result} = params
 
             instance.setColor(generalConfig.data.mainColor)
@@ -1117,7 +1117,7 @@ const roleEmbeds = () => {
     //REACTION ROLE DM
     embeds.add(new api.ODEmbed("opendiscord:reaction-role-dm"))
     embeds.get("opendiscord:reaction-role-dm").workers.add(
-        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,origin) => {
             const {guild,user,role,result} = params
 
             instance.setColor(generalConfig.data.mainColor)
@@ -1143,7 +1143,7 @@ const roleEmbeds = () => {
     //REACTION ROLE LOGS
     embeds.add(new api.ODEmbed("opendiscord:reaction-role-logs"))
     embeds.get("opendiscord:reaction-role-logs").workers.add(
-        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,origin) => {
             const {guild,user,role,result} = params
 
             instance.setColor(generalConfig.data.mainColor)
@@ -1171,7 +1171,7 @@ const clearEmbeds = () => {
     //CLEAR VERIFY MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:clear-verify-message"))
     embeds.get("opendiscord:clear-verify-message").workers.add(
-        new api.ODWorker("opendiscord:clear-verify-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:clear-verify-message",0,async (instance,params,origin) => {
             const {guild,channel,user,filter,list} = params
             
             instance.setColor(generalConfig.data.mainColor)
@@ -1189,7 +1189,7 @@ const clearEmbeds = () => {
     //CLEAR MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:clear-message"))
     embeds.get("opendiscord:clear-message").workers.add(
-        new api.ODWorker("opendiscord:clear-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:clear-message",0,async (instance,params,origin) => {
             const {guild,channel,user,filter,list} = params
             
             instance.setColor(generalConfig.data.mainColor)
@@ -1206,7 +1206,7 @@ const clearEmbeds = () => {
     //CLEAR LOGS
     embeds.add(new api.ODEmbed("opendiscord:clear-logs"))
     embeds.get("opendiscord:clear-logs").workers.add(
-        new api.ODWorker("opendiscord:clear-logs",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:clear-logs",0,async (instance,params,origin) => {
             const {guild,channel,user,filter,list} = params
             
             instance.setColor(generalConfig.data.mainColor)
@@ -1226,10 +1226,10 @@ const autoEmbeds = () => {
     //AUTOCLOSE MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:autoclose-message"))
     embeds.get("opendiscord:autoclose-message").workers.add(
-        new api.ODWorker("opendiscord:autoclose-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autoclose-message",0,async (instance,params,origin) => {
             const {user,ticket} = params
             const hours: number = ticket.get("opendiscord:autoclose-hours").value
-            const description = (source == "leave") ? lang.getTranslation("actions.descriptions.autocloseLeave") : lang.getTranslationWithParams("actions.descriptions.autocloseTimeout",[hours.toString()])
+            const description = (origin == "leave") ? lang.getTranslation("actions.descriptions.autocloseLeave") : lang.getTranslationWithParams("actions.descriptions.autocloseTimeout",[hours.toString()])
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
@@ -1242,10 +1242,10 @@ const autoEmbeds = () => {
     //AUTODELETE MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:autodelete-message"))
     embeds.get("opendiscord:autodelete-message").workers.add(
-        new api.ODWorker("opendiscord:autodelete-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autodelete-message",0,async (instance,params,origin) => {
             const {user,ticket} = params
             const days: number = ticket.get("opendiscord:autodelete-days").value
-            const description = (source == "leave") ? lang.getTranslation("actions.descriptions.autodeleteLeave") : lang.getTranslationWithParams("actions.descriptions.autodeleteTimeout",[days.toString()])
+            const description = (origin == "leave") ? lang.getTranslation("actions.descriptions.autodeleteLeave") : lang.getTranslationWithParams("actions.descriptions.autodeleteTimeout",[days.toString()])
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
@@ -1258,7 +1258,7 @@ const autoEmbeds = () => {
     //AUTOCLOSE ENABLE
     embeds.add(new api.ODEmbed("opendiscord:autoclose-enable"))
     embeds.get("opendiscord:autoclose-enable").workers.add(
-        new api.ODWorker("opendiscord:autoclose-enable",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autoclose-enable",0,async (instance,params,origin) => {
             const {user,ticket,reason,time} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1272,7 +1272,7 @@ const autoEmbeds = () => {
     //AUTODELETE ENABLE
     embeds.add(new api.ODEmbed("opendiscord:autodelete-enable"))
     embeds.get("opendiscord:autodelete-enable").workers.add(
-        new api.ODWorker("opendiscord:autodelete-enable",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autodelete-enable",0,async (instance,params,origin) => {
             const {user,ticket,reason,time} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1286,7 +1286,7 @@ const autoEmbeds = () => {
     //AUTOCLOSE DISABLE
     embeds.add(new api.ODEmbed("opendiscord:autoclose-disable"))
     embeds.get("opendiscord:autoclose-disable").workers.add(
-        new api.ODWorker("opendiscord:autoclose-disable",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autoclose-disable",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1300,7 +1300,7 @@ const autoEmbeds = () => {
     //AUTODELETE DISABLE
     embeds.add(new api.ODEmbed("opendiscord:autodelete-disable"))
     embeds.get("opendiscord:autodelete-disable").workers.add(
-        new api.ODWorker("opendiscord:autodelete-disable",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:autodelete-disable",0,async (instance,params,origin) => {
             const {user,ticket,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1316,7 +1316,7 @@ const extraEmbeds = () => {
     //TOPIC SET
     embeds.add(new api.ODEmbed("opendiscord:topic-set"))
     embeds.get("opendiscord:topic-set").workers.add(
-        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,origin) => {
             const {user,topic} = params
             
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1330,7 +1330,7 @@ const extraEmbeds = () => {
     //PRIORITY SET
     embeds.add(new api.ODEmbed("opendiscord:priority-set"))
     embeds.get("opendiscord:priority-set").workers.add(
-        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,origin) => {
             const {user,priority,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1344,7 +1344,7 @@ const extraEmbeds = () => {
     //PRIORITY GET
     embeds.add(new api.ODEmbed("opendiscord:priority-get"))
     embeds.get("opendiscord:priority-get").workers.add(
-        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,origin) => {
             const {user,priority} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -1357,7 +1357,7 @@ const extraEmbeds = () => {
     //TRANSFER MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:transfer-message"))
     embeds.get("opendiscord:transfer-message").workers.add(
-        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,origin) => {
             const {user,oldCreator,newCreator,reason} = params
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())

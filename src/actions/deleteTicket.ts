@@ -10,7 +10,7 @@ const lang = opendiscord.languages
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:delete-ticket"))
     opendiscord.actions.get("opendiscord:delete-ticket").workers.add([
-        new api.ODWorker("opendiscord:delete-ticket",3,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",3,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
             if (channel.isThread()) throw new api.ODSystemError("Unable to delete ticket! Open Ticket doesn't support threads!")
 
@@ -36,15 +36,15 @@ export const registerActions = async () => {
                 }
             }
 
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build(source,{guild,channel,user,ticket,reason})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build(origin,{guild,channel,user,ticket,reason})).message)
         
             //create transcript
             if (!params.withoutTranscript){
-                const transcriptRes = await opendiscord.actions.get("opendiscord:create-transcript").run(source,{guild,channel,user,ticket})
+                const transcriptRes = await opendiscord.actions.get("opendiscord:create-transcript").run(origin,{guild,channel,user,ticket})
                 //transcript failure
                 if (typeof transcriptRes.success == "boolean" && !transcriptRes.success && transcriptRes.compiler){
                     const {compiler} = transcriptRes
-                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:transcript-error").build(source,{guild,channel,user,ticket,compiler,reason:transcriptRes.errorReason ?? null})).message)
+                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:transcript-error").build(origin,{guild,channel,user,ticket,compiler,reason:transcriptRes.errorReason ?? null})).message)
                         .catch((reason) => opendiscord.log("Unable to send transcript failure to ticket channel!","error",[{key:"id",value:channel.id}]))
                 
                     //undo deletion
@@ -68,21 +68,21 @@ export const registerActions = async () => {
             //delete permissions from manager
             await (await import("../data/framework/permissionLoader.js")).removeTicketPermissions(ticket)
         }),
-        new api.ODWorker("opendiscord:discord-logs",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",2,async (instance,params,origin,cancel) => {
             //logs before channel deletion => channel might still be used in log embeds
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
             if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.deleting.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.deleting.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
+            if (creator && generalConfig.data.system.messages.deleting.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
         }),
-        new api.ODWorker("opendiscord:delete-channel",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-channel",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
             //delete channel & events
             await opendiscord.events.get("onTicketChannelDeletion").emit([ticket,channel,user])
@@ -94,7 +94,7 @@ export const registerActions = async () => {
 
             await opendiscord.events.get("afterTicketDeleted").emit([ticket,user,reason])
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
 
             opendiscord.log(user.displayName+" deleted a ticket!","info",[
@@ -103,7 +103,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"reason",value:params.reason ?? "/"},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"transcript",value:(!params.withoutTranscript).toString()},
             ])
         })
@@ -119,7 +119,7 @@ export const registerVerifyBars = async () => {
     //DELETE TICKET TICKET MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:delete-ticket-ticket-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-ticket-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:delete-ticket-ticket-message").success.add([
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
@@ -186,7 +186,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:delete-ticket-ticket-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -205,7 +205,7 @@ export const registerVerifyBars = async () => {
     //DELETE TICKET CLOSE MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:delete-ticket-close-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-close-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:delete-ticket-close-message").success.add([
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
@@ -272,7 +272,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:delete-ticket-close-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-close-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-close-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             const {verifybarMessage} = params
             if (!guild){
@@ -295,7 +295,7 @@ export const registerVerifyBars = async () => {
     //DELETE TICKET REOPEN MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:delete-ticket-reopen-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-reopen-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:delete-ticket-reopen-message").success.add([
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
@@ -361,7 +361,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:delete-ticket-reopen-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-reopen-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-reopen-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             const {verifybarMessage} = params
             if (!guild){
@@ -384,7 +384,7 @@ export const registerVerifyBars = async () => {
     //DELETE TICKET AUTOCLOSE MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:delete-ticket-autoclose-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-autoclose-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:delete-ticket-autoclose-message").success.add([
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
@@ -450,7 +450,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:delete-ticket-autoclose-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-autoclose-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-autoclose-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             const {verifybarMessage} = params
             if (!guild){

@@ -9,15 +9,15 @@ export const registerButtonResponders = async () => {
     //TRANSCRIPT ERROR RETRY
     opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:transcript-error-retry",/^od:transcript-error-retry_([^_]+)/))
     opendiscord.responders.buttons.get("opendiscord:transcript-error-retry").workers.add([
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
-            const originalSource = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"]
+            const originalOrigin = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"]
             
             //check permissions
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.delete,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
@@ -42,13 +42,13 @@ export const registerButtonResponders = async () => {
             //start deleting ticket (without reason)
             await instance.defer("update",false)
             //don't await DELETE action => else it will update the message after the channel has been deleted
-            opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason:"Transcript Error (Retried)",sendMessage:false,withoutTranscript:false})
+            opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason:"Transcript Error (Retried)",sendMessage:false,withoutTranscript:false})
             //update ticket (for ticket message) => no-await doesn't wait for the action to set this variable
             ticket.get("opendiscord:for-deletion").value = true
             await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build("other",{guild,channel,user,ticket,reason:"Transcript Error (Retried)"}))
         
         }),
-        new api.ODWorker("opendiscord:logs",-1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,async (instance,params,origin,cancel) => {
             const {user,channel} = instance
             if (channel.isDMBased()) return
             opendiscord.log(user.displayName+" retried deleting a ticket with transcript!","info",[
@@ -56,7 +56,7 @@ export const registerButtonResponders = async () => {
                 {key:"userid",value:user.id,hidden:true},
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -64,7 +64,7 @@ export const registerButtonResponders = async () => {
     //TRANSCRIPT ERROR CONTINUE
     opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:transcript-error-continue",/^od:transcript-error-continue_([^_]+)/))
     opendiscord.responders.buttons.get("opendiscord:transcript-error-continue").workers.add([
-        new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:permissions",1,async (instance,params,origin,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.delete
 
             if (permissionMode == "none"){
@@ -97,9 +97,9 @@ export const registerButtonResponders = async () => {
                 }else return
             }
         }),
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
-            const originalSource = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"]
+            const originalOrigin = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"]
             
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -119,13 +119,13 @@ export const registerButtonResponders = async () => {
             //start deleting ticket (without reason)
             await instance.defer("update",false)
             //don't await DELETE action => else it will update the message after the channel has been deleted
-            opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason:"Transcript Error (Continued)",sendMessage:false,withoutTranscript:true})
+            opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason:"Transcript Error (Continued)",sendMessage:false,withoutTranscript:true})
             //update ticket (for ticket message) => no-await doesn't wait for the action to set this variable
             ticket.get("opendiscord:for-deletion").value = true
             await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build("other",{guild,channel,user,ticket,reason:"Transcript Error (Continued)"}))
         
         }),
-        new api.ODWorker("opendiscord:logs",-1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,async (instance,params,origin,cancel) => {
             const {user,channel} = instance
             if (channel.isDMBased()) return
             opendiscord.log(user.displayName+" continued deleting a ticket without transcript!","info",[
@@ -133,7 +133,7 @@ export const registerButtonResponders = async () => {
                 {key:"userid",value:user.id,hidden:true},
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])

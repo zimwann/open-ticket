@@ -9,7 +9,7 @@ const generalConfig = opendiscord.configs.get("opendiscord:general")
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:update-ticket-priority"))
     opendiscord.actions.get("opendiscord:update-ticket-priority").workers.add([
-        new api.ODWorker("opendiscord:update-ticket-priority",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:update-ticket-priority",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,newPriority,reason} = params
             if (channel.isThread() || !(channel instanceof discord.TextChannel)) throw new api.ODSystemError("Unable to set priority of ticket! Open Ticket doesn't support threads!")
 
@@ -35,17 +35,17 @@ export const registerActions = async () => {
             }
 
             //reply with new message
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build(source,{guild,channel,user,ticket,priority:newPriority,reason})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build(origin,{guild,channel,user,ticket,priority:newPriority,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketPriorityChanged").emit([ticket,user,channel,oldPriority,newPriority,reason])
 
             //update channel topic
             await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,newPriority} = params
 
             opendiscord.log(user.displayName+" changed the priority of a ticket!","info",[
@@ -54,7 +54,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"priority",value:newPriority.id.value},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])

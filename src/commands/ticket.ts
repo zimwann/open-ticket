@@ -7,20 +7,20 @@ import * as discord from "discord.js"
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
 
-async function checkTicketCreationPerms(instance:api.ODButtonResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance|api.ODCommandResponderInstance,source:api.ODActionManagerIdMappings["opendiscord:create-ticket-permissions"]["origin"],guild:discord.Guild,user:discord.User,option:api.ODTicketOption){
+async function checkTicketCreationPerms(instance:api.ODButtonResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance|api.ODCommandResponderInstance,origin:api.ODActionManagerIdMappings["opendiscord:create-ticket-permissions"]["origin"],guild:discord.Guild,user:discord.User,option:api.ODTicketOption){
     //check ticket permissions
-    const permsRes = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run(source,{guild,user,option})
+    const permsRes = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run(origin,{guild,user,option})
     if (!permsRes.valid && instance.channel){
         //error
-        const newSource = (source === "slash" || source === "text") ? source : "other"
-        if (permsRes.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user}))
-        else if (permsRes.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,until:permsRes.cooldownUntil}))
-        else if (permsRes.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
-        else if (permsRes.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
-        else if (permsRes.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
-        else if (permsRes.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
-        else if (permsRes.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:permsRes.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
-        else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
+        const newOrigin = (origin === "slash" || origin === "text") ? origin : "other"
+        if (permsRes.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
+        else if (permsRes.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,until:permsRes.cooldownUntil}))
+        else if (permsRes.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
+        else if (permsRes.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
+        else if (permsRes.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
+        else if (permsRes.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+        else if (permsRes.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:permsRes.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
+        else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newOrigin,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
         return false
     }else return true
 }
@@ -29,20 +29,20 @@ export const registerCommandResponders = async () => {
     //TICKET COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:ticket",generalConfig.data.prefix,/^ticket/))
     opendiscord.responders.commands.get("opendiscord:ticket").workers.add([
-        new api.ODWorker("opendiscord:ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:ticket",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.ticket,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
             //check is in guild/server
             if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -51,35 +51,35 @@ export const registerCommandResponders = async () => {
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
                 return cancel()
             }
             
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
                 //send modal
-                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build(source,{guild,channel,user,option}))
+                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build(origin,{guild,channel,user,option}))
             }else{
                 //check ticket permissions
-                if (!(await checkTicketCreationPerms(instance,source,guild,user,option))) return cancel()
+                if (!(await checkTicketCreationPerms(instance,origin,guild,user,option))) return cancel()
 
                 //create ticket
                 await instance.defer(true)
-                const res = await opendiscord.actions.get("opendiscord:create-ticket").run(source,{guild,user,answers:[],option})
+                const res = await opendiscord.actions.get("opendiscord:create-ticket").run(origin,{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
                     //error
-                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
+                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
                     return cancel()
                 }
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(source,{guild,channel:res.channel,user,ticket:res.ticket}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(origin,{guild,channel:res.channel,user,ticket:res.ticket}))
             }
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             opendiscord.log(instance.user.displayName+" used the 'ticket' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -89,11 +89,11 @@ export const registerButtonResponders = async () => {
     //TICKET OPTION BUTTON RESPONDER
     opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:ticket-option",/^od:ticket-option_/))
     opendiscord.responders.buttons.get("opendiscord:ticket-option").workers.add(
-        new api.ODWorker("opendiscord:ticket-option",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:ticket-option",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -102,7 +102,7 @@ export const registerButtonResponders = async () => {
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -120,7 +120,7 @@ export const registerButtonResponders = async () => {
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-button",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
                     //error
-                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
+                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
                     return cancel()
                 }
                 if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-button",{guild,channel:res.channel,user,ticket:res.ticket}))
@@ -133,11 +133,11 @@ export const registerDropdownResponders = async () => {
     //PANEL DROPDOWN TICKETS DROPDOWN RESPONDER
     opendiscord.responders.dropdowns.add(new api.ODDropdownResponder("opendiscord:panel-dropdown-tickets",/^od:panel-dropdown_/))
     opendiscord.responders.dropdowns.get("opendiscord:panel-dropdown-tickets").workers.add(
-        new api.ODWorker("opendiscord:panel-dropdown-tickets",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:panel-dropdown-tickets",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -146,7 +146,7 @@ export const registerDropdownResponders = async () => {
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -164,7 +164,7 @@ export const registerDropdownResponders = async () => {
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-dropdown",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
                     //error
-                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
+                    await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
                     return cancel()
                 }
                 if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-dropdown",{guild,channel:res.channel,user,ticket:res.ticket}))
@@ -185,24 +185,24 @@ export const registerModalResponders = async () => {
     //TICKET QUESTIONS RESPONDER
     opendiscord.responders.modals.add(new api.ODModalResponder("opendiscord:ticket-questions",/^od:ticket-questions_/))
     opendiscord.responders.modals.get("opendiscord:ticket-questions").workers.add([
-        new api.ODWorker("opendiscord:ticket-questions",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:ticket-questions",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
             if (!channel) throw new api.ODSystemError("The 'Ticket Questions' modal requires a channel for responding!")
             if (!guild){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel,user:instance.user}))
                 return cancel()
             }
 
-            const originalSource = instance.interaction.customId.split("_")[2] as ("panel-button"|"panel-dropdown"|"slash"|"text"|"other")
+            const originalOrigin = instance.interaction.customId.split("_")[2] as ("panel-button"|"panel-dropdown"|"slash"|"text"|"other")
 
             //get option
             const optionId = instance.interaction.customId.split("_")[1]
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(source,{guild:instance.guild,channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel,user:instance.user}))
                 return cancel()
             }
 
@@ -229,16 +229,16 @@ export const registerModalResponders = async () => {
             })
 
             //check ticket permissions
-            if (!(await checkTicketCreationPerms(instance,originalSource,guild,user,option))) return cancel()
+            if (!(await checkTicketCreationPerms(instance,originalOrigin,guild,user,option))) return cancel()
 
             //create ticket
-            const res = await opendiscord.actions.get("opendiscord:create-ticket").run(originalSource,{guild,user,answers,option})
+            const res = await opendiscord.actions.get("opendiscord:create-ticket").run(originalOrigin,{guild,user,answers,option})
             if (!res.channel || !res.ticket){
                 //error
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild,channel,user,error:"Unable to receive ticket or channel from callback! #2",layout:"advanced"}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel,user,error:"Unable to receive ticket or channel from callback! #2",layout:"advanced"}))
                 return cancel()
             }
-            if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(originalSource,{guild,channel:res.channel,user,ticket:res.ticket}))
+            if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(originalOrigin,{guild,channel:res.channel,user,ticket:res.ticket}))
         })
     ])
 }

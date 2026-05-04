@@ -9,7 +9,7 @@ const generalConfig = opendiscord.configs.get("opendiscord:general")
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:pin-ticket"))
     opendiscord.actions.get("opendiscord:pin-ticket").workers.add([
-        new api.ODWorker("opendiscord:pin-ticket",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:pin-ticket",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
             if (channel.isThread()) throw new api.ODSystemError("Unable to pin ticket! Open Ticket doesn't support threads!")
             
@@ -61,27 +61,27 @@ export const registerActions = async () => {
             }
 
             //reply with new message
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:pin-message").build(source,{guild,channel,user,ticket,reason})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:pin-message").build(origin,{guild,channel,user,ticket,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketPinned").emit([ticket,user,channel,reason])
 
             //update channel topic
             await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
             if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.pinning.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source,{guild,channel,user,ticket,mode:"pin",reason,additionalData:null}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"pin",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.pinning.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source,{guild,channel,user,ticket,mode:"pin",reason,additionalData:null}))
+            if (creator && generalConfig.data.system.messages.pinning.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"pin",reason,additionalData:null}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
 
             opendiscord.log(user.displayName+" pinned a ticket!","info",[
@@ -90,7 +90,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"reason",value:params.reason ?? "/"},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -100,7 +100,7 @@ export const registerVerifyBars = async () => {
     //PIN TICKET TICKET MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:pin-ticket-ticket-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-ticket-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:pin-ticket-ticket-message").success.add([
-        new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:permissions",1,async (instance,params,origin,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.pin
 
             if (permissionMode == "none"){
@@ -133,7 +133,7 @@ export const registerVerifyBars = async () => {
                 }else return
             }
         }),
-        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -168,7 +168,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:pin-ticket-ticket-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -187,7 +187,7 @@ export const registerVerifyBars = async () => {
     //PIN TICKET UNPIN MESSAGE
     opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:pin-ticket-unpin-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-unpin-message"),!generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:pin-ticket-unpin-message").success.add([
-        new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:permissions",1,async (instance,params,origin,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.pin
 
             if (permissionMode == "none"){
@@ -220,7 +220,7 @@ export const registerVerifyBars = async () => {
                 }else return
             }
         }),
-        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -255,7 +255,7 @@ export const registerVerifyBars = async () => {
         })
     ])
     opendiscord.verifybars.get("opendiscord:pin-ticket-unpin-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-unpin-message",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:back-to-unpin-message",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             const {verifybarMessage} = params
             if (!guild){

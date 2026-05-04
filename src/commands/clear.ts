@@ -10,14 +10,14 @@ export const registerCommandResponders = async () => {
     //CLEAR COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:clear",generalConfig.data.prefix,"clear"))
     opendiscord.responders.commands.get("opendiscord:clear").workers.add([
-        new api.ODWorker("opendiscord:clear",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:clear",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions (only allow global admins: ticket admins aren't allowed to clear tickets)
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.clear,"support",user,member,channel,guild,{allowChannelUserScope:false,allowChannelRoleScope:false})
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
@@ -48,14 +48,14 @@ export const registerCommandResponders = async () => {
 
             //reply with clear verify
             await instance.defer(true)
-            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:clear-verify-message").build(source,{guild,channel,user,filter,list}))
+            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:clear-verify-message").build(origin,{guild,channel,user,filter,list}))
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             opendiscord.log(instance.user.displayName+" used the 'clear' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -65,10 +65,10 @@ export const registerButtonResponders = async () => {
     //CLEAR CONTINUE BUTTON RESPONDER
     opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:clear-continue",/^od:clear-continue_/))
     opendiscord.responders.buttons.get("opendiscord:clear-continue").workers.add(
-        new api.ODWorker("opendiscord:clear-continue",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:clear-continue",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!guild || channel.isDMBased()) return
-            const originalSource = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:clear-tickets"]["origin"]
+            const originalOrigin = instance.interaction.customId.split("_")[1] as api.ODActionManagerIdMappings["opendiscord:clear-tickets"]["origin"]
             const filter = instance.interaction.customId.split("_")[2] as api.ODTicketClearFilter
             
             //start ticket clear
@@ -90,8 +90,8 @@ export const registerButtonResponders = async () => {
                 if (ticketChannel) list.push("#"+ticketChannel.name)
             }
 
-            await opendiscord.actions.get("opendiscord:clear-tickets").run(originalSource,{guild,channel,user,filter,list:ticketList})
-            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:clear-message").build(originalSource,{guild,channel,user,filter,list}))
+            await opendiscord.actions.get("opendiscord:clear-tickets").run(originalOrigin,{guild,channel,user,filter,list:ticketList})
+            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:clear-message").build(originalOrigin,{guild,channel,user,filter,list}))
         })
     )
 }

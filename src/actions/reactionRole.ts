@@ -9,7 +9,7 @@ const generalConfig = opendiscord.configs.get("opendiscord:general")
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:reaction-role"))
     opendiscord.actions.get("opendiscord:reaction-role").workers.add([
-        new api.ODWorker("opendiscord:reaction-role",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:reaction-role",2,async (instance,params,origin,cancel) => {
             const {guild,user,option,overwriteMode} = params
             const role = opendiscord.roles.get(option.id)
             if (!role) throw new api.ODSystemError("ODAction(ot:reaction-role) => Unknown reaction role (ODRole)")
@@ -83,25 +83,25 @@ export const registerActions = async () => {
             instance.result = result
             await opendiscord.events.get("afterRolesUpdated").emit([user,role])
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,user,option,overwriteMode} = params
             if (!instance.role || !instance.result) return
 
             //to logs
             if (generalConfig.data.system.logs.enabled && (generalConfig.data.system.messages.reactionRole.logs)){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role:instance.role,result:instance.result}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(origin,{guild,user,role:instance.role,result:instance.result}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.reactionRole.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role:instance.role,result:instance.result}))
+            if (generalConfig.data.system.messages.reactionRole.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-dm").build(origin,{guild,user,role:instance.role,result:instance.result}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,user,option} = params
             opendiscord.log(user.displayName+" updated his roles!","info",[
                 {key:"user",value:user.username},
                 {key:"userid",value:user.id,hidden:true},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"option",value:option.id.value}
             ])
         })

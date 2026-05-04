@@ -11,14 +11,14 @@ export const registerCommandResponders = async () => {
     //DELETE COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:delete",generalConfig.data.prefix,"delete"))
     opendiscord.responders.commands.get("opendiscord:delete").workers.add([
-        new api.ODWorker("opendiscord:delete",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
             
             //check permissions
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.delete,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
@@ -67,15 +67,15 @@ export const registerCommandResponders = async () => {
 
             //start deleting ticket
             await instance.defer(false)
-            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build(source,{guild,channel,user,ticket,reason}))
-            await opendiscord.actions.get("opendiscord:delete-ticket").run(source,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript})
+            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build(origin,{guild,channel,user,ticket,reason}))
+            await opendiscord.actions.get("opendiscord:delete-ticket").run(origin,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript})
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             opendiscord.log(instance.user.displayName+" used the 'delete' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
@@ -85,13 +85,13 @@ export const registerButtonResponders = async () => {
     //DELETE TICKET BUTTON RESPONDER
     opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:delete-ticket",/^od:delete-ticket/))
     opendiscord.responders.buttons.get("opendiscord:delete-ticket").workers.add(
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source,cancel) => {
-            const originalSource = instance.interaction.customId.split("_")[1] as Exclude<api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"],"slash"|"text"|"autodelete"|"clear">
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin,cancel) => {
+            const originalOrigin = instance.interaction.customId.split("_")[1] as Exclude<api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"],"slash"|"text"|"autodelete"|"clear">
             
-            if (originalSource == "ticket-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-ticket-message").activate(instance)
-            else if (originalSource == "close-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-close-message").activate(instance)
-            else if (originalSource == "reopen-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-reopen-message").activate(instance)
-            else if (originalSource == "autoclose-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-autoclose-message").activate(instance)
+            if (originalOrigin == "ticket-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-ticket-message").activate(instance)
+            else if (originalOrigin == "close-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-close-message").activate(instance)
+            else if (originalOrigin == "reopen-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-reopen-message").activate(instance)
+            else if (originalOrigin == "autoclose-message") await opendiscord.verifybars.get("opendiscord:delete-ticket-autoclose-message").activate(instance)
             else await instance.defer("update",false)
         })
     )
@@ -101,12 +101,12 @@ export const registerModalResponders = async () => {
     //REOPEN WITH REASON MODAL RESPONDER
     opendiscord.responders.modals.add(new api.ODModalResponder("opendiscord:delete-ticket-reason",/^od:delete-ticket-reason_/))
     opendiscord.responders.modals.get("opendiscord:delete-ticket-reason").workers.add([
-        new api.ODWorker("opendiscord:delete-ticket-reason",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:delete-ticket-reason",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             if (!channel) return
             if (!guild){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel,user:instance.user}))
                 return cancel()
             }
             const ticket = opendiscord.tickets.get(instance.interaction.customId.split("_")[1])
@@ -115,36 +115,36 @@ export const registerModalResponders = async () => {
                 return
             }
 
-            const originalSource = instance.interaction.customId.split("_")[2] as Exclude<api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"],"slash"|"text"|"autodelete"|"clear">
+            const originalOrigin = instance.interaction.customId.split("_")[2] as Exclude<api.ODActionManagerIdMappings["opendiscord:delete-ticket"]["origin"],"slash"|"text"|"autodelete"|"clear">
             const reason = instance.values.getTextField("reason",true)
 
             //delete with reason
-            if (originalSource == "ticket-message"){
+            if (originalOrigin == "ticket-message"){
                 await instance.defer("update",false)
                 //don't await DELETE action => else it will update the message after the channel has been deleted
-                opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason,sendMessage:true,withoutTranscript:false})
+                opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason,sendMessage:true,withoutTranscript:false})
                 //update ticket (for ticket message) => no-await doesn't wait for the action to set this variable
                 ticket.get("opendiscord:for-deletion").value = true
                 await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket}))
-            }else if (originalSource == "close-message"){
+            }else if (originalOrigin == "close-message"){
                 await instance.defer("update",false)
                 //don't await DELETE action => else it will update the message after the channel has been deleted
-                opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
+                opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
                 await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build("other",{guild,channel,user,ticket,reason}))
-            }else if (originalSource == "reopen-message"){
+            }else if (originalOrigin == "reopen-message"){
                 await instance.defer("update",false)
                 //don't await DELETE action => else it will update the message after the channel has been deleted
-                opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
+                opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
                 await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build("other",{guild,channel,user,ticket,reason}))
-            }else if (originalSource == "autoclose-message"){
+            }else if (originalOrigin == "autoclose-message"){
                 await instance.defer("update",false)
                 //don't await DELETE action => else it will update the message after the channel has been deleted
-                opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
+                opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason,sendMessage:false,withoutTranscript:false})
                 await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build("other",{guild,channel,user,ticket,reason}))
             }else{
                 await instance.defer("update",false)
                 //don't await DELETE action => else it will update the message after the channel has been deleted
-                opendiscord.actions.get("opendiscord:delete-ticket").run(originalSource,{guild,channel,user,ticket,reason,sendMessage:true,withoutTranscript:false})
+                opendiscord.actions.get("opendiscord:delete-ticket").run(originalOrigin,{guild,channel,user,ticket,reason,sendMessage:true,withoutTranscript:false})
             }
         })
     ])

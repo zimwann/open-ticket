@@ -17,7 +17,7 @@ const transcriptFiles = () => {
     //TEXT TRANSCRIPT
     files.add(new api.ODFile("opendiscord:text-transcript"))
     files.get("opendiscord:text-transcript").workers.add(
-        new api.ODWorker("opendiscord:text-transcript",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:text-transcript",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler,result} = params
             
             const fileMode = transcriptConfig.data.textTranscriptStyle.fileMode

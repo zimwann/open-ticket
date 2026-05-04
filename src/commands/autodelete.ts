@@ -10,21 +10,21 @@ export const registerCommandResponders = async () => {
     //AUTODELETE COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:autodelete",generalConfig.data.prefix,/^autodelete/))
     opendiscord.responders.commands.get("opendiscord:autodelete").workers.add([
-        new api.ODWorker("opendiscord:autodelete",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:autodelete",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
             
             //check permissions
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.autodelete,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
             //check is in guild/server
             if (!guild){
                 //error
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
@@ -49,14 +49,14 @@ export const registerCommandResponders = async () => {
                 const reason = instance.options.getString("reason",false)
                 ticket.get("opendiscord:autodelete-enabled").value = false
                 ticket.get("opendiscord:autodelete-days").value = 0
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:autodelete-disable").build(source,{guild,channel,user,ticket,reason}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:autodelete-disable").build(origin,{guild,channel,user,ticket,reason}))
             
             }else if (scope == "enable"){
                 const time = instance.options.getNumber("time",true)
                 const reason = instance.options.getString("reason",false)
                 ticket.get("opendiscord:autodelete-enabled").value = true
                 ticket.get("opendiscord:autodelete-days").value = time
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:autodelete-enable").build(source,{guild,channel,user,ticket,reason,time}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:autodelete-enable").build(origin,{guild,channel,user,ticket,reason,time}))
             }
 
             //update ticket message
@@ -75,14 +75,14 @@ export const registerCommandResponders = async () => {
                 }
             }
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             const scope = instance.options.getSubCommand()
             const reason = instance.options.getString("reason",false)
             opendiscord.log(instance.user.displayName+" used the 'autodelete "+scope+"' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"reason",value:reason ?? "/"},
             ])
         })

@@ -10,14 +10,14 @@ export const registerCommandResponders = async () => {
     //TRANSFER COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:transfer",generalConfig.data.prefix,"transfer"))
     opendiscord.responders.commands.get("opendiscord:transfer").workers.add([
-        new api.ODWorker("opendiscord:transfer",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:transfer",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                                     
             //check permissions
             const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.transfer,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
                 return cancel()
             }
 
@@ -46,15 +46,15 @@ export const registerCommandResponders = async () => {
 
             //start transferring ticket ownership
             await instance.defer(false)
-            await opendiscord.actions.get("opendiscord:transfer-ticket").run(source,{guild,channel,user,ticket,reason,sendMessage:false,newCreator})
-            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:transfer-message").build(source,{guild,channel,user,ticket,oldCreator,newCreator,reason}))
+            await opendiscord.actions.get("opendiscord:transfer-ticket").run(origin,{guild,channel,user,ticket,reason,sendMessage:false,newCreator})
+            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:transfer-message").build(origin,{guild,channel,user,ticket,oldCreator,newCreator,reason}))
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             opendiscord.log(instance.user.displayName+" used the 'transfer' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
