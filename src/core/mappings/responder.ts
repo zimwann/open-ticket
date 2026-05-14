@@ -8,31 +8,31 @@ import * as api from "@open-discord-bots/framework/api"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODCommandResponderManagerIdMappings extends api.ODCommandResponderManagerIdConstraint {
-    "opendiscord:help":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:help"|"opendiscord:logs"},
-    "opendiscord:stats":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:stats"|"opendiscord:logs"},
-    "opendiscord:panel":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:panel"|"opendiscord:logs"},
-    "opendiscord:ticket":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:ticket"|"opendiscord:logs"},
-    "opendiscord:blacklist":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:blacklist"|"opendiscord:discord-logs"|"opendiscord:logs"},
+    "opendiscord:help":{origin:"slash"|"text",params:{},workers:"opendiscord:help"|"opendiscord:logs"},
+    "opendiscord:stats":{origin:"slash"|"text",params:{},workers:"opendiscord:stats"|"opendiscord:logs"},
+    "opendiscord:panel":{origin:"slash"|"text",params:{},workers:"opendiscord:panel"|"opendiscord:logs"},
+    "opendiscord:ticket":{origin:"slash"|"text",params:{},workers:"opendiscord:ticket"|"opendiscord:logs"},
+    "opendiscord:blacklist":{origin:"slash"|"text",params:{},workers:"opendiscord:blacklist"|"opendiscord:discord-logs"|"opendiscord:logs"},
     
-    "opendiscord:close":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:close"|"opendiscord:logs"},
-    "opendiscord:reopen":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:reopen"|"opendiscord:logs"},
-    "opendiscord:delete":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:delete"|"opendiscord:logs"},
-    "opendiscord:claim":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:claim"|"opendiscord:logs"},
-    "opendiscord:unclaim":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:unclaim"|"opendiscord:logs"},
-    "opendiscord:pin":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:pin"|"opendiscord:logs"},
-    "opendiscord:unpin":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:unpin"|"opendiscord:logs"},
+    "opendiscord:close":{origin:"slash"|"text",params:{},workers:"opendiscord:close"|"opendiscord:logs"},
+    "opendiscord:reopen":{origin:"slash"|"text",params:{},workers:"opendiscord:reopen"|"opendiscord:logs"},
+    "opendiscord:delete":{origin:"slash"|"text",params:{},workers:"opendiscord:delete"|"opendiscord:logs"},
+    "opendiscord:claim":{origin:"slash"|"text",params:{},workers:"opendiscord:claim"|"opendiscord:logs"},
+    "opendiscord:unclaim":{origin:"slash"|"text",params:{},workers:"opendiscord:unclaim"|"opendiscord:logs"},
+    "opendiscord:pin":{origin:"slash"|"text",params:{},workers:"opendiscord:pin"|"opendiscord:logs"},
+    "opendiscord:unpin":{origin:"slash"|"text",params:{},workers:"opendiscord:unpin"|"opendiscord:logs"},
 
-    "opendiscord:rename":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:rename"|"opendiscord:logs"},
-    "opendiscord:move":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:move"|"opendiscord:logs"},
-    "opendiscord:add":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:add"|"opendiscord:logs"},
-    "opendiscord:remove":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:remove"|"opendiscord:logs"},
-    "opendiscord:clear":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:clear"|"opendiscord:logs"},
-    "opendiscord:topic":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:topic"|"opendiscord:logs"},
-    "opendiscord:priority":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:priority"|"opendiscord:logs"},
-    "opendiscord:transfer":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:transfer"|"opendiscord:logs"},
+    "opendiscord:rename":{origin:"slash"|"text",params:{},workers:"opendiscord:rename"|"opendiscord:logs"},
+    "opendiscord:move":{origin:"slash"|"text",params:{},workers:"opendiscord:move"|"opendiscord:logs"},
+    "opendiscord:add":{origin:"slash"|"text",params:{},workers:"opendiscord:add"|"opendiscord:logs"},
+    "opendiscord:remove":{origin:"slash"|"text",params:{},workers:"opendiscord:remove"|"opendiscord:logs"},
+    "opendiscord:clear":{origin:"slash"|"text",params:{},workers:"opendiscord:clear"|"opendiscord:logs"},
+    "opendiscord:topic":{origin:"slash"|"text",params:{},workers:"opendiscord:topic"|"opendiscord:logs"},
+    "opendiscord:priority":{origin:"slash"|"text",params:{},workers:"opendiscord:priority"|"opendiscord:logs"},
+    "opendiscord:transfer":{origin:"slash"|"text",params:{},workers:"opendiscord:transfer"|"opendiscord:logs"},
 
-    "opendiscord:autoclose":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:autoclose"|"opendiscord:logs"},
-    "opendiscord:autodelete":{origin:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:autodelete"|"opendiscord:logs"},
+    "opendiscord:autoclose":{origin:"slash"|"text",params:{},workers:"opendiscord:autoclose"|"opendiscord:logs"},
+    "opendiscord:autodelete":{origin:"slash"|"text",params:{},workers:"opendiscord:autodelete"|"opendiscord:logs"},
 }
 
 /**## ODButtonResponderManagerIdMappings `interface`
@@ -57,8 +57,8 @@ export interface ODButtonResponderManagerIdMappings extends api.ODButtonResponde
     "opendiscord:reopen-ticket":{origin:"button",params:{},workers:"opendiscord:reopen-ticket"},
     "opendiscord:delete-ticket":{origin:"button",params:{},workers:"opendiscord:delete-ticket"},
 
-    "opendiscord:transcript-error-retry":{origin:"button",params:{},workers:"opendiscord:permissions"|"opendiscord:delete-ticket"|"opendiscord:logs"},
-    "opendiscord:transcript-error-continue":{origin:"button",params:{},workers:"opendiscord:permissions"|"opendiscord:delete-ticket"|"opendiscord:logs"},
+    "opendiscord:transcript-error-retry":{origin:"button",params:{},workers:"opendiscord:delete-ticket"|"opendiscord:logs"},
+    "opendiscord:transcript-error-continue":{origin:"button",params:{},workers:"opendiscord:delete-ticket"|"opendiscord:logs"},
     "opendiscord:clear-continue":{origin:"button",params:{},workers:"opendiscord:clear-continue"},
 }
 

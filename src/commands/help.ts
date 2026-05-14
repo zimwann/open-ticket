@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
+import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -13,13 +14,9 @@ export async function registerCommandResponders(){
         new api.ODWorker("opendiscord:help",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
             
-            //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.help,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
-                return cancel()
-            }
+            //responder checks
+            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"help")
+            if (!hasPerms) return cancel()
             
             //calculate slash/text mode for help menu
             let mode: "slash"|"text"

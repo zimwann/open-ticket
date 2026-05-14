@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
+import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -12,37 +13,25 @@ export async function registerCommandResponders(){
     opendiscord.responders.commands.get("opendiscord:move").workers.add([
         new api.ODWorker("opendiscord:move",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
-                        
-            //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.move,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
-                return cancel()
-            }
+            
+            //responder checks
+            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"move")
+            if (!hasPerms) return cancel()
+            
+            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+            
+            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            if (!ticket) return cancel()
+            
+            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            if (!isAvailable) return cancel()
 
-            //check if in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                return cancel()
-            }
-
-            //check if ticket exists
-            const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
-                return cancel()
-            }
-            //return when busy
-            if (ticket.get("opendiscord:busy").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
-                return cancel()
-            }
-
+            //fetch data
             const id = instance.options.getString("id",true)
             const reason = instance.options.getString("reason",false)
-
             const option = opendiscord.options.get(id)
+            
             //return if unknown option
             if (!option || !(option instanceof api.ODTicketOption)){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:opendiscord.languages.getTranslation("errors.titles.unknownOption"),layout:"simple"}))

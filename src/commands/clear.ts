@@ -14,21 +14,16 @@ export async function registerCommandResponders(){
     opendiscord.responders.commands.get("opendiscord:clear").workers.add([
         new api.ODWorker("opendiscord:clear",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
-                        
+                
+            //responder checks
             //check permissions (only allow global admins: ticket admins aren't allowed to clear tickets)
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.clear,"support",user,member,channel,guild,{allowChannelUserScope:false,allowChannelRoleScope:false})
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
-                return cancel()
-            }
-
-            //check is in guild/server
-            if (!guild || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                return cancel()
-            }
+            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"clear",{allowChannelUserScope:false,allowChannelRoleScope:false})
+            if (!hasPerms) return cancel()
             
+            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+            
+            //fetch data
             const tempFilter = instance.options.getString("filter",false)
             const filter = (tempFilter) ? tempFilter.toLowerCase() as api.ODTicketClearFilter : "all"
             const channelNameList: string[] = []

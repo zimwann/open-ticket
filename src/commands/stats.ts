@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
+import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -10,81 +11,23 @@ export async function registerCommandResponders(){
     //STATS COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:stats",generalConfig.data.prefix,/^stats/))
     opendiscord.responders.commands.get("opendiscord:stats").workers.add([
-        new api.ODWorker("opendiscord:permissions",1,async (instance,params,origin,cancel) => {
-            const permissionMode = generalConfig.data.system.permissions.stats
-            
-            //command is disabled
-            if (permissionMode == "none"){
-                //no permissions
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
-                return cancel()
-            }
-
-            //reset subcommand is owner/developer only
-            if (instance.options.getSubCommand() == "reset"){
-                if (!opendiscord.permissions.hasPermissions("owner",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild))){
-                    //no permissions
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["owner","developer"]}))
-                    return cancel()
-                }else return
-            }
-
-            //permissions for normal scopes
-            if (permissionMode == "everyone") return
-            else if (permissionMode == "admin"){
-                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild))){
-                    //no permissions
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
-                    return cancel()
-                }else return
-            }else{
-                if (!instance.guild || !instance.member){
-                    //error
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Permission Error: Not in Server #1",layout:"advanced"}))
-                    return cancel()
-                }
-                const role = await opendiscord.client.fetchGuildRole(instance.guild,permissionMode)
-                if (!role){
-                    //error
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Permission Error: Not in Server #2",layout:"advanced"}))
-                    return cancel()
-                }
-                if (!role.members.has(instance.member.id)){
-                    //no permissions
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
-                    return cancel()
-                }else return
-            }
-        }),
         new api.ODWorker("opendiscord:stats",0,async (instance,params,origin,cancel) => {
             const {user,member,channel,guild} = instance
                         
             //check permissions
-            if (generalConfig.data.system.permissions.stats === "none"){
-                //command is disabled
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
-                return cancel()
-
-            }else if (instance.options.getSubCommand() === "reset" && !opendiscord.permissions.hasPermissions("owner",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild))){
+            if (instance.options.getSubCommand() === "reset" && !opendiscord.permissions.hasPermissions("owner",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild))){
                 //reset --> owner/developer role is required
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["owner","developer"]}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["owner","developer"]}))
                 return cancel()
-
             }else{
                 //default permissions check
-                const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.stats,"support",user,member,channel,guild)
-                if (!permsResult.hasPerms){
-                    if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                    else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
-                    return cancel()
-                }
+                const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"stats")
+                if (!hasPerms) return cancel()
             }
 
-            //check is in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
-                return cancel()
-            }
+            //responder checks
+            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //subcommands
             const scope = instance.options.getSubCommand()
@@ -108,7 +51,6 @@ export async function registerCommandResponders(){
                 const reason = instance.options.getString("reason",false)
                 opendiscord.statistics.reset()
                 await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:stats-reset").build(origin,{guild,channel,user,reason}))
-
             }
         }),
         new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {

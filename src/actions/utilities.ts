@@ -27,11 +27,11 @@ export async function replyInteractiveMessageState(instance:api.ODButtonResponde
 }
 
 /**Check the permissions for this command. If not allowed, auto replies with error and returns `false`. When `false` is received, the worker should be returned and canceled. */
-export async function replyHasPermissions(instance:api.ODButtonResponderInstance|api.ODCommandResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance,origin:"slash"|"text"|"button"|"dropdown"|"modal"|"other",commandName:keyof api.ODGeneralJsonConfig_SystemPermissions) {
+export async function replyHasPermissions(instance:api.ODButtonResponderInstance|api.ODCommandResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance,origin:"slash"|"text"|"button"|"dropdown"|"modal"|"other",commandName:keyof api.ODGeneralJsonConfig_SystemPermissions,settings?:api.ODPermissionSettings) {
     //check permissions
     const {user,member,channel,guild} = instance
     const generalConfig = opendiscord.configs.get("opendiscord:general")
-    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions[commandName],"support",user,member,channel,guild)
+    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions[commandName],"support",user,member,channel,guild,settings)
     
     if (!permsResult.hasPerms){
         if (permsResult.reason == "not-in-server" && channel) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))

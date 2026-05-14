@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
+import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -13,11 +14,9 @@ export async function registerButtonResponders(){
         new api.ODWorker("opendiscord:role-option",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user} = instance
             
-            //check is in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
-                return cancel()
-            }
+            //responder checks
+            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
             const optionId = instance.interaction.customId.split("_")[2]

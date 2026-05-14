@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
+import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -12,22 +13,21 @@ export async function registerCommandResponders(){
     opendiscord.responders.commands.get("opendiscord:panel").workers.add([
         new api.ODWorker("opendiscord:panel",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
-                        
-            //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.panel,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
-                return cancel()
-            }
-
-            //check is in guild/server
-            if (!guild || instance.channel.type == discord.ChannelType.GroupDM){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(origin,{channel:instance.channel,user:instance.user}))
-                return cancel()
-            }
             
-            //get panel data
+            //responder checks
+            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"panel")
+            if (!hasPerms) return cancel()
+            
+            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+            
+            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            if (!ticket) return cancel()
+            
+            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            if (!isAvailable) return cancel()
+
+            //fetch data
             const id = instance.options.getString("id",true)
             const panel = opendiscord.panels.get(id)
             if (!panel){
@@ -36,7 +36,7 @@ export async function registerCommandResponders(){
             }
             
             await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:panel-ready").build(origin,{guild,channel,user,panel}))
-            const panelMessage = await instance.channel.send((await opendiscord.builders.messages.getSafe("opendiscord:panel").build(origin,{guild,channel,user,panel})).message)
+            const panelMessage = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:panel").build(origin,{guild,channel,user,panel})).message)
 
             //add panel to database (this way, the bot knows where all panels are located)
             const globalDatabase = opendiscord.databases.get("opendiscord:global")
