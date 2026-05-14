@@ -8,13 +8,13 @@ const modifiers = opendiscord.components.modifiers
 const lang = opendiscord.languages
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
-export async function addVerifyButton(instance:api.ODMessageInstance|api.ODComponentFactoryInstance<api.ODMessageComponent>,params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar<string>},buttonStyle:"✅"|"❌",verifyButtonId:string,customLabel?:string,customColor?:api.ODValidButtonColor,customEmoji?:string){
+export async function addVerifyButton(instance:api.ODMessageInstance|api.ODComponentFactoryInstance<api.ODMessageComponent>,params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar<string>},defaultButtonType:"✅"|"❌",useDefaultLabels:boolean,verifyButtonId:string,customLabel?:string,customColor?:api.ODValidButtonColor,customEmoji?:string){
     const {guild,channel,user,verifybar} = params
     if (instance instanceof api.ODMessageInstance){
         //message builders
         instance.addComponent(await opendiscord.builders.buttons.getSafe("opendiscord:verifybar-button").build("verifybar",{
             guild,channel,user,verifybar,
-            buttonStyle,customColor,customEmoji,customLabel,
+            defaultButtonType,useDefaultLabels,customColor,customEmoji,customLabel,
             verifyButtonId
         }))
     }else{
@@ -40,9 +40,9 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or close with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.close"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 
     //REOPEN TICKET VERIFYBAR
@@ -55,9 +55,9 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or reopen with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.reopen"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 
     //DELETE TICKET VERIFYBAR
@@ -70,10 +70,10 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or delete with reason or without transcript
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
-        if (generalConfig.data.system.enableDeleteWithoutTranscript) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithoutTranscript,lang.getTranslation("actions.buttons.withoutTranscript"),"red","📄")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.delete"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        if (generalConfig.data.system.enableDeleteWithoutTranscript) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithoutTranscript,lang.getTranslation("actions.buttons.withoutTranscript"),"red","📄")
     }))
 
     //CLAIM TICKET VERIFYBAR
@@ -86,9 +86,9 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or claim with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.claim"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 
     //UNCLAIM TICKET VERIFYBAR
@@ -101,9 +101,9 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or unclaim with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.unclaim"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 
     //PIN TICKET VERIFYBAR
@@ -116,9 +116,9 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or pin with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.pin"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 
     //UNPIN TICKET VERIFYBAR
@@ -131,8 +131,8 @@ export async function registerAllVerifyBarModifiers(){
         }
 
         //cancel, accept or unpin with reason
-        await addVerifyButton(instance,params,"❌",api.ODVerifyButtonId.Cancel)
-        await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.Accept)
-        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
+        await addVerifyButton(instance,params,"❌",true,api.ODVerifyButtonId.Cancel)
+        await addVerifyButton(instance,params,"✅",true,api.ODVerifyButtonId.Accept,lang.getTranslation("actions.buttons.unpin"))
+        if (generalConfig.data.system.enableTicketActionWithReason) await addVerifyButton(instance,params,"✅",false,api.ODVerifyButtonId.AcceptWithReason,lang.getTranslation("actions.buttons.withReason"),"blue","✏️")
     }))
 }

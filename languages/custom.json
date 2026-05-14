@@ -205,13 +205,13 @@
             "transfer":"The ticket ownership has been transferred from {0} to {1} by {2}."
         },
         "modal":{
-            "closePlaceholder":"Why did you close this ticket?",
-            "deletePlaceholder":"Why did you delete this ticket?",
-            "reopenPlaceholder":"Why did you reopen this ticket?",
-            "claimPlaceholder":"Why did you claim this ticket?",
-            "unclaimPlaceholder":"Why did you unclaim this ticket?",
-            "pinPlaceholder":"Why did you pin this ticket?",
-            "unpinPlaceholder":"Why did you unpin this ticket?"
+            "closePlaceholder":"Why would you like to close this ticket?",
+            "deletePlaceholder":"Why would you like to delete this ticket?",
+            "reopenPlaceholder":"Why would you like to reopen this ticket?",
+            "claimPlaceholder":"Why would you like to claim this ticket?",
+            "unclaimPlaceholder":"Why would you like to unclaim this ticket?",
+            "pinPlaceholder":"Why would you like to pin this ticket?",
+            "unpinPlaceholder":"Why would you like to unpin this ticket?"
         },
         "logs":{
             "createLog":"A new ticket got created by {0}.",

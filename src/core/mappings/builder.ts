@@ -16,7 +16,7 @@ import * as discord from "discord.js"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODButtonManagerIdMappings extends api.ODButtonManagerIdConstraint {
-    "opendiscord:verifybar-button":{origin:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar<string>,verifyButtonId:string,buttonStyle:"✅"|"❌",customLabel?:string,customColor?:api.ODValidButtonColor,customEmoji?:string},workers:"opendiscord:verifybar-button"},
+    "opendiscord:verifybar-button":{origin:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar<string>,verifyButtonId:string,defaultButtonType:"✅"|"❌",useDefaultLabels:boolean,customLabel?:string,customColor?:api.ODValidButtonColor,customEmoji?:string},workers:"opendiscord:verifybar-button"},
     
     "opendiscord:error-ticket-deprecated-transcript":{origin:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{},workers:"opendiscord:error-ticket-deprecated-transcript"},
     
