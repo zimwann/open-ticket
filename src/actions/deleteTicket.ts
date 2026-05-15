@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET DELETION SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -20,21 +20,8 @@ export async function registerActions(){
             ticket.get("opendiscord:for-deletion").value = true
             ticket.get("opendiscord:busy").value = true
 
-            //update ticket message
-            const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket deletion!","error",[
-                        {key:"channel",value:"#"+channel.name},
-                        {key:"channelid",value:channel.id,hidden:true},
-                        {key:"messageid",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
-                    ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
-                }
-            }
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
 
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:delete-message").build(origin,{guild,channel,user,ticket,reason})).message)
         

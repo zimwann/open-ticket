@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //CLOSE COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
@@ -17,22 +16,22 @@ export async function registerCommandResponders(){
             const {user,member,channel,guild} = instance
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"close")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"close")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
                 
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketOpen = await actionUtils.replyTicketMustBeOpen(instance,origin,ticket)
+            const isTicketOpen = await openticketUtils.replyTicketMustBeOpen(instance,origin,ticket)
             if (!isTicketOpen) return cancel()
             
-            const messagesHaveBeenSent = await actionUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
+            const messagesHaveBeenSent = await openticketUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
             if (!messagesHaveBeenSent) return cancel()
             
             //start closing ticket
@@ -68,25 +67,25 @@ export async function registerButtonResponders(){
             const {guild,channel,message,user,member} = instance
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"close")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"close")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
             if (!state) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketOpen = await actionUtils.replyTicketMustBeOpen(instance,origin,ticket)
+            const isTicketOpen = await openticketUtils.replyTicketMustBeOpen(instance,origin,ticket)
             if (!isTicketOpen) return cancel()
 
-            const messagesHaveBeenSent = await actionUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
+            const messagesHaveBeenSent = await openticketUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
             if (!messagesHaveBeenSent) return cancel()
 
             //fetch state details
@@ -121,25 +120,25 @@ export async function registerVerifyBars(){
             const {user,member,channel,guild,message} = instance
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"close")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"close")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
             if (!state) return cancel()
 
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketOpen = await actionUtils.replyTicketMustBeOpen(instance,origin,ticket)
+            const isTicketOpen = await openticketUtils.replyTicketMustBeOpen(instance,origin,ticket)
             if (!isTicketOpen) return cancel()
 
-            const messagesHaveBeenSent = await actionUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
+            const messagesHaveBeenSent = await openticketUtils.replyMessageMustBeSentBeforeClose(instance,origin,ticket,"close")
             if (!messagesHaveBeenSent) return cancel()
 
             //fetch state details
@@ -197,22 +196,22 @@ export async function registerModalResponders(){
             const message = await opendiscord.client.fetchChannelMessage(match[1],match[2])
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"close")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"close")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || !channel || channel.isDMBased()) return cancel()
             
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/close")
             if (!state) return cancel()
 
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketOpen = await actionUtils.replyTicketMustBeOpen(instance,origin,ticket)
+            const isTicketOpen = await openticketUtils.replyTicketMustBeOpen(instance,origin,ticket)
             if (!isTicketOpen) return cancel()
             
             //fetch state details

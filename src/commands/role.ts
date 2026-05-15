@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //ROLE BUTTON (not command)
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -15,7 +14,7 @@ export async function registerButtonResponders(){
             const {guild,channel,user} = instance
             
             //responder checks
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data

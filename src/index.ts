@@ -54,6 +54,7 @@ utilities.moduleInstalled("typescript",true)
 utilities.moduleInstalled("terminal-kit",true)
 
 export const opendiscord: api.ODOpenTicketMain = new api.ODOpenTicketMain()
+export * as openticketUtils from "./actions/utilities.js"
 
 utilities.initialStartupLogs(opendiscord,"openticket")
 

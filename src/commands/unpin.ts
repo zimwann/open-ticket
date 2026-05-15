@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //UNPIN COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
@@ -17,19 +16,19 @@ export async function registerCommandResponders(){
             const {user,member,channel,guild} = instance
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"unpin")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"unpin")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketPinned = await actionUtils.replyTicketMustBePinned(instance,origin,ticket)
+            const isTicketPinned = await openticketUtils.replyTicketMustBePinned(instance,origin,ticket)
             if (!isTicketPinned) return cancel()
             
             //start unpining ticket
@@ -65,22 +64,22 @@ export async function registerButtonResponders(){
             const {guild,channel,user,message} = instance
                         
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"unpin")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"unpin")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
             if (!state) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketPinned = await actionUtils.replyTicketMustBePinned(instance,origin,ticket)
+            const isTicketPinned = await openticketUtils.replyTicketMustBePinned(instance,origin,ticket)
             if (!isTicketPinned) return cancel()
 
             //fetch state details
@@ -115,22 +114,22 @@ export async function registerVerifyBars(){
             const {user,member,channel,guild,message} = instance
                         
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"unpin")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"unpin")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
             if (!state) return cancel()
 
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketPinned = await actionUtils.replyTicketMustBePinned(instance,origin,ticket)
+            const isTicketPinned = await openticketUtils.replyTicketMustBePinned(instance,origin,ticket)
             if (!isTicketPinned) return cancel()
 
             //fetch state details
@@ -188,22 +187,22 @@ export async function registerModalResponders(){
             const message = await opendiscord.client.fetchChannelMessage(match[1],match[2])
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"unpin")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"unpin")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || !channel || channel.isDMBased()) return cancel()
 
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/unpin")
             if (!state) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketPinned = await actionUtils.replyTicketMustBePinned(instance,origin,ticket)
+            const isTicketPinned = await openticketUtils.replyTicketMustBePinned(instance,origin,ticket)
             if (!isTicketPinned) return cancel()
             
             //fetch state details

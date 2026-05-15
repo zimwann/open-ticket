@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //TICKET COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
@@ -34,10 +33,10 @@ export async function registerCommandResponders(){
             const {user,member,channel,guild} = instance
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"ticket")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"ticket")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
@@ -86,7 +85,7 @@ export async function registerButtonResponders(){
             const {guild,channel,user} = instance
             
             //responder checks
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
@@ -128,7 +127,7 @@ export async function registerDropdownResponders(){
             const {guild,channel,user} = instance
             
             //responder checks
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
@@ -178,7 +177,7 @@ export async function registerModalResponders(){
             const {guild,channel,user} = instance
             
             //responder checks
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || !channel || channel.isDMBased()) return cancel()
 
             //get option data

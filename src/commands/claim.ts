@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //CLAIM COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
@@ -17,19 +16,19 @@ export async function registerCommandResponders(){
             const {guild,channel,user,member} = instance
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"claim")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"claim")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketUnclaimed = await actionUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
+            const isTicketUnclaimed = await openticketUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
             if (!isTicketUnclaimed) return cancel()
             
             //start claiming ticket
@@ -66,22 +65,22 @@ export async function registerButtonResponders(){
             const {guild,channel,user,message} = instance
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"claim")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"claim")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
             if (!state) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketUnclaimed = await actionUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
+            const isTicketUnclaimed = await openticketUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
             if (!isTicketUnclaimed) return cancel()
 
             //fetch state details
@@ -116,22 +115,22 @@ export async function registerVerifyBars(){
             const {user,member,channel,guild,message} = instance
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"claim")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"claim")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
             if (!state) return cancel()
 
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketUnclaimed = await actionUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
+            const isTicketUnclaimed = await openticketUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
             if (!isTicketUnclaimed) return cancel()
 
             //fetch state details
@@ -189,22 +188,22 @@ export async function registerModalResponders(){
             const message = await opendiscord.client.fetchChannelMessage(match[1],match[2])
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"claim")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"claim")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || !channel || channel.isDMBased()) return cancel()
 
-            const state = await actionUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/claim")
             if (!state) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
             
-            const isTicketUnclaimed = await actionUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
+            const isTicketUnclaimed = await openticketUtils.replyTicketMustBeUnclaimed(instance,origin,ticket)
             if (!isTicketUnclaimed) return cancel()
             
             //fetch state details

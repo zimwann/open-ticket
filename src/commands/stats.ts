@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //STATS COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -21,12 +20,12 @@ export async function registerCommandResponders(){
                 return cancel()
             }else{
                 //default permissions check
-                const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"stats")
+                const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"stats")
                 if (!hasPerms) return cancel()
             }
 
             //responder checks
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //subcommands

@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET UNPINNING SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -36,25 +36,13 @@ export async function registerActions(){
                         {key:"oldName",value:originalName},
                         {key:"newName",value:newName}
                     ])
-                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-unpin",{guild,channel,user,originalName,newName})).message)
+                    const sentMsg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-unpin",{guild,channel,user,originalName,newName})).message)
+                    setTimeout(() => {if (sentMsg.deletable) sentMsg.delete()},7000) //autodelete error message
                 }
             }
 
-            //update ticket message
-            const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket unpinning!","error",[
-                        {key:"channel",value:"#"+channel.name},
-                        {key:"channelid",value:channel.id,hidden:true},
-                        {key:"messageid",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
-                    ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
-                }
-            }
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
 
             //reply with new message
             if (params.sendMessage){

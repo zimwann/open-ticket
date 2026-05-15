@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //AUTODELETE COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -15,16 +14,16 @@ export async function registerCommandResponders(){
             const {guild,channel,user,member} = instance
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"autodelete")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"autodelete")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
-            const ticket = await actionUtils.replyIsTicket(instance,origin)
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
             if (!ticket) return cancel()
             
-            const isAvailable = await actionUtils.replyTicketIsAvailable(instance,origin,ticket)
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
             if (!isAvailable) return cancel()
 
             //subcommands
@@ -45,21 +44,8 @@ export async function registerCommandResponders(){
                 await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:autodelete-enable").build(origin,{guild,channel,user,ticket,reason,time}))
             }
 
-            //update ticket message
-            const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on autodelete "+scope+"!","error",[
-                        {key:"channel",value:"#"+channel.name},
-                        {key:"channelid",value:channel.id,hidden:true},
-                        {key:"messageid",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
-                    ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
-                }
-            }
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
         }),
         new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             const scope = instance.options.getSubCommand()

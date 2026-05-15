@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET CLOSING SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -47,7 +47,8 @@ export async function registerActions(){
                         ticket.get("opendiscord:category-mode").value = categoryResult.newCategoryMode
                         ticket.get("opendiscord:category").value = categoryResult.newCategoryId
                     }catch(err){
-                        await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-category").build("ticket-close",{guild,channel,user,originalCategory:originalCategoryName,newCategory:newCategoryName})).message)
+                        const sentMsg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-category").build("ticket-close",{guild,channel,user,originalCategory:originalCategoryName,newCategory:newCategoryName})).message)
+                        setTimeout(() => {if (sentMsg.deletable) sentMsg.delete()},7000) //autodelete error message
                         opendiscord.log("Unable to move ticket to closed category.","error",[
                             {key:"channel",value:"#"+channel.name},
                             {key:"channelid",value:channel.id,hidden:true},
@@ -114,21 +115,8 @@ export async function registerActions(){
             })
             channel.permissionOverwrites.set(permissions)
 
-            //update ticket message
-            const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket closing!","error",[
-                        {key:"channel",value:"#"+channel.name},
-                        {key:"channelid",value:channel.id,hidden:true},
-                        {key:"messageid",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
-                    ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
-                }
-            }
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
 
             //reply with new message
             if (params.sendMessage){

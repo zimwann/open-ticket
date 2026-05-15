@@ -1,10 +1,8 @@
 ///////////////////////////////////////
-//ACTION UTILITY FUNCTIONS
+//OPEN TICKET UTILITY FUNCTIONS
 ///////////////////////////////////////
 import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
-
-const lang = opendiscord.languages
 
 /**Fetch the interactive message state. If not present, auto replies with error and returns `null`. When `null` is received, the worker should be returned and canceled. */
 export async function replyInteractiveMessageState(instance:api.ODButtonResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance,origin:"slash"|"text"|"button"|"dropdown"|"modal"|"other",channel:discord.TextBasedChannel,message:discord.Message|null,replacementCommandName:string){
@@ -140,6 +138,7 @@ export async function replyMessageMustBeSentBeforeClose(instance:api.ODButtonRes
     //return when not allowed because of missing messages
     const {user,member,channel,guild} = instance
     const generalConfig = opendiscord.configs.get("opendiscord:general")
+    const lang = opendiscord.languages
     const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions[commandName],"support",user,member,channel,guild)
 
     if (!permsResult.hasPerms) throw new api.ODSystemError("Please check permissions before using replyMessageMustBeSentBeforeClose()")
@@ -157,4 +156,21 @@ export async function replyMessageMustBeSentBeforeClose(instance:api.ODButtonRes
         }
         return true
     }else return true
+}
+
+/**Update the ticket message from a given ticket channel. This should be used after every change to the `ODTicket` after an action. */
+export async function updateTicketMessage(guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:api.ODTicket){
+    const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
+    if (!ticketMessage || !user || !channel || !guild || channel.isDMBased()) return
+    try{
+        await ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
+    }catch(e){
+        opendiscord.log("Unable to edit ticket message!","error",[
+            {key:"channel",value:"#"+channel.name},
+            {key:"channelid",value:channel.id,hidden:true},
+            {key:"messageid",value:ticketMessage.id},
+            {key:"option",value:ticket.option.id.value}
+        ])
+        opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
+    }
 }

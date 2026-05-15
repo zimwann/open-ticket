@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //HELP COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
@@ -15,7 +14,7 @@ export async function registerCommandResponders(){
             const {guild,channel,user,member} = instance
             
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"help")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"help")
             if (!hasPerms) return cancel()
             
             //calculate slash/text mode for help menu

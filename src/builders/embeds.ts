@@ -338,8 +338,8 @@ const errorEmbeds = () => {
             instance.setDescription(lang.getTranslation("errors.descriptions.channelRename"))
             instance.setFooter(lang.getTranslationWithParams("errors.descriptions.channelRenameSource",[method]))
             instance.addFields(
-                {name:lang.getTranslation("params.uppercase.originalName")+":",value:"```#"+originalName+"```",inline:false},
-                {name:lang.getTranslation("params.uppercase.newName")+":",value:"```#"+newName+"```",inline:false}
+                {name:lang.getTranslation("params.uppercase.originalName")+":",value:"```#"+originalName+"```",inline:true},
+                {name:lang.getTranslation("params.uppercase.newName")+":",value:"```#"+newName+"```",inline:true}
             )
         })
     )
@@ -361,9 +361,9 @@ const errorEmbeds = () => {
             instance.setFooter(lang.getTranslationWithParams("errors.descriptions.channelRenameSource",[method]))
             instance.addFields(
                 //TODO TRANSLATION!!!
-                {name:"Original Category"+":",value:"```"+originalCategory+"```",inline:false},
+                {name:"Original Category"+":",value:"```"+originalCategory+"```",inline:true},
                 //TODO TRANSLATION!!!
-                {name:"New Category"+":",value:"```"+newCategory+"```",inline:false}
+                {name:"New Category"+":",value:"```"+newCategory+"```",inline:true}
             )
         })
     )

@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET REMOVE USER SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -29,20 +29,8 @@ export async function registerActions(){
                 opendiscord.log("Failed to remove channel permission overwrites on remove-ticket-user","error")
             }
 
-            //update ticket message
-            const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket user removal!","error",[
-                        {key:"channel",value:channel.id},
-                        {key:"message",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
-                    ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
-                }
-            }
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
 
             //reply with new message
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:remove-message").build(origin,{guild,channel,user,ticket,reason,data})).message)

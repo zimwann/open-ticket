@@ -1,7 +1,8 @@
 ///////////////////////////////////////
 //VERIFYBAR SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
+import * as discord from "discord.js"
 
 export async function registerButtonResponders(){
     //HANDLE VERIFYBAR BUTTON

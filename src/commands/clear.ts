@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //CLEAR COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
-import * as actionUtils from "../actions/utilities.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const clearMsgState = opendiscord.states.get("opendiscord:clear-message")
@@ -17,10 +16,10 @@ export async function registerCommandResponders(){
                 
             //responder checks
             //check permissions (only allow global admins: ticket admins aren't allowed to clear tickets)
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"clear",{allowChannelUserScope:false,allowChannelRoleScope:false})
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"clear",{allowChannelUserScope:false,allowChannelRoleScope:false})
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
             
             //fetch data
@@ -79,10 +78,10 @@ export async function registerButtonResponders(){
             }
 
             //responder checks
-            const hasPerms = await actionUtils.replyHasPermissions(instance,origin,"clear")
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"clear")
             if (!hasPerms) return cancel()
             
-            const isInGuild = await actionUtils.replyIsInGuild(instance,origin)
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
             if (!isInGuild || !guild || !channel || channel.isDMBased()) return cancel()
 
             //fetch state details

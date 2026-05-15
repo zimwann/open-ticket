@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET TOPIC SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index.js"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -34,7 +34,8 @@ export async function registerActions(){
                         {key:"oldName",value:originalName},
                         {key:"newName",value:newName}
                     ])
-                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-priority",{guild,channel,user,originalName,newName})).message)
+                    const sentMsg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-priority",{guild,channel,user,originalName,newName})).message)
+                    setTimeout(() => {if (sentMsg.deletable) sentMsg.delete()},7000) //autodelete error message
                 }
             }
 
