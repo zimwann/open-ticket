@@ -36,10 +36,6 @@ export async function registerActions(){
             await opendiscord.statistics.get("opendiscord:global").setStat("opendiscord:tickets-transferred",1,"increase")
             await opendiscord.statistics.get("opendiscord:user").setStat("opendiscord:tickets-transferred",user.id,1,"increase")
 
-            //get new channel properties
-            const channelPrefix = ticket.option.get("opendiscord:channel-prefix").value
-            const channelSuffix = ticket.get("opendiscord:channel-suffix").value
-
             //handle permissions
             const permissions: discord.OverwriteResolvable[] = [{
                 type:discord.OverwriteType.Role,
@@ -93,18 +89,22 @@ export async function registerActions(){
                 opendiscord.log("Failed to reset channel permissions on ticket transfer!","error")
             }
 
-            //rename channel (and give error when crashed)
-            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
-            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
-            
-            const originalName = channel.name
-            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(channelPrefix+channelSuffix)
-            try{
-                await utilities.timedAwait(channel.setName(newName),2500,(err) => {
-                    opendiscord.log("Failed to rename channel on ticket transfer","error")
-                })
-            }catch(err){
-                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-transfer",{guild,channel,user,originalName,newName:newName})).message)
+            //calculate channel name
+            const channelNameResult = await opendiscord.actions.get("opendiscord:calculate-ticket-name").run("transfer-ticket",{guild,user,option:ticket.option,channel,ticket,currentChannelName:channel.name})
+            if (channelNameResult && channelNameResult.shouldChangeName && typeof channelNameResult.newChannelName !== "undefined"){
+                const originalName = channel.name
+                const newName = channelNameResult.newChannelName
+                try{
+                    await utilities.timedAwait(channel.setName(newName),2500,(err) => {
+                        opendiscord.log("Failed to rename channel on ticket transfer","error")
+                    })
+                }catch(err){
+                    opendiscord.log("Unable to rename channel while transferring ticket! Waiting until ratelimit expires...","warning",[
+                        {key:"oldName",value:originalName},
+                        {key:"newName",value:newName}
+                    ])
+                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-transfer",{guild,channel,user,originalName,newName})).message)
+                }
             }
 
             //update ticket message

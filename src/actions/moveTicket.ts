@@ -20,10 +20,6 @@ export async function registerActions(){
             await opendiscord.statistics.get("opendiscord:global").setStat("opendiscord:tickets-moved",1,"increase")
             await opendiscord.statistics.get("opendiscord:user").setStat("opendiscord:tickets-moved",user.id,1,"increase")
 
-            //get new channel properties
-            const channelPrefix = ticket.option.get("opendiscord:channel-prefix").value
-            const channelSuffix = ticket.get("opendiscord:channel-suffix").value
-
             //calculate & update category
             const categoryResult = await opendiscord.actions.get("opendiscord:calculate-ticket-category").run("move-ticket",{guild,user,option:ticket.option,channel,ticket,currentCategoryId:channel.parentId})
             if (categoryResult && categoryResult.shouldChangeCategory && typeof categoryResult.newCategoryId !== "undefined" && typeof categoryResult.newCategoryMode !== "undefined" && typeof categoryResult.newCategory !== "undefined"){
@@ -109,18 +105,22 @@ export async function registerActions(){
             ticket.get("opendiscord:participants").value = participants
             ticket.get("opendiscord:participants").refreshDatabase()
 
-            //rename channel (and give error when crashed)
-            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
-            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
-            
-            const originalName = channel.name
-            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(channelPrefix+channelSuffix)
-            try{
-                await utilities.timedAwait(channel.setName(newName),2500,(err) => {
-                    opendiscord.log("Failed to rename channel on ticket move","error")
-                })
-            }catch(err){
-                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-move",{guild,channel,user,originalName,newName:newName})).message)
+            //calculate channel name
+            const channelNameResult = await opendiscord.actions.get("opendiscord:calculate-ticket-name").run("move-ticket",{guild,user,option:ticket.option,channel,ticket,currentChannelName:channel.name})
+            if (channelNameResult && channelNameResult.shouldChangeName && typeof channelNameResult.newChannelName !== "undefined"){
+                const originalName = channel.name
+                const newName = channelNameResult.newChannelName
+                try{
+                    await utilities.timedAwait(channel.setName(newName),2500,(err) => {
+                        opendiscord.log("Failed to rename channel on ticket move","error")
+                    })
+                }catch(err){
+                    opendiscord.log("Unable to rename channel while moving ticket! Waiting until ratelimit expires...","warning",[
+                        {key:"oldName",value:originalName},
+                        {key:"newName",value:newName}
+                    ])
+                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-move",{guild,channel,user,originalName,newName})).message)
+                }
             }
 
             //update ticket message

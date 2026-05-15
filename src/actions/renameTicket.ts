@@ -15,18 +15,25 @@ export async function registerActions(){
 
             await opendiscord.events.get("onTicketRename").emit([ticket,user,channel,reason])
 
-            //rename channel (and give error when crashed)
-            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
-            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
+            //update ticket
+            ticket.get("opendiscord:channel-renamed").value = data
 
-            const originalName = channel.name
-            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(data)
-            try{
-                await utilities.timedAwait(channel.setName(newName),2500,(err) => {
-                    opendiscord.log("Failed to rename channel on ticket rename","error")
-                })
-            }catch(err){
-                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-rename",{guild,channel,user,originalName,newName:data})).message)
+            //calculate channel name
+            const channelNameResult = await opendiscord.actions.get("opendiscord:calculate-ticket-name").run("rename-ticket",{guild,user,option:ticket.option,channel,ticket,currentChannelName:channel.name})
+            if (channelNameResult && channelNameResult.shouldChangeName && typeof channelNameResult.newChannelName !== "undefined"){
+                const originalName = channel.name
+                const newName = channelNameResult.newChannelName
+                try{
+                    await utilities.timedAwait(channel.setName(newName),2500,(err) => {
+                        opendiscord.log("Failed to rename channel on ticket rename","error")
+                    })
+                }catch(err){
+                    opendiscord.log("Unable to rename channel while renaming ticket! Waiting until ratelimit expires...","warning",[
+                        {key:"oldName",value:originalName},
+                        {key:"newName",value:newName}
+                    ])
+                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-rename",{guild,channel,user,originalName,newName})).message)
+                }
             }
 
             //update ticket message

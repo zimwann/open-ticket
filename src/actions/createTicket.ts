@@ -18,11 +18,14 @@ export async function registerActions(){
             await opendiscord.events.get("onTicketChannelCreation").emit([option,user])
 
             //get channel properties
-            const channelPrefix = option.get("opendiscord:channel-prefix").value
             const channelTopicText = option.get("opendiscord:channel-topic").value
-            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user,guild)
-            const channelName = channelPrefix+channelSuffix
 
+            //calculate channel name
+            const channelNameResult = await opendiscord.actions.get("opendiscord:calculate-ticket-name").run("create-ticket",{guild,user,option,channel:null,ticket:null,currentChannelName:null})
+            if (!channelNameResult) return opendiscord.log("Ticket Creation Error: Unable to calculate ticket name.","error")
+            const channelName = (channelNameResult.shouldChangeName && typeof channelNameResult.newChannelName !== "undefined") ? channelNameResult.newChannelName : "ot-unnamed-ticket"
+            const channelSuffix = (typeof channelNameResult.newChannelSuffix !== "undefined") ? channelNameResult.newChannelSuffix : "unknown"
+            
             //calculate category
             const categoryResult = await opendiscord.actions.get("opendiscord:calculate-ticket-category").run("create-ticket",{guild,user,option,channel:null,ticket:null,currentCategoryId:null})
             if (!categoryResult) return opendiscord.log("Ticket Creation Error: Unable to calculate ticket category.","error")
@@ -118,6 +121,7 @@ export async function registerActions(){
                 new api.ODTicketData("opendiscord:ticket-message",null),
                 new api.ODTicketData("opendiscord:participants",participants),
                 new api.ODTicketData("opendiscord:channel-suffix",channelSuffix),
+                new api.ODTicketData("opendiscord:channel-renamed",null),
                 new api.ODTicketData("opendiscord:previous-creators",[]),
                 
                 new api.ODTicketData("opendiscord:open",true),

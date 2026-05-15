@@ -134,6 +134,12 @@ export interface ODActionManagerIdMappings extends api.ODActionManagerIdConstrai
         result:{newCategoryId:string|null,newCategoryMode:string|null,newCategory:discord.CategoryChannel|null,shouldChangeCategory:boolean},
         workers:"opendiscord:default-category"|"opendiscord:close-category"|"opendiscord:claim-category"|"opendiscord:backup-category"
     },
+    "opendiscord:calculate-ticket-name":{
+        origin:"create-ticket"|"close-ticket"|"reopen-ticket"|"claim-ticket"|"unclaim-ticket"|"move-ticket"|"pin-ticket"|"unpin-ticket"|"rename-ticket"|"transfer-ticket"|"priority-change"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel|null,user:discord.User,option:ODTicketOption,ticket:ODTicket|null,currentChannelName:string|null},
+        result:{newChannelName:string,newChannelSuffix:string,shouldChangeName:boolean},
+        workers:"opendiscord:calculate-ticket-name"
+    },
 }
 
 /////////////////////////////

@@ -19,6 +19,7 @@ export interface ODTicketIdMappings extends ODTicketIdConstraint {
     "opendiscord:ticket-message":ODTicketData<string|null>,
     "opendiscord:participants":ODTicketData<{type:"role"|"user",id:string}[]>,
     "opendiscord:channel-suffix":ODTicketData<string>,
+    "opendiscord:channel-renamed":ODTicketData<string|null>,
     "opendiscord:previous-creators":ODTicketData<string[]>,
     
     "opendiscord:open":ODTicketData<boolean>,
