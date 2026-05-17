@@ -14,8 +14,8 @@ export async function loadAllSlashCommands(){
     if (!generalConfig.data.slashCommands) return
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     //HELP
@@ -87,7 +87,7 @@ export async function loadAllSlashCommands(){
     }))
 
     //DELETE
-    if (allowedCommands.includes("delete") && generalConfig.data.system.enableDeleteWithoutTranscript) commands.add(new api.ODSlashCommand("opendiscord:delete",{
+    if (allowedCommands.includes("delete") && generalConfig.data.ticketSystem.enableDeleteWithoutTranscript) commands.add(new api.ODSlashCommand("opendiscord:delete",{
         type:act.ChatInput,
         name:"delete",
         description:lang.getTranslation("commands.delete"),
@@ -654,8 +654,8 @@ export async function loadAllTextCommands(){
     })
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     //HELP

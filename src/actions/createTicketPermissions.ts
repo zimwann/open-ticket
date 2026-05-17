@@ -38,14 +38,14 @@ export async function registerActions(){
         }),
         new api.ODWorker("opendiscord:check-global-limits",2,(instance,params,origin,cancel) => {
             const generalConfig = opendiscord.configs.get("opendiscord:general")
-            if (!generalConfig.data.system.limits.enabled) return
+            if (!generalConfig.data.ticketSystem.limits.enabled) return
 
             const allTickets = opendiscord.tickets.getAll()
             const globalTicketCount = allTickets.length
             const userTickets = opendiscord.tickets.getFiltered((ticket) => ticket.exists("opendiscord:opened-by") && (ticket.get("opendiscord:opened-by").value == params.user.id))
             const userTicketCount = userTickets.length
 
-            if (globalTicketCount >= generalConfig.data.system.limits.globalMaximum){
+            if (globalTicketCount >= generalConfig.data.ticketSystem.limits.globalMaximum){
                 instance.valid = false
                 instance.reason = "global-limit"
                 opendiscord.log(params.user.displayName+" tried to create a ticket but reached the limit!","info",[
@@ -55,7 +55,7 @@ export async function registerActions(){
                     {key:"limit",value:"global"}
                 ])
                 return cancel()
-            }else if (userTicketCount >= generalConfig.data.system.limits.userMaximum){
+            }else if (userTicketCount >= generalConfig.data.ticketSystem.limits.userMaximum){
                 instance.valid = false
                 instance.reason = "global-user-limit"
                 opendiscord.log(params.user.displayName+" tried to create a ticket, but reached the limit!","info",[

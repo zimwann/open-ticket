@@ -44,14 +44,14 @@ export async function registerActions(){
             const {guild,channel,user,ticket,reason,data} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.removing.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.removing.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"remove",reason,additionalData:data}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.removing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"remove",reason,additionalData:data}))
+            if (creator && generalConfig.data.logs.logMessages.removing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"remove",reason,additionalData:data}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,data} = params

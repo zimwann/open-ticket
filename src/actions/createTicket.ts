@@ -91,15 +91,15 @@ export async function registerActions(){
             
             //handle channel topic
             const channelTopics: string[] = []
-            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
-            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
-            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
+            if (generalConfig.data.ticketSystem.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
+            if (generalConfig.data.ticketSystem.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
+            if (generalConfig.data.ticketSystem.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
+            if (generalConfig.data.ticketSystem.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
+            if (generalConfig.data.ticketSystem.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
+            if (generalConfig.data.ticketSystem.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //create channel
             const channel = await guild.channels.create({
@@ -192,7 +192,7 @@ export async function registerActions(){
                 ticket.get("opendiscord:ticket-message").value = ticketMsg.id
 
                 //pin ticket message (if required)
-                if (generalConfig.data.system.pinFirstTicketMessage && ticketMsg.pinnable) await ticketMsg.pin("Ticket Message")
+                if (generalConfig.data.ticketSystem.pinFirstTicketMessage && ticketMsg.pinnable) await ticketMsg.pin("Ticket Message")
                 
                 //manage stats
                 await opendiscord.statistics.get("opendiscord:ticket").setStat("opendiscord:messages-sent",ticket.id.value,1,"increase")
@@ -212,13 +212,13 @@ export async function registerActions(){
             if (!ticket || !channel) return opendiscord.log("Ticket Creation Error: Unable to send ticket message. Previous worker failed!","error")
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.creation.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.creation.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-logs").build(origin,{guild,channel,user,ticket}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(origin,{guild,channel,user,ticket}))
+            if (generalConfig.data.logs.logMessages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(origin,{guild,channel,user,ticket}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params

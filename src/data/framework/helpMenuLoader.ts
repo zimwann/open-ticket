@@ -20,11 +20,11 @@ export async function loadAllHelpMenuComponents(){
     if (!generalConfig) return
 
     const prefix = generalConfig.data.prefix
-    const enableDeleteWithoutTranscript = generalConfig.data.system.enableDeleteWithoutTranscript
+    const enableDeleteWithoutTranscript = generalConfig.data.ticketSystem.enableDeleteWithoutTranscript
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     const general = helpmenu.get("opendiscord:general")

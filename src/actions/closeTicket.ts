@@ -99,7 +99,7 @@ export async function registerActions(){
             ticket.get("opendiscord:participants").value.forEach((participant) => {
                 //all participants that aren't roles/admins => readonly (OR non-viewable when enabled)
                 if (participant.type == "user"){
-                    if (generalConfig.data.system.removeParticipantsOnClose) permissions.push({
+                    if (generalConfig.data.ticketSystem.removeParticipantsOnClose) permissions.push({
                         type:discord.OverwriteType.Member,
                         id:participant.id,
                         allow:[],
@@ -138,14 +138,14 @@ export async function registerActions(){
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.closing.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.closing.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.closing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
+            if (creator && generalConfig.data.logs.logMessages.closing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params

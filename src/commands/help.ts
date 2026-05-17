@@ -19,7 +19,7 @@ export async function registerCommandResponders(){
             
             //calculate slash/text mode for help menu
             let mode: "slash"|"text"
-            if (generalConfig.data.slashCommands && generalConfig.data.textCommands) mode = (generalConfig.data.system.preferSlashOverText) ? "slash" : "text"
+            if (generalConfig.data.slashCommands && generalConfig.data.textCommands) mode = (generalConfig.data.ticketSystem.preferSlashOverText) ? "slash" : "text"
             else if (!generalConfig.data.slashCommands) mode = "text"
             else mode = "slash"
             

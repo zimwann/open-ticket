@@ -29,7 +29,7 @@ export async function registerActions(){
             ticket.get("opendiscord:open").value = true
             ticket.get("opendiscord:busy").value = true
 
-            if (generalConfig.data.system.disableAutocloseAfterReopen){
+            if (generalConfig.data.ticketSystem.disableAutocloseAfterReopen){
                 //disable autoclose after reopen
                 ticket.get("opendiscord:autoclose-enabled").value = false
                 ticket.get("opendiscord:autoclose-hours").value = 0
@@ -136,14 +136,14 @@ export async function registerActions(){
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.reopening.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.reopening.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"reopen",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.reopening.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"reopen",reason,additionalData:null}))
+            if (creator && generalConfig.data.logs.logMessages.reopening.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"reopen",reason,additionalData:null}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params

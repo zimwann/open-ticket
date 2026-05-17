@@ -29,15 +29,15 @@ export async function registerActions(){
 
             //handle channel topic
             const channelTopics: string[] = []
-            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
-            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
-            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName())
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+(closed ? lang.getTranslation("params.uppercase.closed") : lang.getTranslation("params.uppercase.open")))
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+(claimedBy ? discord.userMention(claimedBy) : lang.getTranslation("params.uppercase.noone")))
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+(pinned ? lang.getTranslation("params.uppercase.yes") : lang.getTranslation("params.uppercase.no")))
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(creator))
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName())
+            if (generalConfig.data.ticketSystem.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+(closed ? lang.getTranslation("params.uppercase.closed") : lang.getTranslation("params.uppercase.open")))
+            if (generalConfig.data.ticketSystem.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+(claimedBy ? discord.userMention(claimedBy) : lang.getTranslation("params.uppercase.noone")))
+            if (generalConfig.data.ticketSystem.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+(pinned ? lang.getTranslation("params.uppercase.yes") : lang.getTranslation("params.uppercase.no")))
+            if (generalConfig.data.ticketSystem.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(creator))
+            if (generalConfig.data.ticketSystem.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //update channel
             channel.setTopic(channelTopics.join(" • "),"Topic Changed")

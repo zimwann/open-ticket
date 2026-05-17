@@ -29,7 +29,7 @@ export async function replyHasPermissions(instance:api.ODButtonResponderInstance
     //check permissions
     const {user,member,channel,guild} = instance
     const generalConfig = opendiscord.configs.get("opendiscord:general")
-    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions[commandName],"support",user,member,channel,guild,settings)
+    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.permissions[commandName],"support",user,member,channel,guild,settings)
     
     if (!permsResult.hasPerms){
         if (permsResult.reason == "not-in-server" && channel) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
@@ -139,18 +139,18 @@ export async function replyMessageMustBeSentBeforeClose(instance:api.ODButtonRes
     const {user,member,channel,guild} = instance
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     const lang = opendiscord.languages
-    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions[commandName],"support",user,member,channel,guild)
+    const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.permissions[commandName],"support",user,member,channel,guild)
 
     if (!permsResult.hasPerms) throw new api.ODSystemError("Please check permissions before using replyMessageMustBeSentBeforeClose()")
     if (!guild || channel.isDMBased()) throw new api.ODSystemError("replyMessageMustBeSentBeforeClose() must be used in a guild and not a DM channel.")
 
-    if (!permsResult.isAdmin && (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage)){
+    if (!permsResult.isAdmin && (!generalConfig.data.ticketSystem.allowCloseBeforeMessage || !generalConfig.data.ticketSystem.allowCloseBeforeAdminMessage)){
         const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
-        if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+        if (analysis && !generalConfig.data.ticketSystem.allowCloseBeforeMessage && analysis.totalMessages < 1){
             if (channel) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
             return false
         }
-        if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+        if (analysis && !generalConfig.data.ticketSystem.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
             if (channel) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
             return false
         }

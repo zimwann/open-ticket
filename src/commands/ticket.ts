@@ -105,7 +105,7 @@ export async function registerButtonResponders(){
                 if (!(await checkTicketCreationPerms(instance,"panel-button",guild,user,option))) return cancel()
             
                 //CREATE TICKET
-                await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+                await instance.defer((generalConfig.data.ticketSystem.replyOnTicketCreation) ? "reply" : "update",true)
 
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-button",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
@@ -113,7 +113,7 @@ export async function registerButtonResponders(){
                     await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
                     return cancel()
                 }
-                if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-button",{guild,channel:res.channel,user,ticket:res.ticket}))
+                if (generalConfig.data.ticketSystem.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-button",{guild,channel:res.channel,user,ticket:res.ticket}))
             }
         })
     )
@@ -147,7 +147,7 @@ export async function registerDropdownResponders(){
                 if (!(await checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option))) return cancel()
             
                 //CREATE TICKET
-                await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+                await instance.defer((generalConfig.data.ticketSystem.replyOnTicketCreation) ? "reply" : "update",true)
 
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-dropdown",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
@@ -155,7 +155,7 @@ export async function registerDropdownResponders(){
                     await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive ticket or channel from callback! #1",layout:"advanced"}))
                     return cancel()
                 }
-                if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-dropdown",{guild,channel:res.channel,user,ticket:res.ticket}))
+                if (generalConfig.data.ticketSystem.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build("panel-dropdown",{guild,channel:res.channel,user,ticket:res.ticket}))
             }
 
             //update panel after dropdown usage (reset panel choice)
@@ -214,7 +214,7 @@ export async function registerModalResponders(){
                 }
             })
             
-            await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+            await instance.defer((generalConfig.data.ticketSystem.replyOnTicketCreation) ? "reply" : "update",true)
 
             //CREATE TICKET
             const res = await opendiscord.actions.get("opendiscord:create-ticket").run(originalOrigin,{guild,user,answers,option})
@@ -223,7 +223,7 @@ export async function registerModalResponders(){
                 await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel,user,error:"Unable to receive ticket or channel from callback! #2",layout:"advanced"}))
                 return cancel()
             }
-            if (generalConfig.data.system.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(originalOrigin,{guild,channel:res.channel,user,ticket:res.ticket}))
+            if (generalConfig.data.ticketSystem.replyOnTicketCreation) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created").build(originalOrigin,{guild,channel:res.channel,user,ticket:res.ticket}))
         })
     ])
 }

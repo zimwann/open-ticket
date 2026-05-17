@@ -93,7 +93,7 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             }
             if (layout == "detailed"){
                 const optionAdmins = [...opt.get("opendiscord:admins").value]
-                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                if (generalConfig.data.ticketSystem.showGlobalAdminsInPanelRoles){
                     for (const admin of generalConfig.data.globalAdmins){
                         if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
                     }
@@ -147,7 +147,7 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             }
             if (layout == "detailed"){
                 const optionAdmins = [...opt.get("opendiscord:admins").value]
-                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                if (generalConfig.data.ticketSystem.showGlobalAdminsInPanelRoles){
                     for (const admin of generalConfig.data.globalAdmins){
                         if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
                     }

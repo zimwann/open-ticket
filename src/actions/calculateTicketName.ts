@@ -19,7 +19,7 @@ export async function registerActions(){
             const baseChannelName = (channelRenamed) ? channelRenamed : channelPrefix+channelSuffix
 
             //calculate status emojis
-            const pinEmoji = (ticket && ticket.get("opendiscord:pinned").value) ? generalConfig.data.system.pinEmoji : ""
+            const pinEmoji = (ticket && ticket.get("opendiscord:pinned").value) ? generalConfig.data.ticketSystem.pinEmoji : ""
             const priorityEmoji = (ticket) ? (opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? "") : ""
 
             instance.newChannelName = pinEmoji+priorityEmoji+baseChannelName

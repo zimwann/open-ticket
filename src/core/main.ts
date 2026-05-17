@@ -58,7 +58,7 @@ export class ODOpenTicketMain extends api.ODMain {
     priorities: api.ODMappedPriorityManager
 
     constructor(){
-        const version = api.ODVersion.fromString("opendiscord:version","v4.1.3")
+        const version = api.ODVersion.fromString("opendiscord:version","v4.2.0")
         const debugfile = new api.ODDebugFileManager("./","otdebug.txt",5000,version)
         const console = new api.ODConsoleManager(100,debugfile)
         const debug = new api.ODDebugger(console)
@@ -108,7 +108,7 @@ export class ODOpenTicketMain extends api.ODMain {
         },"openticket")
 
         this.livestatus.useMain(this)
-        this.versions.add(api.ODVersion.fromString("opendiscord:version","v4.1.3"))
+        this.versions.add(api.ODVersion.fromString("opendiscord:version","v4.2.0"))
         this.versions.add(api.ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
 
         //OPEN TICKET

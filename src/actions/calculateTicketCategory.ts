@@ -46,8 +46,9 @@ export async function registerActions(){
             const {guild,user,channel,option,ticket,currentCategoryId} = params
             if (!ticket) return
             if (!ticket.get("opendiscord:closed").value) return
+            if (!generalConfig.data.ticketSystem.closedCategory.enabled) return
 
-            const closeCategoryId = option.get("opendiscord:channel-category-closed").value
+            const closeCategoryId = generalConfig.data.ticketSystem.closedCategory.categoryId
             if (!closeCategoryId) return
             const closeCategory = await opendiscord.client.fetchGuildCategoryChannel(guild,closeCategoryId)
             if (closeCategory){
@@ -74,7 +75,7 @@ export async function registerActions(){
             if (!ticket) return
             if (!ticket.get("opendiscord:claimed").value) return
 
-            const claimedCategoryIds = option.get("opendiscord:channel-categories-claimed").value
+            const claimedCategoryIds = generalConfig.data.ticketSystem.claimedCategories
             const claimCategoryId = claimedCategoryIds.find((c) => c.user == user.id)?.category
             if (!claimCategoryId) return
             const claimCategory = await opendiscord.client.fetchGuildCategoryChannel(guild,claimCategoryId)
@@ -101,8 +102,9 @@ export async function registerActions(){
             const {guild,user,channel,option,ticket,currentCategoryId} = params
             if (!instance.newCategory || !instance.newCategoryId || !instance.shouldChangeCategory) return
             if (instance.newCategory.children.cache.size < 50) return
+            if (!generalConfig.data.ticketSystem.backupCategory.enabled) return
 
-            const backupCategoryId = option.get("opendiscord:channel-category-backup").value
+            const backupCategoryId = generalConfig.data.ticketSystem.backupCategory.categoryId
             if (!backupCategoryId) return
             const backupCategory = await opendiscord.client.fetchGuildCategoryChannel(guild,backupCategoryId)
             if (backupCategory){

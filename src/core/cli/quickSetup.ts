@@ -31,7 +31,7 @@ interface ODQuickSetupVariables {
     globalUserLimit?:number|null,
     removeParticipantsOnClose?:boolean,
     ticketMessageLayout?:"embed"|"text"|null,
-    emojiStyle?:api.ODGeneralJsonConfig_System["emojiStyle"],
+    emojiStyle?:api.ODGeneralJsonConfig_TicketSystem["emojiStyle"],
     panelName?:string,
     panelDescription?:string,
     panelDropdown?:boolean,
@@ -234,7 +234,7 @@ async function renderQuickSetupBotToken(backFn:() => api.ODPromiseVoid){
     cli.renderHeader(headerOpts,"⏱️ Open Ticket Quick Setup: Bot Token")
 
     terminal.bold.blue(stepCount(2)+"Please insert the token of your discord bot.\n")
-    terminal.gray("This is used to configure the bot and is then stored securely in the './config/general.json' file.\n\n> ")
+    terminal.gray("This is used to configure the bot and is then stored securely in the './config/general.jsonc' file.\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -1203,11 +1203,7 @@ async function saveQuickSetupConfig(){
     //GENERAL CONFIG
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     const generalConfigData: api.ODGeneralJsonConfig_GeneralData = {
-        _INFO:{
-            support:"https://otdocs.dj-dj.be",
-            discord:"https://discord.dj-dj.be",
-            version:"open-ticket-"+opendiscord.versions.get("opendiscord:version").toString()
-        },
+        _CONFIG_VERSION:"open-ticket-"+opendiscord.versions.get("opendiscord:version").toString(),
         
         token:quickSetupStorage.client?.token ?? "<unknown-token>",
         tokenFromENV:false,
@@ -1222,8 +1218,29 @@ async function saveQuickSetupConfig(){
         textCommands:quickSetupStorage.textCommands ?? false,
         
         status:quickSetupStorage.status ?? {enabled:false,mode:"online",type:"custom",text:"",state:""},
+        logs:{
+            enabled:(typeof quickSetupStorage.logChannel == "string"),
+            channel:quickSetupStorage.logChannel ?? "",
+            logMessages:{
+                creation:{dm:true,logs:true},
+                closing:{dm:true,logs:true},
+                deleting:{dm:true,logs:true},
+                reopening:{dm:false,logs:true},
+                claiming:{dm:false,logs:true},
+                pinning:{dm:false,logs:true},
+                adding:{dm:false,logs:true},
+                removing:{dm:false,logs:true},
+                renaming:{dm:false,logs:true},
+                moving:{dm:true,logs:true},
+                blacklisting:{dm:true,logs:true},
+                transferring:{dm:true,logs:true},
+                topicChange:{dm:false,logs:true},
+                priorityChange:{dm:false,logs:true},
+                reactionRole:{dm:false,logs:true}
+            }
+        },
         
-        system:{
+        ticketSystem:{
             preferSlashOverText:quickSetupStorage.slashCommands ?? false,
             sendErrorOnUnknownCommand:true,
             questionFieldsInCodeBlock:true,
@@ -1234,10 +1251,11 @@ async function saveQuickSetupConfig(){
             alwaysShowReason:false,
             emojiStyle:quickSetupStorage.emojiStyle ?? "before",
             pinEmoji:"📌",
+            closeEmoji:"🔒",
             
-            replyOnTicketCreation:false,
+            replyOnTicketCreation:true,
             replyOnReactionRole:true,
-            askPriorityOnTicketCreation:false,
+            askPriorityOnTicketCreation:true,
             removeParticipantsOnClose:quickSetupStorage.removeParticipantsOnClose ?? false,
             disableAutocloseAfterReopen:true,
             autodeleteRequiresClosedTicket:true,
@@ -1245,7 +1263,7 @@ async function saveQuickSetupConfig(){
             allowCloseBeforeMessage:false,
             allowCloseBeforeAdminMessage:true,
             useTranslatedConfigChecker:true,
-            pinFirstTicketMessage:false,
+            pinFirstTicketMessage:true,
             
             enableTicketClaimButtons:true,
             enableTicketCloseButtons:true,
@@ -1253,11 +1271,7 @@ async function saveQuickSetupConfig(){
             enableTicketDeleteButtons:true,
             enableTicketActionWithReason:true,
             enableDeleteWithoutTranscript:true,
-            
-            logs:{
-                enabled:(typeof quickSetupStorage.logChannel == "string"),
-                channel:quickSetupStorage.logChannel ?? ""
-            },
+            enableCreateTicketForOtherUser:true,
             
             limits:{
                 enabled:(typeof quickSetupStorage.globalUserLimit == "number"),
@@ -1276,49 +1290,41 @@ async function saveQuickSetupConfig(){
                 showCreator:false,
                 showParticipants:false
             },
-            
-            permissions:{
-                help:"everyone",
-                panel:"admin",
-                ticket:"everyone",
-                close:"admin",
-                delete:"admin",
-                reopen:"admin",
-                claim:"admin",
-                unclaim:"admin",
-                pin:"admin",
-                unpin:"admin",
-                move:"admin",
-                rename:"admin",
-                add:"admin",
-                remove:"admin",
-                blacklist:"admin",
-                stats:"everyone",
-                clear:"admin",
-                autoclose:"admin",
-                autodelete:"admin",
-                transfer:"admin",
-                topic:"admin",
-                priority:"admin",
+
+            closedCategory:{
+                enabled:false,
+                categoryId:""
             },
-            
-            messages:{
-                creation:{dm:true,logs:true},
-                closing:{dm:true,logs:true},
-                deleting:{dm:true,logs:true},
-                reopening:{dm:false,logs:true},
-                claiming:{dm:false,logs:true},
-                pinning:{dm:false,logs:true},
-                adding:{dm:false,logs:true},
-                removing:{dm:false,logs:true},
-                renaming:{dm:false,logs:true},
-                moving:{dm:true,logs:true},
-                blacklisting:{dm:true,logs:true},
-                transferring:{dm:true,logs:true},
-                topicChange:{dm:false,logs:true},
-                priorityChange:{dm:false,logs:true},
-                reactionRole:{dm:false,logs:true}
-            }
+            backupCategory:{
+                enabled:false,
+                categoryId:""
+            },
+            claimedCategories:[],
+        },
+        permissions:{
+            help:"everyone",
+            panel:"admin",
+            ticket:"everyone",
+            close:"admin",
+            delete:"admin",
+            reopen:"admin",
+            claim:"admin",
+            unclaim:"admin",
+            pin:"admin",
+            unpin:"admin",
+            move:"admin",
+            rename:"admin",
+            add:"admin",
+            remove:"admin",
+            blacklist:"admin",
+            stats:"everyone",
+            clear:"admin",
+            autoclose:"admin",
+            autodelete:"admin",
+            transfer:"admin",
+            topic:"admin",
+            priority:"admin",
+            transcripts:"admin"
         }
     }
     generalConfig.data = generalConfigData
@@ -1330,10 +1336,11 @@ async function saveQuickSetupConfig(){
         {
             id:"example-question-1",
             name:"Example Question 1",
+            description:"This is a short text input question.",
             type:"short",
-            
             required:true,
-            placeholder:"Insert your short answer here!",
+            
+            placeholder:"Insert answer...",
             length:{
                 enabled:false,
                 min:0,
@@ -1343,15 +1350,69 @@ async function saveQuickSetupConfig(){
         {
             id:"example-question-2",
             name:"Example Question 2",
+            description:"This is a paragraph text input question.",
             type:"paragraph",
-            
             required:false,
-            placeholder:"Insert your long answer here!",
+            
+            placeholder:"Insert answer...",
             length:{
                 enabled:false,
                 min:0,
                 max:1000
             }
+        },
+        {
+            id:"example-question-3",
+            name:"Example Question 3",
+            description:"This is a dropdown question.",
+            type:"dropdown",
+            required:false,
+
+            placeholder:"Choose your answer...",
+            choices:[
+                {title:"Choice A",description:"Apple",emoji:"🍎"},
+                {title:"Choice B",description:"Banana",emoji:"🍌"},
+                {title:"Choice C",description:"Orange",emoji:"🍊"},
+                {title:"Choice D",description:"Kiwi",emoji:"🥝"}
+            ]
+        },
+        {
+            id:"example-question-4",
+            name:"Example Question 4",
+            description:"This is a radio select question.",
+            type:"radio-select",
+            required:true,
+
+            choices:[
+                {title:"Choice A",description:"Up",selectedByDefault:false},
+                {title:"Choice B",description:"Down",selectedByDefault:false},
+                {title:"Choice C",description:"Left",selectedByDefault:false},
+                {title:"Choice D",description:"Right",selectedByDefault:false}
+            ]
+        },
+        {
+            id:"example-question-5",
+            name:"Example Question 5",
+            description:"This is a checkbox select question.",
+            type:"checkbox-select",
+            required:true,
+
+            limits:{
+                enabled:false,
+                min:0,
+                max:10
+            },
+            choices:[
+                {title:"Choice A",description:"Happiness",selectedByDefault:false},
+                {title:"Choice B",description:"Anger",selectedByDefault:false},
+                {title:"Choice C",description:"Sadness",selectedByDefault:false},
+                {title:"Choice D",description:"Fear",selectedByDefault:false}
+            ]
+        },
+        {
+            id:"example-text-display",
+            type:"text-display",
+            textContents:"This is a text display. It isn't a question, but allows you to display a text, explaination or details."
         }
     ]
     questionsConfig.data = questionsConfigData
@@ -1384,9 +1445,6 @@ async function saveQuickSetupConfig(){
                 prefix:ticket.channelPrefix,
                 suffix:ticket.channelSuffix,
                 category:quickSetupStorage.ticketCategory ?? "",
-                closedCategory:"",
-                backupCategory:"",
-                claimedCategory:[],
                 topic:ticket.description
             },
             
@@ -1482,6 +1540,7 @@ async function saveQuickSetupConfig(){
             },
             settings:{
                 dropdownPlaceholder:"Open a ticket",
+                maximumButtonsPerRow:5,
 
                 enableMaxTicketsWarningInText:(quickSetupStorage.panelLayout == "text" && (quickSetupStorage.panelMaxTicketsWarning ?? false)),
                 enableMaxTicketsWarningInEmbed:(quickSetupStorage.panelLayout == "embed" && (quickSetupStorage.panelMaxTicketsWarning ?? false)),

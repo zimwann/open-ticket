@@ -71,9 +71,6 @@ export const loadTicketOption = (option:api.ODOptionsJsonConfig_TicketOption): a
         new api.ODOptionData("opendiscord:channel-prefix",option.channel.prefix),
         new api.ODOptionData("opendiscord:channel-suffix",option.channel.suffix),
         new api.ODOptionData("opendiscord:channel-category",option.channel.category),
-        new api.ODOptionData("opendiscord:channel-category-closed",option.channel.closedCategory),
-        new api.ODOptionData("opendiscord:channel-category-backup",option.channel.backupCategory),
-        new api.ODOptionData("opendiscord:channel-categories-claimed",option.channel.claimedCategory),
         new api.ODOptionData("opendiscord:channel-topic",option.channel.topic),
         
         new api.ODOptionData("opendiscord:dm-message-enabled",option.dmMessage.enabled),

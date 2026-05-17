@@ -47,7 +47,7 @@ export async function registerActions(){
             const {guild,channel,user,filter,list} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.deleting.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.deleting.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:clear-logs").build(origin,{guild,channel,user,filter,list:instance.list ?? []}))
             }

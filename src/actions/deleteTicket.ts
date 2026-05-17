@@ -60,14 +60,14 @@ export async function registerActions(){
             const {guild,channel,user,ticket,reason} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.deleting.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.deleting.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(origin,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
             }
 
             //to dm
             const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.deleting.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
+            if (creator && generalConfig.data.logs.logMessages.deleting.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(origin,{guild,channel,user,ticket,mode:"delete",reason,additionalData:null}))
         }),
         new api.ODWorker("opendiscord:delete-channel",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,reason} = params

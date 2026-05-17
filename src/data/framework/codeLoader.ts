@@ -30,7 +30,7 @@ export async function loadCommandErrorHandlingCode(){
                 error.msg.channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-option-invalid").build("text",{guild:error.msg.guild,channel:error.msg.channel,user:error.msg.author,error})).message)
             }else if (error.type == "missing_option"){
                 error.msg.channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-option-missing").build("text",{guild:error.msg.guild,channel:error.msg.channel,user:error.msg.author,error})).message)
-            }else if (error.type == "unknown_command" && generalConfig.data.system.sendErrorOnUnknownCommand){
+            }else if (error.type == "unknown_command" && generalConfig.data.ticketSystem.sendErrorOnUnknownCommand){
                 error.msg.channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-unknown-command").build("text",{guild:error.msg.guild,channel:error.msg.channel,user:error.msg.author,error})).message)
             }
         })
@@ -459,7 +459,7 @@ const loadAutoCode = () => {
                 if (lastMessage){
                     //ticket has last message
                     const disableOnClaim = ticket.option.get("opendiscord:autodelete-disable-claim").value && ticket.get("opendiscord:claimed").value
-                    const disableWhenNotClosed = generalConfig.data.system.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
+                    const disableWhenNotClosed = generalConfig.data.ticketSystem.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
                     
                     const enabled = (disableOnClaim || disableWhenNotClosed) ? false : ticket.get("opendiscord:autodelete-enabled").value
                     const days = ticket.get("opendiscord:autodelete-days").value
@@ -490,7 +490,7 @@ const loadAutoCode = () => {
                     if (!channel) return
                     //ticket has been created by this user
                     const disableOnClaim = ticket.option.get("opendiscord:autodelete-disable-claim").value && ticket.get("opendiscord:claimed").value
-                    const disableWhenNotClosed = generalConfig.data.system.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
+                    const disableWhenNotClosed = generalConfig.data.ticketSystem.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
                     const enabled = (disableOnClaim || disableWhenNotClosed || !ticket.get("opendiscord:autodelete-enabled").value) ? false : ticket.option.get("opendiscord:autodelete-enable-leave")
 
                     if (enabled){

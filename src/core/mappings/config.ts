@@ -10,20 +10,20 @@ import { ODRoleUpdateMode } from "../api/role.js"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODConfigManagerIdMappings extends api.ODConfigManagerIdConstraint {
-    "opendiscord:general":ODGeneralJsonConfig,
-    "opendiscord:questions":ODQuestionsJsonConfig,
-    "opendiscord:options":ODOptionsJsonConfig,
-    "opendiscord:panels":ODPanelsJsonConfig,
-    "opendiscord:transcripts":ODTranscriptsJsonConfig
+    "opendiscord:general":ODGeneralJsonCommentsConfig,
+    "opendiscord:questions":ODQuestionsJsonCommentsConfig,
+    "opendiscord:options":ODOptionsJsonCommentsConfig,
+    "opendiscord:panels":ODPanelsJsonCommentsConfig,
+    "opendiscord:transcripts":ODTranscriptsJsonCommentsConfig
 }
 
 ///////////////////////////////////////
 // CONFIG STRUCTURES, VALUES & TYPES
-// --> general.json
+// --> general.jsonc
 ///////////////////////////////////////
 
 /**## ODGeneralJsonConfig_Status `interface`
- * This interface is an object which has all properties for the status object in the `general.json` config!
+ * This interface is an object which has all properties for the status object in the `general.jsonc` config!
  */
 export interface ODGeneralJsonConfig_Status {
     /**Is the status enabled? */
@@ -39,7 +39,7 @@ export interface ODGeneralJsonConfig_Status {
 }
 
 /**## ODGeneralJsonConfig_MessageSettings `interface`
- * This interface is an object which has all properties for the "system"."messages".... object in the `general.json` config!
+ * This interface is an object which has all properties for the "system"."messages".... object in the `general.jsonc` config!
  */
 export interface ODGeneralJsonConfig_MessageSettings {
     /**Enable sending DM logs to the ticket creator for this action. */
@@ -49,21 +49,9 @@ export interface ODGeneralJsonConfig_MessageSettings {
 }
 
 /**## ODGeneralJsonConfig_CmdPermissionSettingsType `type`
- * This type is a collection of command permission settings for the "system"."permissions".... object in the `general.json` config!
+ * This type is a collection of command permission settings for the "system"."permissions".... object in the `general.jsonc` config!
  */
 export type ODGeneralJsonConfig_CmdPermissionSettingsType = "admin"|"everyone"|"none"|string
-
-/**## ODGeneralJsonConfig_Info `interface`
- * This object contains a few URLs and metadata for the config.
- */
-export interface ODGeneralJsonConfig_Info {
-    /**A link to the Open Ticket documentation. */
-    support:string,
-    /**A link to the DJdj Development discord server. */
-    discord:string,
-    /**The version of Open Ticket this config is compatible with. */
-    version:string
-}
 
 /**## ODGeneralJsonConfig_SystemLogs `interface`
  * All settings related to the log channel.
@@ -72,7 +60,9 @@ export interface ODGeneralJsonConfig_SystemLogs {
     /**Enable logging. Individual actions should still be added via the `"system"."messages"..."logs"` */
     enabled:boolean,
     /**The channel to send logs to. */
-    channel:string
+    channel:string,
+    /**Configure dm & log messages for all Open Ticket commands & actions. */
+    logMessages:ODGeneralJsonConfig_LogMessages
 }
 
 /**## ODGeneralJsonConfig_SystemLimits `interface`
@@ -137,12 +127,13 @@ export interface ODGeneralJsonConfig_SystemPermissions {
     transfer:ODGeneralJsonConfig_CmdPermissionSettingsType,
     topic:ODGeneralJsonConfig_CmdPermissionSettingsType,
     priority:ODGeneralJsonConfig_CmdPermissionSettingsType,
+    transcripts:ODGeneralJsonConfig_CmdPermissionSettingsType,
 }
 
-/**## ODGeneralJsonConfig_SystemMessages `interface`
+/**## ODGeneralJsonConfig_LogMessages `interface`
  * Configure dm & log messages for all Open Ticket commands & actions.
  */
-export interface ODGeneralJsonConfig_SystemMessages {
+export interface ODGeneralJsonConfig_LogMessages {
     creation:ODGeneralJsonConfig_MessageSettings,
     closing:ODGeneralJsonConfig_MessageSettings,
     deleting:ODGeneralJsonConfig_MessageSettings,
@@ -160,10 +151,10 @@ export interface ODGeneralJsonConfig_SystemMessages {
     reactionRole:ODGeneralJsonConfig_MessageSettings,
 }
 
-/**## ODGeneralJsonConfig_System `interface`
+/**## ODGeneralJsonConfig_TicketSystem `interface`
  * All settings related to the ticket system.
  */
-export interface ODGeneralJsonConfig_System {
+export interface ODGeneralJsonConfig_TicketSystem {
     /**Prefer slash-commands over text-commands when displaying them in menu's and messages. */
     preferSlashOverText:boolean,
     /**Reply with "unknown command" when the prefix is used without a valid command. */
@@ -184,6 +175,8 @@ export interface ODGeneralJsonConfig_System {
     emojiStyle:"before"|"after"|"double"|"disabled",
     /**The emoji used when pinning tickets. This is '📌' by default. */
     pinEmoji:string,
+    /**The emoji used when closing tickets. This is '🔒' by default. */
+    closeEmoji:string,
     
     /**Reply with an ephemeral message when a ticket is created. */
     replyOnTicketCreation:boolean,
@@ -220,9 +213,8 @@ export interface ODGeneralJsonConfig_System {
     enableTicketActionWithReason:boolean,
     /**Enable/disable the delete without transcript feature (button & /delete command). */
     enableDeleteWithoutTranscript:boolean,
-
-    /**All settings related to the log channel. */
-    logs:ODGeneralJsonConfig_SystemLogs,
+    /**Enable/disable creating tickets for other users with /ticket <user>. (ADMIN ONLY) */
+    enableCreateTicketForOtherUser:boolean,
     
     /**All settings related to global ticket limits. */
     limits:ODGeneralJsonConfig_SystemLimits,
@@ -230,19 +222,31 @@ export interface ODGeneralJsonConfig_System {
     /**All global channel topic settings. */
     channelTopic:ODGeneralJsonConfig_SystemChannelTopic,
 
-    /**Configure permissions for all Open Ticket commands & actions. */
-    permissions:ODGeneralJsonConfig_SystemPermissions,
-
-    /**Configure dm & log messages for all Open Ticket commands & actions. */
-    messages:ODGeneralJsonConfig_SystemMessages
+    /**Move closed tickets to this channel category. */
+    closedCategory:{
+        enabled:boolean
+        categoryId:string
+    },
+    /**Create tickets in this channel category when the original category is full (max 50 channels). */
+    backupCategory:{
+        enabled:boolean
+        categoryId:string
+    },
+    /**Move claimed tickets to the matching channel category of the user that claimed the ticket. */
+    claimedCategories:{
+        /**The user who claimed the ticket. */
+        user:string,
+        /**The category to move the ticket to. */
+        category:string
+    }[],
 }
 
 /**## ODGeneralJsonConfig_GeneralData `interface`
- * All contents of the `general.json` config file.
+ * All contents of the `general.jsonc` config file.
  */
 export interface ODGeneralJsonConfig_GeneralData {
     /**This object contains a few URLs and metadata for the config. */
-    _INFO:ODGeneralJsonConfig_Info,
+    _CONFIG_VERSION:string,
     
     /**The token of the bot. (Empty when using `tokenFromENV`) */
     token:string,
@@ -267,18 +271,24 @@ export interface ODGeneralJsonConfig_GeneralData {
 
     /**All settings related to the status of the bot. */
     status:ODGeneralJsonConfig_Status,
-
+    
     /**All settings related to the ticket system. */
-    system:ODGeneralJsonConfig_System
+    ticketSystem:ODGeneralJsonConfig_TicketSystem,
+    
+    /**Configure permissions for all Open Ticket commands & actions. */
+    permissions:ODGeneralJsonConfig_SystemPermissions,
+
+    /**All settings related to the log channel. */
+    logs:ODGeneralJsonConfig_SystemLogs,
 }
 
 ///////////////////////////////////////
 // CONFIG STRUCTURES, VALUES & TYPES
-// --> options.json
+// --> options.jsonc
 ///////////////////////////////////////
 
 /**## ODOptionsJsonConfig_BaseOption `interface`
- * This interface is an object which has all basic properties for options in the `options.json` config!
+ * The basic properties for options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_BaseOption {
     /**The id of this option. */
@@ -288,7 +298,7 @@ export interface ODOptionsJsonConfig_BaseOption {
     /**The description of this option. */
     description:string,
     /**The type of this option. This type also determines the other option-specific variables. */
-    type:"ticket"|"website"|"role",
+    type:"ticket"|"website"|"role"|"sub-panel",
     /**All settings related to the button for the 3 option types. */
     button:{
         /**The emoji of the button. (can also be empty) */
@@ -299,7 +309,7 @@ export interface ODOptionsJsonConfig_BaseOption {
 }
 
 /**## ODOptionsJsonConfig_OptionButtonSettings `interface`
- * This interface is an object which has all button settings for ticket & reaction role options in the `options.json` config!
+ * The button settings for ticket, sub-panel & reaction role options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_OptionButtonSettings {
     /**The emoji of the button. (can also be empty) */
@@ -311,7 +321,7 @@ export interface ODOptionsJsonConfig_OptionButtonSettings {
 }
 
 /**## ODOptionsJsonConfig_TicketOptionEmbedSettings `interface`
- * This interface is an object which has all message embed settings for ticket options in the `options.json` config!
+ * The message embed settings for ticket options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_TicketOptionEmbedSettings {
     /**Is this embed enabled? */
@@ -340,7 +350,7 @@ export interface ODOptionsJsonConfig_TicketOptionEmbedSettings {
 }
 
 /**## ODOptionsJsonConfig_TicketOptionPingSettings `interface`
- * This interface is an object which has all message ping settings for ticket options in the `options.json` config!
+ * The message ping settings for ticket options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_TicketOptionPingSettings {
     /**Ping `@here`. */
@@ -361,23 +371,12 @@ export interface ODOptionsJsonConfig_TicketOptionChannelSettings {
     suffix:"user-name"|"user-nickname"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed",
     /**An optional discord category id to create this ticket in. */
     category:string,
-    /**An optional discord category id to move this ticket to when closed. */
-    closedCategory:string,
-    /**An optional discord category id to create this ticket in when the primary one is full (max. 50 tickets). */
-    backupCategory:string,
-    /**A list of discord category ids to move this ticket to when claimed by a specific user. */
-    claimedCategory:{
-        /**The user which claimed the ticket. */
-        user:string,
-        /**The category to move the ticket to when claimed by this user. */
-        category:string
-    }[],
     /**The channel topic shown at the top of the channel in discord. */
     topic:string
 }
 
 /**## ODOptionsJsonConfig_TicketOption `interface`
- * This interface is an object which has all ticket properties for options in the `options.json` config!
+ * All properties for ticket options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_TicketOption extends ODOptionsJsonConfig_BaseOption {
     type:"ticket",
@@ -388,7 +387,7 @@ export interface ODOptionsJsonConfig_TicketOption extends ODOptionsJsonConfig_Ba
     readonlyAdmins:string[],
     /**When enabled, blacklisted users can still create this ticket type. (used for appeals, etc) */
     allowCreationByBlacklistedUsers:boolean,
-    /**A list of valid question ids from the `questions.json` config. */
+    /**A list of valid question ids from the `questions.jsonc` config. */
     questions:string[],
     /**All settings related to the ticket channel itself. */
     channel:ODOptionsJsonConfig_TicketOptionChannelSettings,
@@ -460,7 +459,7 @@ export interface ODOptionsJsonConfig_TicketOption extends ODOptionsJsonConfig_Ba
 }
 
 /**## ODOptionsJsonConfig_WebsiteOption `interface`
- * This interface is an object which has all website properties for options in the `options.json` config!
+ * All properties for website options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_WebsiteOption extends ODOptionsJsonConfig_BaseOption {
     type:"website",
@@ -469,7 +468,7 @@ export interface ODOptionsJsonConfig_WebsiteOption extends ODOptionsJsonConfig_B
 }
 
 /**## ODOptionsJsonConfig_RoleOption `interface`
- * This interface is an object which has all reaction role properties for options in the `options.json` config!
+ * All properties for reaction-role options in the `options.jsonc` config!
  */
 export interface ODOptionsJsonConfig_RoleOption extends ODOptionsJsonConfig_BaseOption {
     type:"role",
@@ -484,18 +483,28 @@ export interface ODOptionsJsonConfig_RoleOption extends ODOptionsJsonConfig_Base
     addOnMemberJoin:boolean
 }
 
-/**## ODOptionsJsonConfig_OptionsData `type`
- * All contents of the `options.json` config file.
+/**## ODOptionsJsonConfig_SubPanelOption `interface`
+ * All properties for sub-panel options in the `options.jsonc` config!
  */
-export type ODOptionsJsonConfig_OptionsData = (ODOptionsJsonConfig_TicketOption|ODOptionsJsonConfig_WebsiteOption|ODOptionsJsonConfig_RoleOption)[]
+export interface ODOptionsJsonConfig_SubPanelOption extends ODOptionsJsonConfig_BaseOption {
+    type:"sub-panel",
+    button:ODOptionsJsonConfig_OptionButtonSettings,
+    /**The panel ID of the sub-panel to show when the button is clicked. */
+    subPanelId:string
+}
+
+/**## ODOptionsJsonConfig_OptionsData `type`
+ * All contents of the `options.jsonc` config file.
+ */
+export type ODOptionsJsonConfig_OptionsData = (ODOptionsJsonConfig_TicketOption|ODOptionsJsonConfig_WebsiteOption|ODOptionsJsonConfig_RoleOption|ODOptionsJsonConfig_SubPanelOption)[]
 
 ///////////////////////////////////////
 // CONFIG STRUCTURES, VALUES & TYPES
-// --> panels.json
+// --> panels.jsonc
 ///////////////////////////////////////
 
 /**## ODPanelsJsonConfig_PanelEmbedSettings `interface`
- * This interface is an object which has all message embed settings for panels in the `panels.json` config!
+ * This interface is an object which has all message embed settings for panels in the `panels.jsonc` config!
  */
 export interface ODPanelsJsonConfig_PanelEmbedSettings {
     /**Is this embed enabled? */
@@ -535,6 +544,8 @@ export interface ODPanelsJsonConfig_PanelEmbedSettings {
 export interface ODPanelsJsonConfig_PanelSettings {
     /**The placeholder used in the dropdown when enabled. */
     dropdownPlaceholder:string,
+    /**The maximum amount of option buttons before starting a new row. */
+    maximumButtonsPerRow:number
 
     /**Enable a max tickets warning in the text contents. */
     enableMaxTicketsWarningInText:boolean,
@@ -554,7 +565,7 @@ export interface ODPanelsJsonConfig_PanelSettings {
 }
 
 /**## ODPanelsJsonConfig_Panel `interface`
- * This interface is an object which has all properties for panels in the `panels.json` config!
+ * This interface is an object which has all properties for panels in the `panels.jsonc` config!
  */
 export interface ODPanelsJsonConfig_Panel {
     /**The id of this panel. */
@@ -563,7 +574,7 @@ export interface ODPanelsJsonConfig_Panel {
     name:string,
     /**When enabled, the panel uses a dropdown instead of buttons. */
     dropdown:boolean,
-    /**A list of valid options ids from the `options.json` config. */
+    /**A list of valid options ids from the `options.jsonc` config. */
     options:string[],
 
     /**The raw text contents of this panel. (empty for embed only) */
@@ -575,19 +586,19 @@ export interface ODPanelsJsonConfig_Panel {
 }
 
 /**## ODPanelsJsonConfig_PanelsData `type`
- * All contents of the `panels.json` config file.
+ * All contents of the `panels.jsonc` config file.
  */
 export type ODPanelsJsonConfig_PanelsData = ODPanelsJsonConfig_Panel[]
 
 ///////////////////////////////////////
 // CONFIG STRUCTURES, VALUES & TYPES
-// --> questions.json
+// --> questions.jsonc
 ///////////////////////////////////////
 
-/**## ODQuestionsJsonConfig_QuestionLengthSettings `interface`
+/**## ODQuestionsJsonConfig_TextLengthLimits `interface`
  * This interface is a collection of settings related to length validation in a question.
  */
-export interface ODQuestionsJsonConfig_QuestionLengthSettings {
+export interface ODQuestionsJsonConfig_TextLengthLimits {
     /**Enable text length verification. */
     enabled:boolean,
     /**The minimum text input length. */
@@ -596,48 +607,138 @@ export interface ODQuestionsJsonConfig_QuestionLengthSettings {
     max:number
 }
 
+/**## ODQuestionsJsonConfig_CheckboxLimits `interface`
+ * The required amount of checkboxes validation in a question.
+ */
+export interface ODQuestionsJsonConfig_CheckboxLimits {
+    /**Enable checkbox limits. */
+    enabled:boolean,
+    /**The minimum amount of selected checkboxes. */
+    min:number,
+    /**The maximum amount of selected checkboxes. */
+    max:number
+}
+
+/**## ODQuestionsJsonConfig_DropdownChoice `interface`
+ * A dropdown choice used in `ODQuestionsJsonConfig_DropdownQuestion`
+ */
+export interface ODQuestionsJsonConfig_DropdownChoice {
+    /**The title of the choice. */
+    title:string,
+    /**The optional description of the choice. (Leave empty for none) */
+    description:string,
+    /**The optional emoji of the choice. (Leave empty for none) */
+    emoji:string
+}
+
+/**## ODQuestionsJsonConfig_RadioCheckboxChoice `interface`
+ * A radio/checkbox choice used in `ODQuestionsJsonConfig_RadioSelectQuestion` & `ODQuestionsJsonConfig_CheckboxSelectQuestion`
+ */
+export interface ODQuestionsJsonConfig_RadioCheckboxChoice {
+    /**The title of the choice. */
+    title:string,
+    /**The optional description of the choice. (Leave empty for none) */
+    description:string,
+    /**Is this choice selected by default? */
+    selectedByDefault:boolean
+}
+
 /**## ODQuestionsJsonConfig_BaseQuestion `interface`
- * This interface is an object which has all universal properties for questions in the `questions.json` config!
+ * This interface is an object which has all universal properties for questions in the `questions.jsonc` config!
  */
 export interface ODQuestionsJsonConfig_BaseQuestion {
     /**The id of this question. */
     id:string,
     /**The name of this question. */
     name:string,
+    /**The description of this question. (Leave empty for none) */
+    description:string,
     /**The type of this question. */
-    type:"short"|"paragraph",
+    type:"short"|"paragraph"|"text-display"|"dropdown"|"radio-select"|"checkbox-select",
     /**Is this question required? */
     required:boolean,
 }
 
+/**## ODQuestionsJsonConfig_TextDisplayQuestion `interface`
+ * All properties for a text-display in the `questions.jsonc` config!
+ */
+export interface ODQuestionsJsonConfig_TextDisplayQuestion {
+    /**The id of this text-display. */
+    id:string,
+    /**The type of this question. */
+    type:"text-display",
+    /**The text contents to show in the modal. */
+    textContents:string
+}
+
 /**## ODQuestionsJsonConfig_ShortQuestion `interface`
- * This interface is an object which has all properties for short questions in the `questions.json` config!
+ * All properties for short questions in the `questions.jsonc` config!
  */
 export interface ODQuestionsJsonConfig_ShortQuestion extends ODQuestionsJsonConfig_BaseQuestion {
+    type:"short",
     /**A placeholder for the question. */
     placeholder:string,
     /**A collection of settings related to length validation in a question. */
-    length:ODQuestionsJsonConfig_QuestionLengthSettings
+    length:ODQuestionsJsonConfig_TextLengthLimits
 }
 
 /**## ODQuestionsJsonConfig_ParagraphQuestion `interface`
- * This interface is an object which has all properties for paragraph questions in the `questions.json` config!
+ * All properties for paragraph questions in the `questions.jsonc` config!
  */
 export interface ODQuestionsJsonConfig_ParagraphQuestion extends ODQuestionsJsonConfig_BaseQuestion {
+    type:"paragraph",
     /**A placeholder for the question. */
     placeholder:string,
     /**A collection of settings related to length validation in a question. */
-    length:ODQuestionsJsonConfig_QuestionLengthSettings
+    length:ODQuestionsJsonConfig_TextLengthLimits
+}
+
+/**## ODQuestionsJsonConfig_DropdownQuestion `interface`
+ * All properties for dropdown questions in the `questions.jsonc` config!
+ */
+export interface ODQuestionsJsonConfig_DropdownQuestion extends ODQuestionsJsonConfig_BaseQuestion {
+    type:"dropdown",
+    /**A placeholder for the dropdown. */
+    placeholder:string,
+    /**A list of maximum 25 dropdown choices. */
+    choices:ODQuestionsJsonConfig_DropdownChoice[]
+}
+
+/**## ODQuestionsJsonConfig_RadioSelectQuestion `interface`
+ * All properties for radio select questions in the `questions.jsonc` config!
+ */
+export interface ODQuestionsJsonConfig_RadioSelectQuestion extends ODQuestionsJsonConfig_BaseQuestion {
+    type:"radio-select",
+    /**A list of minimum 2, maximum 10 radio choices. */
+    choices:ODQuestionsJsonConfig_RadioCheckboxChoice[]
+}
+
+/**## ODQuestionsJsonConfig_CheckboxSelectQuestion `interface`
+ * All properties for checkbox select questions in the `questions.jsonc` config!
+ */
+export interface ODQuestionsJsonConfig_CheckboxSelectQuestion extends ODQuestionsJsonConfig_BaseQuestion {
+    type:"checkbox-select",
+    /**Verify the checked amount of checkboxes with a minimum & maximum. */
+    limits:ODQuestionsJsonConfig_CheckboxLimits
+    /**A list of minimum 1, maximum 10 checkbox choices. */
+    choices:ODQuestionsJsonConfig_RadioCheckboxChoice[]
 }
 
 /**## ODQuestionsJsonConfig_QuestionsData `type`
- * All contents of the `questions.json` config file.
+ * All contents of the `questions.jsonc` config file.
  */
-export type ODQuestionsJsonConfig_QuestionsData = (ODQuestionsJsonConfig_ShortQuestion|ODQuestionsJsonConfig_ParagraphQuestion)[]
+export type ODQuestionsJsonConfig_QuestionsData = (
+    ODQuestionsJsonConfig_ShortQuestion|
+    ODQuestionsJsonConfig_ParagraphQuestion|
+    ODQuestionsJsonConfig_TextDisplayQuestion|
+    ODQuestionsJsonConfig_DropdownQuestion|
+    ODQuestionsJsonConfig_RadioSelectQuestion|
+    ODQuestionsJsonConfig_CheckboxSelectQuestion
+)[]
 
 ///////////////////////////////////////
 // CONFIG STRUCTURES, VALUES & TYPES
-// --> transcripts.json
+// --> transcripts.jsonc
 ///////////////////////////////////////
 
 /**## ODTranscriptsJsonConfig_TranscriptsTextLayout `interface`
@@ -712,7 +813,7 @@ export interface ODTranscriptsJsonConfig_TranscriptsHtmlLayout {
 }
 
 /**## ODTranscriptsJsonConfig_TranscriptsData `interface`
- * All contents of the `transcripts.json` config file.
+ * All contents of the `transcripts.jsonc` config file.
  */
 export interface ODTranscriptsJsonConfig_TranscriptsData {
     /**All general settings related to transcripts. */
@@ -760,27 +861,27 @@ export interface ODTranscriptsJsonConfig_TranscriptsData {
  */
 export class ODMappedConfigManager extends api.ODConfigManager<ODConfigManagerIdMappings> {}
 
-/**## ODGeneralJsonConfig `class
- * A special class with types for the Open Ticket `config/general.json` config file
+/**## ODGeneralJsonCommentsConfig `class
+ * A special class with types for the Open Ticket `config/general.jsonc` config file
  */
-export class ODGeneralJsonConfig extends api.ODJsonConfig<ODGeneralJsonConfig_GeneralData> {}
+export class ODGeneralJsonCommentsConfig extends api.ODJsonCommentsConfig<ODGeneralJsonConfig_GeneralData> {}
 
-/**## ODQuestionsJsonConfig `class
- * A special class with types for the Open Ticket `config/questions.json` config file
+/**## ODQuestionsJsonCommentsConfig `class
+ * A special class with types for the Open Ticket `config/questions.jsonc` config file
  */
-export class ODQuestionsJsonConfig extends api.ODJsonConfig<ODQuestionsJsonConfig_QuestionsData> {}
+export class ODQuestionsJsonCommentsConfig extends api.ODJsonCommentsConfig<ODQuestionsJsonConfig_QuestionsData> {}
 
-/**## ODOptionsJsonConfig `class
- * A special class with types for the Open Ticket `config/options.json` config file
+/**## ODOptionsJsonCommentsConfig `class
+ * A special class with types for the Open Ticket `config/options.jsonc` config file
  */
-export class ODOptionsJsonConfig extends api.ODJsonConfig<ODOptionsJsonConfig_OptionsData> {}
+export class ODOptionsJsonCommentsConfig extends api.ODJsonCommentsConfig<ODOptionsJsonConfig_OptionsData> {}
 
-/**## ODPanelsJsonConfig `class
- * A special class with types for the Open Ticket `config/panels.json` config file
+/**## ODPanelsJsonCommentsConfig `class
+ * A special class with types for the Open Ticket `config/panels.jsonc` config file
  */
-export class ODPanelsJsonConfig extends api.ODJsonConfig<ODPanelsJsonConfig_PanelsData> {}
+export class ODPanelsJsonCommentsConfig extends api.ODJsonCommentsConfig<ODPanelsJsonConfig_PanelsData> {}
 
-/**## ODTranscriptsJsonConfig `class
- * A special class with types for the Open Ticket `config/transcripts.json` config file
+/**## ODTranscriptsJsonCommentsConfig `class
+ * A special class with types for the Open Ticket `config/transcripts.jsonc` config file
  */
-export class ODTranscriptsJsonConfig extends api.ODJsonConfig<ODTranscriptsJsonConfig_TranscriptsData> {}
+export class ODTranscriptsJsonCommentsConfig extends api.ODJsonCommentsConfig<ODTranscriptsJsonConfig_TranscriptsData> {}

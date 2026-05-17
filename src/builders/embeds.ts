@@ -42,7 +42,7 @@ const errorEmbeds = () => {
             
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",customTitle ?? lang.getTranslation("errors.titles.internalError")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.internalError",[method]) + (layout == "simple") ? "\n"+error : "")
@@ -75,7 +75,7 @@ const errorEmbeds = () => {
             })
             const commandSyntax = "**"+error.prefix+error.name+" "+optionSyntax.join(" ")+"**"
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.optionMissing")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.optionMissing"))
@@ -130,7 +130,7 @@ const errorEmbeds = () => {
             else if (error.reason == "channel_type" && error.option.type == "channel") reasonValue = lang.getTranslation("errors.optionInvalidReasons.channelType")
             else if (error.reason == "not_in_guild") reasonValue = lang.getTranslation("errors.optionInvalidReasons.notInGuild")
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.optionInvalid")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.optionInvalid")+"\n"+reasonTitle+": `"+reasonValue+"`")
@@ -144,7 +144,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-unknown-command",0,async (instance,params) => {
             const {user} = params
             
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.unknownCommand")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.unknownCommand"))
@@ -169,7 +169,7 @@ const errorEmbeds = () => {
                 else if (perm == "discord-administrator") return "- "+lang.getTranslation("errors.permissions.discord-administrator")
             }).join("\n")
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.noPermissions",[method]))
@@ -185,7 +185,7 @@ const errorEmbeds = () => {
             
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.noPermissionsCooldown",[method]))
@@ -201,7 +201,7 @@ const errorEmbeds = () => {
             
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.noPermissionsBlacklist",[method]))
@@ -214,7 +214,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-no-permissions-limits",0,async (instance,params,origin) => {
             const {user,limit} = params
             
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.noPermissions")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             if (limit == "global") instance.setDescription(lang.getTranslation("errors.descriptions.noPermissionsLimitGlobal"))
@@ -232,7 +232,7 @@ const errorEmbeds = () => {
             
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.internalError")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.internalError",[method]))
@@ -247,7 +247,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-ticket-unknown",0,async (instance,params,origin) => {
             const {user} = params
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.unknownTicket")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.unknownTicket"))
@@ -261,7 +261,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-ticket-deprecated",0,async (instance,params,origin) => {
             const {user} = params
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.deprecatedTicket")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.deprecatedTicket"))
@@ -281,7 +281,7 @@ const errorEmbeds = () => {
                 }else return "- `"+option.id.value+"`"
             }).join("\n")
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.unknownOption")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setFooter(lang.getTranslation("errors.descriptions.askForInfo"))
@@ -301,7 +301,7 @@ const errorEmbeds = () => {
                 }else return "- `"+panel.id.value+"`"
             }).join("\n")
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.unknownPanel")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.addFields({name:lang.getTranslation("params.uppercase.validPanels")+":",value:renderedPanels})
@@ -317,7 +317,7 @@ const errorEmbeds = () => {
 
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.notInGuild")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.notInGuild",[method]))
@@ -332,7 +332,7 @@ const errorEmbeds = () => {
             
             const method = (origin == "ticket-move" || origin == "ticket-pin" || origin == "ticket-rename" || origin == "ticket-unpin" || origin == "ticket-priority" || origin == "ticket-transfer") ? origin : getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.channelRename")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslation("errors.descriptions.channelRename"))
@@ -352,7 +352,7 @@ const errorEmbeds = () => {
             
             const method = (origin == "ticket-create" || origin == "ticket-close" || origin == "ticket-reopen" || origin == "ticket-claim" || origin == "ticket-unclaim" || origin == "ticket-move") ? origin : getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             //TODO TRANSLATION!!!
             instance.setTitle(utilities.emojiTitle("❌","Unable To Change Category"))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
@@ -376,7 +376,7 @@ const errorEmbeds = () => {
             
             const method = getMethodFromOrigin(origin)
 
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.busy")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.busy",[method]))
@@ -501,7 +501,7 @@ const statsEmbeds = () => {
         new api.ODWorker("opendiscord:stats-ticket-unknown",0,async (instance,params) => {
             const {user,id} = params
             
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.unknownTicket")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.statsError",[discord.channelMention(id)]))
@@ -534,8 +534,8 @@ const panelEmbeds = () => {
                 instance.setDescription(embedOptions.description)
             }
 
-            if (panel.get("opendiscord:enable-max-tickets-warning-embed").value && generalConfig.data.system.limits.enabled){
-                instance.setDescription(instance.data.description+"\n\n*"+lang.getTranslationWithParams("actions.descriptions.ticketMessageLimit",[generalConfig.data.system.limits.userMaximum.toString()])+"*")
+            if (panel.get("opendiscord:enable-max-tickets-warning-embed").value && generalConfig.data.ticketSystem.limits.enabled){
+                instance.setDescription(instance.data.description+"\n\n*"+lang.getTranslationWithParams("actions.descriptions.ticketMessageLimit",[generalConfig.data.ticketSystem.limits.userMaximum.toString()])+"*")
             }
 
             if (panel.get("opendiscord:describe-options-in-embed-fields").value){
@@ -623,12 +623,12 @@ const ticketEmbeds = () => {
 
             if (ticket.option.get("opendiscord:questions").value.length > 0){
                 //show config fields if mixing is allowed
-                if (generalConfig.data.system.displayFieldsWithQuestions) instance.addFields(...embedOptions.fields)
+                if (generalConfig.data.ticketSystem.displayFieldsWithQuestions) instance.addFields(...embedOptions.fields)
                 
                 const answers = ticket.get("opendiscord:answers").value
                 answers.forEach((answer) => {
                     if (!answer.value || answer.value.length == 0) return
-                    if (generalConfig.data.system.questionFieldsInCodeBlock) instance.addFields({name:answer.name,value:"```"+answer.value.slice(0,1024-6)+"```",inline:false})
+                    if (generalConfig.data.ticketSystem.questionFieldsInCodeBlock) instance.addFields({name:answer.name,value:"```"+answer.value.slice(0,1024-6)+"```",inline:false})
                     else instance.addFields({name:answer.name,value:answer.value,inline:false})
                 })
             }else if (embedOptions.fields){
@@ -656,7 +656,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔒",lang.getTranslation("actions.titles.close")))
             instance.setDescription(lang.getTranslation("actions.descriptions.close"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -670,7 +670,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔓",lang.getTranslation("actions.titles.reopen")))
             instance.setDescription(lang.getTranslation("actions.descriptions.reopen"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -684,7 +684,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🗑️",lang.getTranslation("actions.titles.delete")))
             instance.setDescription(lang.getTranslation("actions.descriptions.delete"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -698,7 +698,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👋",lang.getTranslation("actions.titles.claim")))
             instance.setDescription(lang.getTranslation("actions.descriptions.claim"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -712,7 +712,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
             instance.setDescription(lang.getTranslation("actions.descriptions.unclaim"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -724,9 +724,9 @@ const ticketEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
+            instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.pin")))
             instance.setDescription(lang.getTranslation("actions.descriptions.pin"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -738,9 +738,9 @@ const ticketEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
+            instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.unpin")))
             instance.setDescription(lang.getTranslation("actions.descriptions.unpin"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -754,7 +754,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.rename",["`#"+data+"`"]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -768,7 +768,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔀",lang.getTranslation("actions.titles.move")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.move",["`"+data.get("opendiscord:name").value+"`"]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -782,7 +782,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👤",lang.getTranslation("actions.titles.add")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.add",[discord.userMention(data.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -796,7 +796,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👤",lang.getTranslation("actions.titles.remove")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.remove",[discord.userMention(data.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
     
@@ -828,10 +828,10 @@ const ticketEmbeds = () => {
                 instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
                 instance.setDescription(lang.getTranslation("actions.logs.unclaimDm"))
             }else if (mode == "pin"){
-                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.pin")))
                 instance.setDescription(lang.getTranslation("actions.logs.pinDm"))
             }else if (mode == "unpin"){
-                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.unpin")))
                 instance.setDescription(lang.getTranslation("actions.logs.unpinDm"))
             }else if (mode == "rename"){
                 instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
@@ -864,7 +864,7 @@ const ticketEmbeds = () => {
                 {name:lang.getTranslation("params.uppercase.ticket")+":",value:"```#"+(channel ? channel.name : "<unknown>")+"```",inline:false},
                 {name:lang.getTranslation("params.uppercase.option")+":",value:"```"+(ticket.option.get("opendiscord:name").value)+"```",inline:false},
             )
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```",inline:false})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```",inline:false})
 
             if (mode == "close"){
                 instance.setTitle(utilities.emojiTitle("🔒",lang.getTranslation("actions.titles.close")))
@@ -882,10 +882,10 @@ const ticketEmbeds = () => {
                 instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.unclaimLog",[discord.userMention(user.id)]))
             }else if (mode == "pin"){
-                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.pin")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.pinLog",[discord.userMention(user.id)]))
             }else if (mode == "unpin"){
-                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.ticketSystem.pinEmoji,lang.getTranslation("actions.titles.unpin")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.unpinLog",[discord.userMention(user.id)]))
             }else if (mode == "rename"){
                 instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
@@ -938,7 +938,7 @@ const blacklistEmbeds = () => {
 
             if (blacklist){
                 instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistGetSuccess",[discord.userMention(data.id)]))
-                if (blacklist.reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(blacklist.reason ?? "/")+"```"})
+                if (blacklist.reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(blacklist.reason ?? "/")+"```"})
                 
             }else instance.setDescription("*"+lang.getTranslationWithParams("actions.descriptions.blacklistGetEmpty",[discord.userMention(data.id)])+"*")
         })
@@ -954,7 +954,7 @@ const blacklistEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🚫",lang.getTranslation("actions.titles.blacklistAdd")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistAdd",[discord.userMention(data.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -968,7 +968,7 @@ const blacklistEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🆓",lang.getTranslation("actions.titles.blacklistRemove")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistRemove",[discord.userMention(data.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -985,7 +985,7 @@ const blacklistEmbeds = () => {
             instance.setTitle(utilities.emojiTitle((mode == "add") ? "🚫" : "🆓",title))
             instance.setTimestamp(new Date())
             instance.setDescription(text)
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1004,7 +1004,7 @@ const blacklistEmbeds = () => {
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setTimestamp(new Date())
             instance.setDescription(text)
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }
@@ -1103,12 +1103,12 @@ const transcriptEmbeds = () => {
         new api.ODWorker("opendiscord:transcript-error",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,compiler,reason} = params
             
-            instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
+            instance.setColor(generalConfig.data.ticketSystem.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("transcripts.errors.title")))
             instance.setTimestamp(new Date())
             instance.setDescription(lang.getTranslation("transcripts.errors.error"))
             instance.setFooter(lang.getTranslation("errors.descriptions.askForInfo"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }
@@ -1289,7 +1289,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autocloseEnabled")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.autocloseEnabled",[time.toString()]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1303,7 +1303,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autodeleteEnabled")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.autodeleteEnabled",[time.toString()]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1317,7 +1317,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autocloseDisabled")))
             instance.setDescription(lang.getTranslation("actions.descriptions.autocloseDisabled"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1331,7 +1331,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autodeleteDisabled")))
             instance.setDescription(lang.getTranslation("actions.descriptions.autodeleteDisabled"))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }
@@ -1361,7 +1361,7 @@ const extraEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🚨",lang.getTranslation("actions.titles.prioritySet")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.prioritySet",["**"+priority.renderDisplayName()+"**",discord.userMention(user.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1388,7 +1388,7 @@ const extraEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔀",lang.getTranslation("actions.titles.transfer")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.transfer",[discord.userMention(oldCreator.id),discord.userMention(newCreator.id),discord.userMention(user.id)]))
-            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+            if (reason || generalConfig.data.ticketSystem.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }

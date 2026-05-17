@@ -20,7 +20,7 @@
 
     INFORMATION:
     ============
-    Open Ticket v4.1.3 - © DJdj Development
+    Open Ticket v4.2.0 - © DJdj Development
 
     support us: https://github.com/sponsors/DJj123dj
     discord: https://discord.dj-dj.be
@@ -151,7 +151,8 @@ const main = async () => {
 
     if (opendiscord.sharedFuses.getFuse("emojiTitleStyleLoading")){
         //set emoji style based on config
-        opendiscord.sharedFuses.setFuse("emojiTitleStyle",generalConfig.data.system.emojiStyle)
+        const emojiStyle = (generalConfig.data && generalConfig.data.ticketSystem && generalConfig.data.ticketSystem.emojiStyle) ? generalConfig.data.ticketSystem.emojiStyle : "before"
+        opendiscord.sharedFuses.setFuse("emojiTitleStyle",emojiStyle)
     }
     
     //load database
@@ -225,7 +226,7 @@ const main = async () => {
     }
 
     //handle data migration (PART 2)
-    if (lastVersion) await (await import("./core/startup/manageMigration.js")).loadAllAfterInitVersionMigrations(lastVersion)
+    if (lastVersion) await (await import("./core/startup/manageMigration.js")).loadAfterStartupMigrations(lastVersion)
     
     //load config checker
     opendiscord.log("Loading config checker...","system")
@@ -253,7 +254,7 @@ const main = async () => {
     if (opendiscord.sharedFuses.getFuse("checkerTranslationLoading")){
         await (await import("./data/framework/checkerLoader.js")).loadAllConfigCheckerTranslations()
     }
-    await opendiscord.events.get("onCheckerTranslationLoad").emit([opendiscord.checkers.translation,((generalConfig && generalConfig.data.system && generalConfig.data.system.useTranslatedConfigChecker) ? generalConfig.data.system.useTranslatedConfigChecker : false),opendiscord.checkers])
+    await opendiscord.events.get("onCheckerTranslationLoad").emit([opendiscord.checkers.translation,((generalConfig && generalConfig.data.ticketSystem && generalConfig.data.ticketSystem.useTranslatedConfigChecker) ? generalConfig.data.ticketSystem.useTranslatedConfigChecker : false),opendiscord.checkers])
     await opendiscord.events.get("afterCheckerTranslationsLoaded").emit([opendiscord.checkers.translation,opendiscord.checkers])
 
     //render config checker

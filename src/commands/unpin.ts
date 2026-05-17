@@ -89,7 +89,7 @@ export async function registerButtonResponders(){
             const originalMsgType = state.data.messageType
 
             //send verifybar
-            if (generalConfig.data.system.disableVerifyBars){
+            if (generalConfig.data.ticketSystem.disableVerifyBars){
                 //verifybar disabled, directly run response
                 await verifybar.activate(instance,"accept")
             

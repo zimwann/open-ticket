@@ -14,7 +14,7 @@ export async function registerCommandResponders(){
             const {guild,channel,user,member} = instance
 
             //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.blacklist,"support",user,member,channel,guild)
+            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.permissions.blacklist,"support",user,member,channel,guild)
             if (!permsResult.hasPerms){
                 if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
                 else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(origin,{guild,channel,user,permissions:["support"]}))
@@ -83,13 +83,13 @@ export async function registerCommandResponders(){
             const reason = instance.options.getString("reason",false)
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.blacklisting.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.blacklisting.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:blacklist-logs").build(origin,{guild,channel,user,mode:scope,data,reason}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.blacklisting.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:blacklist-dm").build(origin,{guild,channel,user,mode:scope,data,reason}))
+            if (generalConfig.data.logs.logMessages.blacklisting.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:blacklist-dm").build(origin,{guild,channel,user,mode:scope,data,reason}))
         }),
         new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             const scope = instance.options.getSubCommand()

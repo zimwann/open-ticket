@@ -32,9 +32,6 @@ export interface ODTicketOptionIdMappings extends ODOptionIdConstraint {
     "opendiscord:channel-prefix":ODOptionData<string>,
     "opendiscord:channel-suffix":ODOptionData<"user-name"|"user-nickname"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed">,
     "opendiscord:channel-category":ODOptionData<string>,
-    "opendiscord:channel-category-closed":ODOptionData<string>,
-    "opendiscord:channel-category-backup":ODOptionData<string>,
-    "opendiscord:channel-categories-claimed":ODOptionData<{user:string,category:string}[]>,
     "opendiscord:channel-topic":ODOptionData<string>,
     
     "opendiscord:dm-message-enabled":ODOptionData<boolean>,

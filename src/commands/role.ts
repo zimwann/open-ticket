@@ -34,7 +34,7 @@ export async function registerButtonResponders(){
                 await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(origin,{guild,channel:instance.channel,user,error:"Unable to receive role update data from worker!",layout:"advanced"}))
                 return cancel()
             }
-            if (generalConfig.data.system.replyOnReactionRole) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role").build("panel-button",{guild,user,role:res.role,result:res.result}))
+            if (generalConfig.data.ticketSystem.replyOnReactionRole) await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role").build("panel-button",{guild,user,role:res.role,result:res.result}))
         })
     )
 }

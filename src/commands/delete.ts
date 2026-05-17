@@ -36,7 +36,7 @@ export async function registerCommandResponders(){
 
             //don't allow deleteWithoutTranscript to non-global-admins when enabled
             const withoutTranscript = instance.options.getBoolean("notranscript",false) ?? false
-            if (withoutTranscript && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+            if (withoutTranscript && generalConfig.data.ticketSystem.adminOnlyDeleteWithoutTranscript){
                 if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
                     instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
                     return cancel()
@@ -93,7 +93,7 @@ export async function registerButtonResponders(){
             const originalMsgType = state.data.messageType
 
             //send verifybar
-            if (generalConfig.data.system.disableVerifyBars){
+            if (generalConfig.data.ticketSystem.disableVerifyBars){
                 //verifybar disabled, directly run response
                 await verifybar.activate(instance,"accept")
             
@@ -146,7 +146,7 @@ export async function registerVerifyBars(){
 
             //don't allow deleteWithoutTranscript to non-global-admins when enabled
             const withoutTranscript = (params.selectedButtonId == "accept-without-transcript")
-            if (withoutTranscript && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+            if (withoutTranscript && generalConfig.data.ticketSystem.adminOnlyDeleteWithoutTranscript){
                 if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
                     instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
                     return cancel()

@@ -286,8 +286,8 @@ const panelMessages = () => {
                 instance.setContent(text)
             }
 
-            if (panel.get("opendiscord:enable-max-tickets-warning-text").value && generalConfig.data.system.limits.enabled){
-                instance.setContent(instance.data.content+"\n\n*"+lang.getTranslationWithParams("actions.descriptions.ticketMessageLimit",[generalConfig.data.system.limits.userMaximum.toString()])+"*")
+            if (panel.get("opendiscord:enable-max-tickets-warning-text").value && generalConfig.data.ticketSystem.limits.enabled){
+                instance.setContent(instance.data.content+"\n\n*"+lang.getTranslationWithParams("actions.descriptions.ticketMessageLimit",[generalConfig.data.ticketSystem.limits.userMaximum.toString()])+"*")
             }
 
             //add embed
@@ -399,7 +399,7 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:ticket-message-components",1,async (instance,params,origin) => {
             const {guild,channel,user,ticket} = params
             //add components
-            if (generalConfig.data.system.enableTicketClaimButtons && !ticket.get("opendiscord:closed").value){
+            if (generalConfig.data.ticketSystem.enableTicketClaimButtons && !ticket.get("opendiscord:closed").value){
                 //enable ticket claiming
                 if (ticket.get("opendiscord:claimed").value){
                     instance.addComponent(await buttons.getSafe("opendiscord:unclaim-ticket").build("ticket-message",{guild,channel,user,ticket}))
@@ -407,7 +407,7 @@ const ticketMessages = () => {
                     instance.addComponent(await buttons.getSafe("opendiscord:claim-ticket").build("ticket-message",{guild,channel,user,ticket}))
                 }
             }
-            if (generalConfig.data.system.enableTicketPinButtons && !ticket.get("opendiscord:closed").value){
+            if (generalConfig.data.ticketSystem.enableTicketPinButtons && !ticket.get("opendiscord:closed").value){
                 //enable ticket pinning
                 if (ticket.get("opendiscord:pinned").value){
                     instance.addComponent(await buttons.getSafe("opendiscord:unpin-ticket").build("ticket-message",{guild,channel,user,ticket}))
@@ -415,7 +415,7 @@ const ticketMessages = () => {
                     instance.addComponent(await buttons.getSafe("opendiscord:pin-ticket").build("ticket-message",{guild,channel,user,ticket}))
                 }
             }
-            if (generalConfig.data.system.enableTicketCloseButtons){
+            if (generalConfig.data.ticketSystem.enableTicketCloseButtons){
                 //enable ticket closing
                 if (ticket.get("opendiscord:closed").value){
                     instance.addComponent(await buttons.getSafe("opendiscord:reopen-ticket").build("ticket-message",{guild,channel,user,ticket}))
@@ -424,7 +424,7 @@ const ticketMessages = () => {
                 }
             }
             //enable ticket deletion
-            if (generalConfig.data.system.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("ticket-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("ticket-message",{guild,channel,user,ticket}))
         }),
         new api.ODWorker("opendiscord:ticket-message-disable-components",2,async (instance,params,origin) => {
             const {ticket} = params
@@ -445,8 +445,8 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:close-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:close-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:reopen-ticket").build("close-message",{guild,channel,user,ticket}))
-            if (generalConfig.data.system.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("close-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:reopen-ticket").build("close-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("close-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -456,8 +456,8 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:reopen-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:reopen-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:close-ticket").build("reopen-message",{guild,channel,user,ticket}))
-            if (generalConfig.data.system.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("reopen-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:close-ticket").build("reopen-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("reopen-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -476,7 +476,7 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:claim-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:claim-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketClaimButtons) instance.addComponent(await buttons.getSafe("opendiscord:unclaim-ticket").build("claim-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketClaimButtons) instance.addComponent(await buttons.getSafe("opendiscord:unclaim-ticket").build("claim-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -486,7 +486,7 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:unclaim-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:unclaim-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketClaimButtons) instance.addComponent(await buttons.getSafe("opendiscord:claim-ticket").build("unclaim-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketClaimButtons) instance.addComponent(await buttons.getSafe("opendiscord:claim-ticket").build("unclaim-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -496,7 +496,7 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:pin-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:pin-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketPinButtons) instance.addComponent(await buttons.getSafe("opendiscord:unpin-ticket").build("pin-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketPinButtons) instance.addComponent(await buttons.getSafe("opendiscord:unpin-ticket").build("pin-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -506,7 +506,7 @@ const ticketMessages = () => {
         new api.ODWorker("opendiscord:unpin-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:unpin-message").build(origin,{guild,channel,user,ticket,reason}))
-            if (generalConfig.data.system.enableTicketPinButtons) instance.addComponent(await buttons.getSafe("opendiscord:pin-ticket").build("unpin-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketPinButtons) instance.addComponent(await buttons.getSafe("opendiscord:pin-ticket").build("unpin-message",{guild,channel,user,ticket}))
         })
     )
 
@@ -732,8 +732,8 @@ const autoMessages = () => {
         new api.ODWorker("opendiscord:autoclose-message",0,async (instance,params,origin) => {
             const {guild,channel,user,ticket} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:autoclose-message").build(origin,{guild,channel,user,ticket}))
-            if (generalConfig.data.system.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:reopen-ticket").build("autoclose-message",{guild,channel,user,ticket}))
-            if (generalConfig.data.system.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("autoclose-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketCloseButtons) instance.addComponent(await buttons.getSafe("opendiscord:reopen-ticket").build("autoclose-message",{guild,channel,user,ticket}))
+            if (generalConfig.data.ticketSystem.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("autoclose-message",{guild,channel,user,ticket}))
         })
     )
 
