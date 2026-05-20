@@ -15,9 +15,8 @@
 
 <p align="center">
 Open Ticket is the most <b>advanced and customizable</b> Discord ticket bot available right now. With <b>350+ configurable settings</b>, you have full control over almost every aspect of your ticket system!
-From <code>HTML transcripts</code> and <code>Advanced Plugins</code> to <code>Claiming & Pinning</code>, <code>Modal Questions & Limits</code>, <code>Detailed Statistics</code>, and much more.<br><br>
-The bot is fully translated into <b>38+ languages</b> and has been battle-tested in large Discord servers.<br>
-Need help or want to get involved? Feel free to join our <a href="https://discord.dj-dj.be"><b>Discord server</b></a>.
+From <code>HTML transcripts</code> and <code>Advanced Plugins</code> to <code>Claiming & Pinning</code>, <code>Modal Questions & Limits</code>, <code>Detailed Statistics</code>, and much more.
+The bot is fully translated into <b>38+ languages</b> and has been battle-tested in large Discord servers. Need help or want to get involved? Feel free to join our <a href="https://discord.dj-dj.be"><b>Discord server</b></a>.
 </p>
 
 <h3 align="center"><b>⭐️ Support Open Ticket’s growth by starring this repo! ⭐️</b></h3>
