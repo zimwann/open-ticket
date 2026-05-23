@@ -1,0 +1,4 @@
+# Exclude local build artifacts — these are regenerated inside the container
+node_modules/
+dist/
+.git/
