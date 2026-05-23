@@ -378,15 +378,42 @@ export const migrations = [
                     await globalDatabase.delete("opendiscord:panel-update",panelMessage.key)
                 }
             })
-            opendiscord.events.get("afterStatesInitiated").listen(async (states) => {
-                const panelMsgState = states.get("opendiscord:panel-message")
+            opendiscord.events.get("beforeReadyForUsage").listen(async () => {
+                const panelMsgState = opendiscord.states.get("opendiscord:panel-message")
                 for (const {channelId,messageId,panelId,autoUpdate} of migratedPanelStates){
                     await panelMsgState.setMsgState({channel:channelId,message:messageId},{
                         messageOrigin:"auto-update",
                         panelId,
                         panelOptionIds:[],
-                        panelAutoUpdate:autoUpdate
+                        panelAutoUpdate:autoUpdate,
+                        isSubPanel:false
                     },false)
+
+                    if (!autoUpdate){
+                        //auto update ALL non auto-update panels once to update button changes from v4.1 -> v4.2
+                        const panel = opendiscord.panels.get(panelId)
+                        if (!panel) continue
+                        
+                        //fetch panel message
+                        const mainServer = opendiscord.client.mainServer
+                        const message = await opendiscord.client.fetchChannelMessage(channelId,messageId)
+                        if (!message || !mainServer || !message.editable || message.flags.has("Ephemeral")) continue
+                        
+                        const panelMessage = await message.edit((await opendiscord.builders.messages.getSafe("opendiscord:panel").build("auto-update",{guild:mainServer,channel:message.channel,user:opendiscord.client.client.user,panel,isSubPanel:false})).message)
+                        if (panelMessage) await panelMsgState.setMsgState({channel:message.channel,message:panelMessage},{
+                            messageOrigin:"auto-update",
+                            panelId:panel.id.value,
+                            panelOptionIds:panel.get("opendiscord:options").value,
+                            panelAutoUpdate:false,
+                            isSubPanel:false
+                        },panelMessage.flags.has("Ephemeral"))
+        
+                        opendiscord.log("Panel in server got updated to v4.2!","info",[
+                            {key:"channelid",value:channelId},
+                            {key:"messageid",value:messageId},
+                            {key:"panel",value:panel.id.value}
+                        ])
+                    }
                 }
             })
         }

@@ -123,7 +123,7 @@ const panelButtons = () => {
         new api.ODWorker("opendiscord:ticket-option",0,async (instance,params) => {
             const {panel,option} = params
             
-            instance.setCustomId("od:ticket-option_"+panel.id.value+"_"+option.id.value)
+            instance.setCustomId("od:ticket-option|"+option.id.value)
             instance.setMode("button")
             instance.setColor(option.get("opendiscord:button-color").value)
             if (option.get("opendiscord:button-emoji").value) instance.setEmoji(option.get("opendiscord:button-emoji").value)
@@ -152,7 +152,22 @@ const panelButtons = () => {
         new api.ODWorker("opendiscord:role-option",0,async (instance,params) => {
             const {panel,option} = params
             
-            instance.setCustomId("od:role-option_"+panel.id.value+"_"+option.id.value)
+            instance.setCustomId("od:role-option|"+option.id.value)
+            instance.setMode("button")
+            instance.setColor(option.get("opendiscord:button-color").value)
+            if (option.get("opendiscord:button-emoji").value) instance.setEmoji(option.get("opendiscord:button-emoji").value)
+            if (option.get("opendiscord:button-label").value) instance.setLabel(option.get("opendiscord:button-label").value)
+            if (!option.get("opendiscord:button-emoji").value && !option.get("opendiscord:button-label").value) instance.setLabel("<"+option.id.value+">")
+        })
+    )
+
+    //SUB-PANEL OPTION
+    buttons.add(new api.ODButton("opendiscord:subpanel-option"))
+    buttons.get("opendiscord:subpanel-option").workers.add(
+        new api.ODWorker("opendiscord:subpanel-option",0,async (instance,params) => {
+            const {panel,option} = params
+            
+            instance.setCustomId("od:subpanel-option|"+option.id.value)
             instance.setMode("button")
             instance.setColor(option.get("opendiscord:button-color").value)
             if (option.get("opendiscord:button-emoji").value) instance.setEmoji(option.get("opendiscord:button-emoji").value)

@@ -80,11 +80,15 @@ export async function registerCommandResponders(){
 
 export async function registerButtonResponders(){
     //TICKET OPTION BUTTON RESPONDER
-    opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:ticket-option",/^od:ticket-option_/))
+    opendiscord.responders.buttons.add(new api.ODButtonResponder("opendiscord:ticket-option",/^od:ticket-option\|([^|]+)/))
     opendiscord.responders.buttons.get("opendiscord:ticket-option").workers.add(
         new api.ODWorker("opendiscord:ticket-option",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,message} = instance
             
+            const match = /^od:ticket-option\|([^|]+)/.exec(instance.interaction.customId)
+            if (!match) return cancel()
+            const optionId = match[1]
+
             //check message state
             const state = await panelMsgState.getMsgState({channel,message})
             if (!state){
@@ -98,7 +102,6 @@ export async function registerButtonResponders(){
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
-            const optionId = instance.interaction.customId.split("_")[2]
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
@@ -130,7 +133,7 @@ export async function registerButtonResponders(){
 
 export async function registerDropdownResponders(){
     //PANEL DROPDOWN TICKETS DROPDOWN RESPONDER
-    opendiscord.responders.dropdowns.add(new api.ODDropdownResponder("opendiscord:panel-dropdown-tickets",/^od:panel-dropdown_/))
+    opendiscord.responders.dropdowns.add(new api.ODDropdownResponder("opendiscord:panel-dropdown-tickets",/^od:panel-dropdown/))
     opendiscord.responders.dropdowns.get("opendiscord:panel-dropdown-tickets").workers.add(
         new api.ODWorker("opendiscord:panel-dropdown-tickets",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,message} = instance
@@ -148,7 +151,9 @@ export async function registerDropdownResponders(){
             if (!isInGuild || !guild || channel.isDMBased()) return cancel()
 
             //get option data
-            const optionId = instance.values.getStringValues()[0].split("_")[2]
+            const match = /^od:ticket-option\|([^|]+)/.exec(instance.values.getStringValues()[0])
+            if (!match) return cancel()
+            const optionId = match[1]
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(origin,{guild:instance.guild,channel:instance.channel,user:instance.user}))
@@ -178,12 +183,13 @@ export async function registerDropdownResponders(){
             //update panel after dropdown usage (reset panel choice)
             const panel = opendiscord.panels.get(state.data.panelId)
             if (panel){
-                const panelMessage = await instance.message.edit((await opendiscord.builders.messages.getSafe("opendiscord:panel").build("auto-update",{guild,channel,user,panel})).message)
+                const panelMessage = await instance.message.edit((await opendiscord.builders.messages.getSafe("opendiscord:panel").build("auto-update",{guild,channel,user,panel,isSubPanel:state.data.isSubPanel})).message)
                 if (panelMessage) await panelMsgState.setMsgState({channel,message:panelMessage},{
                     messageOrigin:"auto-update",
                     panelId:panel.id.value,
                     panelOptionIds:panel.get("opendiscord:options").value,
-                    panelAutoUpdate:state.data.panelAutoUpdate //same value
+                    panelAutoUpdate:state.data.panelAutoUpdate, //same value
+                    isSubPanel:state.data.isSubPanel //same value
                 },panelMessage.flags.has("Ephemeral"))
             }
         })

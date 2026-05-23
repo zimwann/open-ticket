@@ -96,6 +96,21 @@ export interface ODRoleOptionIdMappings extends ODOptionIdConstraint {
     "opendiscord:add-on-join":ODOptionData<boolean>
 }
 
+/**## ODSubPanelOptionIdMappings `interface`
+ * A list of all available IDs in the default `ODSubPanelOption` class in `opendiscord`.
+ * It's used to generate typescript declarations for this class.
+ */
+export interface ODSubPanelOptionIdMappings extends ODOptionIdConstraint {
+    "opendiscord:name":ODOptionData<string>,
+    "opendiscord:description":ODOptionData<string>,
+    
+    "opendiscord:button-emoji":ODOptionData<string>,
+    "opendiscord:button-label":ODOptionData<string>,
+    "opendiscord:button-color":ODOptionData<api.ODValidButtonColor>,
+    
+    "opendiscord:panel-id":ODOptionData<string>
+}
+
 /**## ODOptionManager `class`
  * This is an Open Ticket option manager.
  * 
@@ -149,19 +164,39 @@ export interface ODOptionJson {
  * 
  * It's recommended to use `ODTicketOption`, `ODWebsiteOption` or `ODRoleOption` instead!
  */
-export class ODOption extends api.ODManager<ODOptionData<api.ODValidJsonType>> {
+export abstract class ODOption<IdList extends ODOptionIdConstraint = ODOptionIdConstraint> extends api.ODManager<ODOptionData<api.ODValidJsonType>> {
     /**The id of this option. (from the config) */
     id:api.ODId
     /**The type of this option. (e.g. `opendiscord:ticket`, `opendiscord:website`, `opendiscord:role`) */
-    type: string
+    abstract readonly type: string
 
-    constructor(id:api.ODValidId, type:string, data:ODOptionData<api.ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
         super()
         this.id = new api.ODId(id)
-        this.type = type
         data.forEach((data) => {
             this.add(data)
         })
+    }
+
+    get<OptionId extends keyof api.ODNoGeneric<IdList>>(id:OptionId): IdList[OptionId]
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
+    
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
+        return super.get(id)
+    }
+
+    remove<OptionId extends keyof api.ODNoGeneric<IdList>>(id:OptionId): IdList[OptionId]
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
+    
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
+        return super.remove(id)
+    }
+
+    exists(id:keyof api.ODNoGeneric<IdList>): boolean
+    exists(id:api.ODValidId): boolean
+    
+    exists(id:api.ODValidId): boolean {
+        return super.exists(id)
     }
 
     /**Convert this option to a JSON object for storing this option in the database. */
@@ -179,11 +214,6 @@ export class ODOption extends api.ODManager<ODOptionData<api.ODValidJsonType>> {
             version:version.toString(),
             data
         }
-    }
-
-    /**Create an option from a JSON object in the database. */
-    static fromJson(json:ODOptionJson): ODOption {
-        return new ODOption(json.id,json.type,json.data.map((data) => new ODOptionData(data.id,data.value)))
     }
 }
 
@@ -224,32 +254,11 @@ export class ODOptionData<DataType extends api.ODValidJsonType> extends api.ODMa
  * 
  * Use this option to create a new ticket!
  */
-export class ODTicketOption extends ODOption {
-    type: "opendiscord:ticket" = "opendiscord:ticket"
+export class ODTicketOption extends ODOption<ODTicketOptionIdMappings> {
+    readonly type: "opendiscord:ticket" = "opendiscord:ticket"
 
     constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
-        super(id,"opendiscord:ticket",data)
-    }
-
-    get<OptionId extends keyof api.ODNoGeneric<ODTicketOptionIdMappings>>(id:OptionId): ODTicketOptionIdMappings[OptionId]
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.get(id)
-    }
-
-    remove<OptionId extends keyof api.ODNoGeneric<ODTicketOptionIdMappings>>(id:OptionId): ODTicketOptionIdMappings[OptionId]
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.remove(id)
-    }
-
-    exists(id:keyof api.ODNoGeneric<ODTicketOptionIdMappings>): boolean
-    exists(id:api.ODValidId): boolean
-    
-    exists(id:api.ODValidId): boolean {
-        return super.exists(id)
+        super(id,data)
     }
 
     static fromJson(json: ODOptionJson): ODTicketOption {
@@ -264,32 +273,11 @@ export class ODTicketOption extends ODOption {
  * 
  * Use this option to create a button which links to a website!
  */
-export class ODWebsiteOption extends ODOption {
-    type: "opendiscord:website" = "opendiscord:website"
+export class ODWebsiteOption extends ODOption<ODWebsiteOptionIdMappings> {
+    readonly type: "opendiscord:website" = "opendiscord:website"
 
     constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
-        super(id,"opendiscord:website",data)
-    }
-
-    get<OptionId extends keyof api.ODNoGeneric<ODWebsiteOptionIdMappings>>(id:OptionId): ODWebsiteOptionIdMappings[OptionId]
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.get(id)
-    }
-
-    remove<OptionId extends keyof api.ODNoGeneric<ODWebsiteOptionIdMappings>>(id:OptionId): ODWebsiteOptionIdMappings[OptionId]
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.remove(id)
-    }
-
-    exists(id:keyof api.ODNoGeneric<ODWebsiteOptionIdMappings>): boolean
-    exists(id:api.ODValidId): boolean
-    
-    exists(id:api.ODValidId): boolean {
-        return super.exists(id)
+        super(id,data)
     }
 
     static fromJson(json: ODOptionJson): ODWebsiteOption {
@@ -304,36 +292,34 @@ export class ODWebsiteOption extends ODOption {
  * 
  * Use this option to create a button for reaction roles!
  */
-export class ODRoleOption extends ODOption {
-    type: "opendiscord:role" = "opendiscord:role"
+export class ODRoleOption extends ODOption<ODRoleOptionIdMappings> {
+    readonly type: "opendiscord:role" = "opendiscord:role"
 
     constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
-        super(id,"opendiscord:role",data)
-    }
-
-    get<OptionId extends keyof api.ODNoGeneric<ODRoleOptionIdMappings>>(id:OptionId): ODRoleOptionIdMappings[OptionId]
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.get(id)
-    }
-
-    remove<OptionId extends keyof api.ODNoGeneric<ODRoleOptionIdMappings>>(id:OptionId): ODRoleOptionIdMappings[OptionId]
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
-    
-    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
-        return super.remove(id)
-    }
-
-    exists(id:keyof api.ODNoGeneric<ODRoleOptionIdMappings>): boolean
-    exists(id:api.ODValidId): boolean
-    
-    exists(id:api.ODValidId): boolean {
-        return super.exists(id)
+        super(id,data)
     }
 
     static fromJson(json:ODOptionJson): ODRoleOption {
         return new ODRoleOption(json.id,json.data.map((data) => new ODOptionData(data.id,data.value)))
+    }
+}
+
+/**## ODSubPanelOption `class`
+ * This is an Open Ticket sub-panel option.
+ * 
+ * This class contains all data related to an Open Ticket sub-panel option (parsed from the config).
+ * 
+ * Use this option to create a button for sub-panels!
+ */
+export class ODSubPanelOption extends ODOption<ODSubPanelOptionIdMappings> {
+    readonly type: "opendiscord:sub-panel" = "opendiscord:sub-panel"
+
+    constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
+        super(id,data)
+    }
+
+    static fromJson(json:ODOptionJson): ODSubPanelOption {
+        return new ODSubPanelOption(json.id,json.data.map((data) => new ODOptionData(data.id,data.value)))
     }
 }
 

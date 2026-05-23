@@ -48,6 +48,7 @@ export interface ODButtonResponderManagerIdMappings extends api.ODButtonResponde
 
     "opendiscord:ticket-option":{origin:"button",params:{},workers:"opendiscord:ticket-option"},
     "opendiscord:role-option":{origin:"button",params:{},workers:"opendiscord:role-option"},
+    "opendiscord:subpanel-option":{origin:"button",params:{},workers:"opendiscord:subpanel-option"},
 
     "opendiscord:claim-ticket":{origin:"button",params:{},workers:"opendiscord:claim-ticket"},
     "opendiscord:unclaim-ticket":{origin:"button",params:{},workers:"opendiscord:unclaim-ticket"},

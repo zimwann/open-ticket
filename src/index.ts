@@ -526,15 +526,13 @@ const main = async () => {
     await opendiscord.events.get("afterStatesLoaded").emit([opendiscord.states])
 
     //init states (async to prevent blocking startup)
-    utilities.runAsync(async () => {
-        opendiscord.log("Initiating states...","system")
-        await opendiscord.events.get("onStateInit").emit([opendiscord.states])
-        if (opendiscord.sharedFuses.getFuse("stateInitiating")){
-            await opendiscord.states.init()
-            await opendiscord.events.get("afterStatesInitiated").emit([opendiscord.states])
-        }
-        opendiscord.log("Message states ready!","info")
-    })
+    opendiscord.log("Initiating states... (may take a while for many tickets)","system")
+    await opendiscord.events.get("onStateInit").emit([opendiscord.states])
+    if (opendiscord.sharedFuses.getFuse("stateInitiating")){
+        await opendiscord.states.init()
+        await opendiscord.events.get("afterStatesInitiated").emit([opendiscord.states])
+    }
+    opendiscord.log("Message states ready!","info")
 
     //plugin loading before managers
     await opendiscord.events.get("onPluginBeforeManagerLoad").emit([])
@@ -727,6 +725,7 @@ const main = async () => {
         await (await import("./actions/handleVerifyBar.js")).registerButtonResponders()
         await (await import("./actions/handleTranscriptErrors.js")).registerButtonResponders()
         await (await import("./commands/help.js")).registerButtonResponders()
+        await (await import("./commands/panel.js")).registerButtonResponders()
         await (await import("./commands/ticket.js")).registerButtonResponders()
         await (await import("./commands/close.js")).registerButtonResponders()
         await (await import("./commands/reopen.js")).registerButtonResponders()

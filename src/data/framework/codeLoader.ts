@@ -270,12 +270,13 @@ export async function loadPanelAutoUpdateCode(){
                 const message = await opendiscord.client.fetchChannelMessage(channel,panelState.messageId)
                 if (!message || !message.editable || message.flags.has("Ephemeral")) continue
                 
-                const panelMessage = await message.edit((await opendiscord.builders.messages.getSafe("opendiscord:panel").build("auto-update",{guild:mainServer,channel,user:opendiscord.client.client.user,panel})).message)
+                const panelMessage = await message.edit((await opendiscord.builders.messages.getSafe("opendiscord:panel").build("auto-update",{guild:mainServer,channel,user:opendiscord.client.client.user,panel,isSubPanel:false})).message)
                 if (panelMessage) await panelMsgState.setMsgState({channel,message:panelMessage},{
                     messageOrigin:"auto-update",
                     panelId:panel.id.value,
                     panelOptionIds:panel.get("opendiscord:options").value,
-                    panelAutoUpdate:true
+                    panelAutoUpdate:true,
+                    isSubPanel:false
                 },panelMessage.flags.has("Ephemeral"))
 
                 opendiscord.log("Panel in server got auto-updated!","info",[

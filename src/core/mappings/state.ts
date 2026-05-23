@@ -67,13 +67,15 @@ export class ODClearMessageState extends api.ODState<{
  */
 export class ODPanelMessageState extends api.ODState<{
     /**The method this message was generated with. */
-    messageOrigin:"slash"|"text"|"auto-update"|"other",
+    messageOrigin:"slash"|"text"|"sub-panel"|"auto-update"|"other",
     /**The Id of the panel associated with this message. */
     panelId:string,
     /**A list of options available in this panel. (buttons or dropdown) */
     panelOptionIds:string[]
     /**Should this panel be auto-updated on restart? */
-    panelAutoUpdate:boolean
+    panelAutoUpdate:boolean,
+    /**Is this panel a sub-panel? */
+    isSubPanel:boolean
 },false,false> {
     constructor(id:api.ODValidId,client:api.ODClientManager,database:api.ODDatabase){
         super(id,client,database,{})

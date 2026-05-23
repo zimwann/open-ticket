@@ -24,14 +24,14 @@ const panelDropdowns = () => {
                 
                 return {
                     label:(label.length > 0) ? label : "<no-label-provided>",
-                    value:"od:ticket-option_"+panel.id.value+"_"+option.id.value,
+                    value:"od:ticket-option|"+option.id.value,
                     emoji:(emoji.length > 0) ? emoji : undefined,
                     description:(desc.length > 0) ? desc : undefined,
                     default:false
                 }
             })
 
-            instance.setCustomId("od:panel-dropdown_"+panel.id.value)
+            instance.setCustomId("od:panel-dropdown")
             instance.setType("string")
             instance.setMaxValues(1)
             instance.setMinValues(0)

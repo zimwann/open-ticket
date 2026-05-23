@@ -4,7 +4,7 @@
 import * as api from "@open-discord-bots/framework/api"
 import { ODPermissionEmbedType } from "./permission.js"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../api/transcript.js"
-import { ODRoleOption, ODTicketOption, ODWebsiteOption } from "../api/option.js"
+import { ODRoleOption, ODSubPanelOption, ODTicketOption, ODWebsiteOption } from "../api/option.js"
 import { ODTicket, ODTicketClearFilter } from "../api/ticket.js"
 import { ODRole, ODRoleUpdateResult } from "../api/role.js"
 import { ODPriorityLevel } from "../api/priority.js"
@@ -25,9 +25,10 @@ export interface ODButtonManagerIdMappings extends api.ODButtonManagerIdConstrai
     "opendiscord:help-menu-page":{origin:"text"|"slash"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu-page"}
     "opendiscord:help-menu-switch":{origin:"text"|"slash"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu-switch"},
 
-    "opendiscord:ticket-option":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODTicketOption},workers:"opendiscord:ticket-option"},
-    "opendiscord:website-option":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODWebsiteOption},workers:"opendiscord:website-option"},
-    "opendiscord:role-option":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODRoleOption},workers:"opendiscord:role-option"}
+    "opendiscord:ticket-option":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODTicketOption},workers:"opendiscord:ticket-option"},
+    "opendiscord:website-option":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODWebsiteOption},workers:"opendiscord:website-option"},
+    "opendiscord:role-option":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODRoleOption},workers:"opendiscord:role-option"}
+    "opendiscord:subpanel-option":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,option:ODSubPanelOption},workers:"opendiscord:subpanel-option"}
 
     "opendiscord:visit-ticket":{origin:"ticket-created"|"dm"|"logs"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:visit-ticket"},
 
@@ -51,7 +52,7 @@ export interface ODButtonManagerIdMappings extends api.ODButtonManagerIdConstrai
  * It's used to generate typescript declarations for this class.
  */
 export interface ODDropdownManagerIdMappings extends api.ODDropdownManagerIdConstraint {
-    "opendiscord:panel-dropdown-tickets":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,options:ODTicketOption[]},workers:"opendiscord:panel-dropdown-tickets"}
+    "opendiscord:panel-dropdown-tickets":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,options:ODTicketOption[]},workers:"opendiscord:panel-dropdown-tickets"}
 }
 
 /**## ODFileManagerIdMappings `interface`
@@ -93,7 +94,7 @@ export interface ODEmbedManagerIdMappings extends api.ODEmbedManagerIdConstraint
     "opendiscord:stats-reset":{origin:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,reason:string|null},workers:"opendiscord:stats-reset"},
     "opendiscord:stats-ticket-unknown":{origin:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,id:string},workers:"opendiscord:stats-ticket-unknown"},
     
-    "opendiscord:panel":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel},workers:"opendiscord:panel"},
+    "opendiscord:panel":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,isSubPanel:boolean},workers:"opendiscord:panel"},
     "opendiscord:ticket-created":{origin:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:ticket-created"},
     "opendiscord:ticket-created-dm":{origin:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:ticket-created-dm"},
     "opendiscord:ticket-created-logs":{origin:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:ticket-created-logs"},
@@ -176,7 +177,7 @@ export interface ODMessageManagerIdMappings extends api.ODMessageManagerIdConstr
     "opendiscord:stats-reset":{origin:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,reason:string|null},workers:"opendiscord:stats-reset"},
     "opendiscord:stats-ticket-unknown":{origin:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,id:string},workers:"opendiscord:stats-ticket-unknown"},
     
-    "opendiscord:panel":{origin:"slash"|"text"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel},workers:"opendiscord:panel-layout"|"opendiscord:panel-components"},
+    "opendiscord:panel":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,isSubPanel:boolean},workers:"opendiscord:panel-layout"|"opendiscord:panel-components"},
     "opendiscord:panel-ready":{origin:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel},workers:"opendiscord:panel-ready"},
     
     "opendiscord:ticket-created":{origin:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:ticket-created"},

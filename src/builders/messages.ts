@@ -274,7 +274,10 @@ const panelMessages = () => {
     messages.add(new api.ODMessage("opendiscord:panel"))
     messages.get("opendiscord:panel").workers.add([
         new api.ODWorker("opendiscord:panel-layout",1,async (instance,params,origin) => {
-            const {guild,channel,user,panel} = params
+            const {guild,channel,user,panel,isSubPanel} = params
+
+            //ephemeral if sub-panel
+            if (isSubPanel) instance.setEphemeral(true)
 
             //add text
             const text = panel.get("opendiscord:text").value
@@ -292,7 +295,7 @@ const panelMessages = () => {
 
             //add embed
             const embedOptions = panel.get("opendiscord:embed").value
-            if (embedOptions.enabled) instance.addEmbed(await embeds.getSafe("opendiscord:panel").build(origin,{guild,channel,user,panel}))
+            if (embedOptions.enabled) instance.addEmbed(await embeds.getSafe("opendiscord:panel").build(origin,{guild,channel,user,panel,isSubPanel}))
         }),
         new api.ODWorker("opendiscord:panel-components",0,async (instance,params,origin) => {
             const {guild,channel,user,panel} = params
@@ -315,6 +318,7 @@ const panelMessages = () => {
                     if (option instanceof api.ODTicketOption) instance.addComponent(await buttons.getSafe("opendiscord:ticket-option").build(origin,{guild,channel,user,panel,option}))
                     else if (option instanceof api.ODWebsiteOption) instance.addComponent(await buttons.getSafe("opendiscord:website-option").build(origin,{guild,channel,user,panel,option}))
                     else if (option instanceof api.ODRoleOption) instance.addComponent(await buttons.getSafe("opendiscord:role-option").build(origin,{guild,channel,user,panel,option}))
+                    else if (option instanceof api.ODSubPanelOption) instance.addComponent(await buttons.getSafe("opendiscord:subpanel-option").build(origin,{guild,channel,user,panel,option}))
                 }
             }
         })
