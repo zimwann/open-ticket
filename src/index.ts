@@ -744,6 +744,7 @@ const main = async () => {
     opendiscord.log("Loading dropdown responders...","system")
     if (opendiscord.sharedFuses.getFuse("dropdownRespondersLoading")){
         await (await import("./commands/panel.js")).registerDropdownResponders()
+        await (await import("./commands/priority.js")).registerDropdownResponders()
     }
     await opendiscord.events.get("onDropdownResponderLoad").emit([opendiscord.responders.dropdowns,opendiscord.responders,opendiscord.actions])
     await opendiscord.events.get("afterDropdownRespondersLoaded").emit([opendiscord.responders.dropdowns,opendiscord.responders,opendiscord.actions])

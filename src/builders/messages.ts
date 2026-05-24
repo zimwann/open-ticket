@@ -438,6 +438,9 @@ const ticketMessages = () => {
             }
             //enable ticket deletion
             if (generalConfig.data.ticketSystem.enableTicketDeleteButtons) instance.addComponent(await buttons.getSafe("opendiscord:delete-ticket").build("ticket-message",{guild,channel,user,ticket}))
+
+            //add priority dropdown
+            if (generalConfig.data.ticketSystem.askPriorityOnTicketCreation) instance.addComponent(await dropdowns.getSafe("opendiscord:priority-dropdown").build(origin,{guild,channel,user,ticket}))
         }),
         new api.ODWorker("opendiscord:ticket-message-disable-components",2,async (instance,params,origin) => {
             const {ticket} = params

@@ -5,13 +5,14 @@ import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
 
 const dropdowns = opendiscord.builders.dropdowns
+const lang = opendiscord.languages
 
 export async function registerAllDropdowns(){
     panelDropdowns()
 }
 
 const panelDropdowns = () => {
-    //TICKET OPTION
+    //PANEL DROPDOWN
     dropdowns.add(new api.ODDropdown("opendiscord:panel-dropdown"))
     dropdowns.get("opendiscord:panel-dropdown").workers.add(
         new api.ODWorker("opendiscord:panel-dropdown",0,async (instance,params) => {
@@ -62,6 +63,31 @@ const panelDropdowns = () => {
             instance.setMaxValues(1)
             instance.setMinValues(0)
             instance.setPlaceholder(panel.get("opendiscord:dropdown-placeholder").value)
+            instance.setOptions(parsedOptions)
+        })
+    )
+
+    //PRIORITY DROPDOWN
+    dropdowns.add(new api.ODDropdown("opendiscord:priority-dropdown"))
+    dropdowns.get("opendiscord:priority-dropdown").workers.add(
+        new api.ODWorker("opendiscord:priority-dropdown",0,async (instance,params) => {
+            const {ticket} = params
+
+            const parsedOptions: api.ODDropdownData["options"] = opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => ({
+                label:prio.displayName,
+                emoji:prio.displayEmoji ?? undefined,
+                value:"od:select-priority|"+prio.rawName
+            }))
+
+            const currentPriority = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value)
+            //TODO TRANSLATION!!!
+            const placeholder = (currentPriority.priority < 0) ? "Select priority level" : (lang.getTranslation("params.uppercase.priority")+": "+currentPriority.renderDisplayName())
+            
+            instance.setCustomId("od:priority-dropdown")
+            instance.setType("string")
+            instance.setMaxValues(1)
+            instance.setMinValues(0)
+            instance.setPlaceholder(placeholder) 
             instance.setOptions(parsedOptions)
         })
     )

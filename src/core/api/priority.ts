@@ -36,7 +36,7 @@ export class ODPriorityManager<IdList extends ODPriorityManagerIdConstraint = OD
 
     /**Get an `ODPriorityLevel` from the priority level value. Returns a dummy value when the level doesn't exist. */
     getFromPriorityLevel(level:number){
-        return this.getAll().find((lvl) => lvl.priority === level) ?? new ODPriorityLevel("opendiscord:unknown",0,"unknown","UNKNOWN_PRIORITY","🚫","🚫")
+        return this.getAll().find((lvl) => lvl.priority === level) ?? new ODPriorityLevel("opendiscord:unknown",-1,"unknown","UNKNOWN_PRIORITY","🚫","🚫")
     }
     /**List the available priority levels. */
     listAvailableLevels(){

@@ -46,6 +46,9 @@ export async function registerActions(){
             if (params.sendMessage && newTopic) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:topic-set").build(origin,{guild,channel,user,ticket,topic:newTopic})).message)
             ticket.get("opendiscord:busy").value = false
             if (newTopic) await opendiscord.events.get("afterTicketTopicChanged").emit([ticket,user,channel,oldTopic,newTopic])
+
+            //update ticket message (no await)
+            openticketUtils.updateTicketMessage(guild,channel,user,ticket)
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params

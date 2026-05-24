@@ -53,6 +53,7 @@ export interface ODButtonManagerIdMappings extends api.ODButtonManagerIdConstrai
  */
 export interface ODDropdownManagerIdMappings extends api.ODDropdownManagerIdConstraint {
     "opendiscord:panel-dropdown":{origin:"slash"|"text"|"sub-panel"|"auto-update"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,panel:ODPanel,options:(ODTicketOption|ODRoleOption|ODSubPanelOption)[]},workers:"opendiscord:panel-dropdown"}
+    "opendiscord:priority-dropdown":{origin:"panel-button"|"panel-dropdown"|"slash"|"text"|"verifybar"|"other",params:{guild:discord.Guild,channel:discord.TextBasedChannel,user:discord.User,ticket:ODTicket},workers:"opendiscord:priority-dropdown"}
 }
 
 /**## ODFileManagerIdMappings `interface`

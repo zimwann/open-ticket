@@ -61,3 +61,48 @@ export async function registerCommandResponders(){
         })
     ])
 }
+
+export async function registerDropdownResponders(){
+    //PRIORITY DROPDOWN RESPONDER
+    opendiscord.responders.dropdowns.add(new api.ODDropdownResponder("opendiscord:priority-dropdown",/^od:priority-dropdown/))
+    opendiscord.responders.dropdowns.get("opendiscord:priority-dropdown").workers.add(
+        new api.ODWorker("opendiscord:priority-dropdown",0,async (instance,params,origin,cancel) => {
+            const {guild,channel,user,message} = instance
+
+            const match = /^od:select-priority\|([^|]+)/.exec(instance.values.getStringValues()[0])
+            if (!match) return
+            const priorityName = match[1]
+
+            const priority = opendiscord.priorities.getAll().find((lvl) => lvl.rawName === priorityName) ?? null
+            if (!priority){
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"Please select a valid priority level.",customTitle:"Unknown Priority Level"}))
+                return cancel()
+            }
+
+            //responder checks
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"priority")
+            if (!hasPerms) return cancel()
+            
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/priority")
+            if (!state) return cancel()
+            
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
+            if (!ticket) return cancel()
+            
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
+            if (!isAvailable) return cancel()
+
+            //fetch state details
+            const originalMsgOrigin = state.data.messageOrigin
+            const originalMsgType = state.data.messageType
+
+            //start changing ticket priority
+            await instance.defer("reply",false)
+            await opendiscord.actions.get("opendiscord:update-ticket-priority").run("other",{guild,channel,user,ticket,newPriority:priority,sendMessage:false,reason:null})
+            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build("other",{guild,channel,user,ticket,priority,reason:null}))
+        })
+    )
+}

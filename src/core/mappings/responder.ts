@@ -69,6 +69,7 @@ export interface ODButtonResponderManagerIdMappings extends api.ODButtonResponde
  */
 export interface ODDropdownResponderManagerIdMappings extends api.ODDropdownResponderManagerIdConstraint {
     "opendiscord:panel-dropdown":{origin:"dropdown",params:{},workers:"opendiscord:dropdown-ticket"|"opendiscord:dropdown-role"|"opendiscord:dropdown-subpanel"},
+    "opendiscord:priority-dropdown":{origin:"dropdown",params:{},workers:"opendiscord:priority-dropdown"},
 }
 
 /**## ODModalResponderManagerIdMappings `interface`
