@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.2.0",
         "translators":["SankeDev"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Romanian",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Acest buton trebuie sa aiba cel putin un {0} sau {1}!",
             "unusedOption":"Optiunea {0} nu este folosita nicaieri!",
             "unusedQuestion":"Intrebarea {0} nu este folosita nicaieri!",
-            "dropdownOption":"Un meniul cu dropdown activat poate contine doar valori din categoria 'ticket'!",
+            "dropdownOption":"Un panou cu meniu derulant poate conține doar opțiuni de tipurile: 'ticket', 'role' sau 'sub-panel'.",
             "customInvalidVersion":"Versiunea specificată în configurația ta nu corespunde! Asigură-te că ai actualizat configurația la cea mai recentă versiune!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Vezi Text Commands",
             "helpPage":"Pagina {0}",
             "withReason":"Cu motiv",
-            "withoutTranscript":"Fara Transcript"
+            "withoutTranscript":"Fara Transcript",
+            "blacklistAdd":"Adaugă Utilizatorul pe Lista Neagră",
+            "blacklistRemove":"Eliberează Utilizatorul"
         },
         "titles":{
             "created":"Ticket Creat",
@@ -156,7 +158,8 @@
             "topicSet":"Subiect Modificat",
             "prioritySet":"Prioritate Modificată",
             "priorityGet":"Prioritate Tichet",
-            "transfer":"Tichet Transferat"
+            "transfer":"Tichet Transferat",
+            "transcripts":"Istoric Transcrieri"
         },
         "descriptions":{
             "create":"Ticket-ul tau a fost creat cu succes! Apasa pe butonul de mai jos pentru a-l vizualiza!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Prioritatea acestui tichet a fost modificată la {0} de către {1}!",
             "prioritySetDm":"Prioritatea tichetului tău a fost modificată la {0} pe serverul nostru!",
             "roleUpdateLog":"{0} și-a actualizat rolurile!",
-            "roleUpdateDm":"Rolurile tale pe serverul nostru au fost actualizate!"
+            "roleUpdateDm":"Rolurile tale pe serverul nostru au fost actualizate!",
+            "topicSetLog":"Prioritatea acestui tichet a fost setată la {0} de către {1}.",
+            "topicSetDm":"Prioritatea tichetului tău a fost setată la {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Sterge fara Transcript",
             "backup":"Creeaza un Transcript de Backup",
             "error":"Ceva nu a mers bine cand s-a incercat creearea transcriptului.\nCum doresti sa continui?\n\nAcest ticket nu va fi modificat pana cand nu apesi pe unul dintre butoane.",
-            "title":"Eroare Transcriere"
+            "title":"Eroare Transcriere",
+            "noHistory":"Acest utilizator nu are încă nicio transcriere.",
+            "historyNotSupported":"Istoricul transcrierilor este momentan suportat doar cu HTML Transcripts.\nIstoricul transcrierilor text va fi disponibil în versiunile viitoare."
         },
         "text":{
             "messagesTitle":"MESAJE",
@@ -298,6 +305,7 @@
             "unknownPanel":"Panel Necunoscut",
             "notInGuild":"Nu este in server",
             "channelRename":"Nu se poate redenumi canalul",
+            "channelCategory":"Categoria Nu Poate Fi Schimbată",
             "busy":"Ticket ocupat",
             "permissionError":"Eroare de Permisiune"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Acest ticket este deprecat si nu mai poate fi folosit! Posibil sa fie dintr-o versiune veche Open Ticket!",
             "notInGuild":"Aceasta {0} poate fi folosita doar in server!",
             "channelRename":"Nu s-a putut redenumi canalul din cauza unor limitari Discord! Canalul va fi redenumit in 10 minute daca botul nu va fi repornit.",
+            "channelCategory":"Din cauza limitelor de rată Discord, categoria canalului nu a putut fi schimbată imediat. Va fi schimbată automat în 10 minute dacă botul rămâne online.",
             "channelRenameSource":"Sursa acestei erori este: {0}",
             "busy":"Nu se poate executa {0}!\nTicketul este in curs de procesare.\n\nTe rugam sa incerci din nou in cateva minute!",
             "closeBeforeMessage":"Acest tichet nu poate fi închis/șters înainte ca un mesaj să fi fost trimis de un utilizator.",
             "closeBeforeAdminMessage":"Acest tichet nu poate fi închis/șters înainte ca un mesaj să fi fost trimis de un administrator de tichete sau un membru al echipei de suport.",
-            "unableToCreateTicket":"Nu poți crea un tichet."
+            "unableToCreateTicket":"Nu poți crea un tichet.",
+            "messageMissing":"Nu s-a putut găsi mesajul interacțiunii. Folosește comanda `{0}` în schimb.",
+            "stateExpired":"Această interacțiune nu mai este validă sau a expirat. Folosește comanda `{0}` în schimb. Este normal să primești această eroare după o actualizare majoră Open Ticket.",
+            "panelStateExpired":"Acest panou nu mai este valid sau a expirat. Creează un nou panou folosind `{0}` pentru a rezolva problema. Este normal să primești această eroare după o actualizare majoră Open Ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Valoarea nu respecta formatul necesar!",
@@ -387,6 +399,8 @@
             "syntax":"Sintaxa",
             "originalName":"Nume Original",
             "newName":"Nume Nou",
+            "originalCategory":"Categoria Originală",
+            "newCategory":"Categorie Nouă",
             "until":"Pana",
             "validOptions":"Optiuni Valide",
             "validPanels":"Panels Valide",
@@ -408,6 +422,8 @@
             "participants":"PARTICIPANȚI",
             "yes":"DA",
             "no":"NU",
+            "accept":"Acceptă",
+            "cancel":"Anulează",
             "option":"OPȚIUNE",
             "topic":"SUBIECT",
             "uptime":"TIM P FUNCȚIONARE SISTEM",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Activeaza sau dezactiveaza actualizarea automata a panelului.",
         "ticket":"Creeaza instant un ticket.",
         "ticketId":"Id-ul ticketului pe care vrei sa il folosesti.",
+        "ticketOtherUser":"Creează un tichet pentru alt utilizator.",
         "close":"Inchide un ticket.",
         "delete":"Sterge un ticket.",
         "deleteNoTranscript":"Sterge un ticket fara a crea un transcript.",
@@ -504,7 +521,9 @@
         "priorityGet":"Obține prioritatea tichetului.",
         "priorityList":"Obține o listă cu toate tichetele și starea priorității lor.",
         "transfer":"Transferă proprietatea tichetului de la un utilizator la altul.",
-        "transferUser":"Utilizatorul către care se face transferul."
+        "transferUser":"Utilizatorul către care se face transferul.",
+        "transcripts":"Vezi istoricul transcrierilor tichetelor unui utilizator.",
+        "transcriptsUser":"Utilizatorul de vizualizat."
     },
     "helpMenu":{
         "help":"Afiseaza o lista cu toate comenzile disponibile.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Selectează tichetul tău",
         "selectRole":"Selectează rolul tău",
-        "selectOption":"Selectează opțiunea ta"
+        "selectOption":"Selectează opțiunea ta",
+        "selectPriorityLevel":"Selectează nivelul de prioritate"
     },
     "priorities":{
         "urgent":"Urgent",

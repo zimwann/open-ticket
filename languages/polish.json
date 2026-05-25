@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.2.0",
         "translators":["DanoGlez"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Polish",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Ten przycisk musi zawierać co najmniej {0} lub {1}!",
             "unusedOption":"Opcja {0} nie jest nigdzie używana!",
             "unusedQuestion":"Pytanie {0} nie jest nigdzie używane!",
-            "dropdownOption":"Panel z włączonym rozwijanym menu może zawierać tylko opcje typu 'ticket'!",
+            "dropdownOption":"Panel z rozwijanym menu może zawierać tylko opcje typu: 'ticket', 'role' lub 'sub-panel'.",
             "customInvalidVersion":"Wersja określona w konfiguracji nie pasuje! Upewnij się, że zaktualizowałeś konfigurację do najnowszej wersji!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Pokaż Komendy Tekstowe",
             "helpPage":"Strona {0}",
             "withReason":"Z Powodem",
-            "withoutTranscript":"Bez Transkrypcji"
+            "withoutTranscript":"Bez Transkrypcji",
+            "blacklistAdd":"Dodaj Użytkownika do Czarnej Listy",
+            "blacklistRemove":"Zwolnij Użytkownika"
         },
         "titles":{
             "created":"Ticket Utworzony",
@@ -156,7 +158,8 @@
             "topicSet":"Temat Zmieniony",
             "prioritySet":"Priorytet Zmieniony",
             "priorityGet":"Priorytet Tiku",
-            "transfer":"Tik przeniesiony"
+            "transfer":"Tik przeniesiony",
+            "transcripts":"Historia Transkrypcji"
         },
         "descriptions":{
             "create":"Twój ticket został utworzony. Kliknij poniższy przycisk, aby go otworzyć!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Priorytet tego tiku został zmieniony na {0} przez {1}!",
             "prioritySetDm":"Priorytet twojego tiku został zmieniony na {0} na naszym serwerze!",
             "roleUpdateLog":"{0} zaktualizował swoje role!",
-            "roleUpdateDm":"Twoje role na naszym serwerze zostały zaktualizowane!"
+            "roleUpdateDm":"Twoje role na naszym serwerze zostały zaktualizowane!",
+            "topicSetLog":"Priorytet tego zgłoszenia został ustawiony na {0} przez {1}.",
+            "topicSetDm":"Priorytet Twojego zgłoszenia został ustawiony na {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Usuń bez transkryptu",
             "backup":"Utwórz kopię zapasową transkryptu",
             "error":"Coś poszło nie tak podczas próby utworzenia transkryptu.\nCo chciałbyś zrobić?\n\nTen ticket nie zostanie usunięty, dopóki nie klikniesz jednego z tych przycisków.",
-            "title":"Błąd Transkrypcji"
+            "title":"Błąd Transkrypcji",
+            "noHistory":"Ten użytkownik nie ma jeszcze żadnych transkrypcji.",
+            "historyNotSupported":"Historia transkrypcji jest obecnie obsługiwana tylko z HTML Transcripts.\nHistoria tekstowych transkrypcji będzie dostępna w przyszłych wersjach."
         },
         "text":{
             "messagesTitle":"WIADOMOŚCI",
@@ -298,6 +305,7 @@
             "unknownPanel":"Nieznany panel",
             "notInGuild":"Nie na serwerze",
             "channelRename":"Nie można zmienić nazwy kanału",
+            "channelCategory":"Nie Można Zmienić Kategorii",
             "busy":"Ticket jest zajęty",
             "permissionError":"Błąd uprawnień"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Obecny kanał nie jest prawidłowym ticketem! Może to być ticket z starej wersji Open Ticket!",
             "notInGuild":"To {0} nie działa w DM! Spróbuj ponownie na serwerze!",
             "channelRename":"Z powodu ograniczeń Discorda obecnie niemożliwe jest, aby bot zmienił nazwę kanału. Kanał zostanie automatycznie przemianowany w ciągu 10 minut, jeśli bot nie zostanie zrestartowany.",
+            "channelCategory":"Z powodu limitów szybkości Discorda nie można było natychmiast zmienić kategorii kanału. Zostanie ona zmieniona automatycznie w ciągu 10 minut, jeśli bot pozostanie online.",
             "channelRenameSource":"Źródło tego błędu: {0}",
             "busy":"Nie można użyć tego {0}!\nTicket jest obecnie przetwarzany przez bota.\n\nSpróbuj ponownie za kilka sekund!",
             "closeBeforeMessage":"Nie można zamknąć/usunąć tego tiku zanim użytkownik wyśle wiadomość.",
             "closeBeforeAdminMessage":"Nie można zamknąć/usunąć tego tiku zanim administrator lub członek wsparcia wyśle wiadomość.",
-            "unableToCreateTicket":"Nie możesz utworzyć tiku."
+            "unableToCreateTicket":"Nie możesz utworzyć tiku.",
+            "messageMissing":"Nie można odnaleźć wiadomości interakcji. Zamiast tego użyj komendy `{0}`.",
+            "stateExpired":"Ta interakcja nie jest już ważna lub wygasła. Zamiast tego użyj komendy `{0}`. Otrzymanie tego błędu po dużej aktualizacji Open Ticket jest normalne.",
+            "panelStateExpired":"Ten panel nie jest już ważny lub wygasł. Utwórz nowy panel za pomocą `{0}`, aby rozwiązać problem. Otrzymanie tego błędu po dużej aktualizacji Open Ticket jest normalne."
         },
         "optionInvalidReasons":{
             "stringRegex":"Wartość nie pasuje do wzorca!",
@@ -387,6 +399,8 @@
             "syntax":"Składnia",
             "originalName":"Oryginalna nazwa",
             "newName":"Nowa nazwa",
+            "originalCategory":"Oryginalna Kategoria",
+            "newCategory":"Nowa Kategoria",
             "until":"Do",
             "validOptions":"Prawidłowe opcje",
             "validPanels":"Prawidłowe panele",
@@ -408,6 +422,8 @@
             "participants":"UCZESTNICY",
             "yes":"Tak",
             "no":"Nie",
+            "accept":"Akceptuj",
+            "cancel":"Anuluj",
             "option":"Opcja",
             "topic":"Temat",
             "uptime":"Czas działania systemu",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Czy chcesz, aby ten panel automatycznie aktualizował się po edycji?",
         "ticket":"Natychmiast utwórz ticket.",
         "ticketId":"Identyfikator ticketa, który chcesz utworzyć.",
+        "ticketOtherUser":"Utwórz zgłoszenie dla innego użytkownika.",
         "close":"Zamknij ticket.",
         "delete":"Usuń ticket.",
         "deleteNoTranscript":"Usuń ten ticket bez tworzenia transkryptu.",
@@ -504,7 +521,9 @@
         "priorityGet":"Pobierz priorytet tiku.",
         "priorityList":"Pobierz listę wszystkich tików z ich priorytetem.",
         "transfer":"Przenieś własność tiku od jednego użytkownika do drugiego.",
-        "transferUser":"Użytkownik, do którego przenieść."
+        "transferUser":"Użytkownik, do którego przenieść.",
+        "transcripts":"Wyświetl historię transkrypcji zgłoszeń użytkownika.",
+        "transcriptsUser":"Użytkownik do wyświetlenia."
     },
     "helpMenu":{
         "help":"Uzyskaj listę wszystkich dostępnych poleceń.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Wybierz swój tik",
         "selectRole":"Wybierz swoją rolę",
-        "selectOption":"Wybierz opcję"
+        "selectOption":"Wybierz opcję",
+        "selectPriorityLevel":"Wybierz poziom priorytetu"
     },
     "priorities":{
         "urgent":"Pilny",

@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.2.0",
         "translators":["Kornel0706"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Hungarian",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Ennek a gombnak legalább egy {0} vagy {1} kell, hogy tartalmazzon!",
             "unusedOption":"Az opció {0} nincs használatban sehol!",
             "unusedQuestion":"A kérdés {0} nincs használatban sehol!",
-            "dropdownOption":"Egy legördülő menüvel rendelkező panel csak a 'jegy' típusú opciókat tartalmazhat!",
+            "dropdownOption":"A legördülő menüvel rendelkező panel csak a következő típusú opciókat tartalmazhatja: 'ticket', 'role' vagy 'sub-panel'.",
             "customInvalidVersion":"A konfigurációban megadott verzió nem egyezik! Győződjön meg róla, hogy a konfiguráció a legfrissebb verzióra van frissítve!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Szöveges parancsok megtekintése",
             "helpPage":"Oldal {0}",
             "withReason":"Indoklással",
-            "withoutTranscript":"Átirat nélkül"
+            "withoutTranscript":"Átirat nélkül",
+            "blacklistAdd":"Felhasználó Tiltólistára Helyezése",
+            "blacklistRemove":"Felhasználó Feloldása"
         },
         "titles":{
             "created":"Jegy létrehozva",
@@ -156,7 +158,8 @@
             "topicSet":"Téma megváltoztatva",
             "prioritySet":"Prioritás megváltoztatva",
             "priorityGet":"Jegy prioritása",
-            "transfer":"Jegy átvitele"
+            "transfer":"Jegy átvitele",
+            "transcripts":"Átirat Előzmények"
         },
         "descriptions":{
             "create":"A jegyed létrejött. Kattints az alábbi gombra, hogy hozzáférj!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"A jegy prioritása {1} által {0}-re változott!",
             "prioritySetDm":"A jegy prioritása a szerverünkön {0}-re változott!",
             "roleUpdateLog":"{0} frissítette a szerepköreit!",
-            "roleUpdateDm":"A szerepköreit frissítették a szerverünkön!"
+            "roleUpdateDm":"A szerepköreit frissítették a szerverünkön!",
+            "topicSetLog":"A jegy prioritását {1} {0} értékre állította.",
+            "topicSetDm":"A jegyed prioritása {0} értékre lett állítva."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Törlés átirat nélkül",
             "backup":"Biztonsági átirat létrehozása",
             "error":"Valami hiba történt az átirat létrehozása közben.\nMit szeretnél tenni?\n\nEz a jegy nem kerül törlésre, amíg nem kattintasz az egyik gombra.",
-            "title":"Átirat hiba"
+            "title":"Átirat hiba",
+            "noHistory":"Ennek a felhasználónak még nincsenek átiratai.",
+            "historyNotSupported":"Az átirat előzmények jelenleg csak HTML Transcripts használatával támogatottak.\nA szöveges átirat előzmények a jövőbeli verziókban lesznek elérhetők."
         },
         "text":{
             "messagesTitle":"ÜZENETEK",
@@ -298,6 +305,7 @@
             "unknownPanel":"Ismeretlen Panel",
             "notInGuild":"Nem a Szerveren",
             "channelRename":"Nem sikerült átnevezni a csatornát",
+            "channelCategory":"A Kategória Nem Módosítható",
             "busy":"A Jegy Elfoglalt",
             "permissionError":"Engedély hiba"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Az aktuális csatorna nem egy érvényes jegy! Lehet, hogy ez egy régi Open Ticket verzióból származó jegy volt!",
             "notInGuild":"Ez a {0} nem működik DM-ben! Próbáld újra egy szerveren!",
             "channelRename":"A discord korlátai miatt jelenleg nem lehet átnevezni a csatornát. A csatorna automatikusan átnevezésre kerül 10 perc múlva, ha a bot nincs újraindítva.",
+            "channelCategory":"A Discord sebességkorlátai miatt a csatorna kategóriája nem módosítható azonnal. Automatikusan módosul 10 percen belül, ha a bot online marad.",
             "channelRenameSource":"A hiba forrása: {0}",
             "busy":"Nem lehet használni ezt a {0}-t!\nA jegy jelenleg a bot által van feldolgozás alatt.\n\nPróbáld meg néhány másodperc múlva!",
             "closeBeforeMessage":"Ezt a jegyet nem lehet lezárni/törölni, amíg egy felhasználó nem küldött üzenetet.",
             "closeBeforeAdminMessage":"Ezt a jegyet nem lehet lezárni/törölni, amíg a jegy adminja vagy a támogatói csapat tagja nem küldött üzenetet.",
-            "unableToCreateTicket":"Nem tud jegyet létrehozni."
+            "unableToCreateTicket":"Nem tud jegyet létrehozni.",
+            "messageMissing":"Nem található az interakció üzenete. Használd helyette a(z) `{0}` parancsot.",
+            "stateExpired":"Ez az interakció már nem érvényes vagy lejárt. Használd helyette a(z) `{0}` parancsot. Ez a hiba normális egy nagyobb Open Ticket frissítés után.",
+            "panelStateExpired":"Ez a panel már nem érvényes vagy lejárt. Hozz létre egy új panelt a(z) `{0}` használatával a probléma megoldásához. Ez a hiba normális egy nagyobb Open Ticket frissítés után."
         },
         "optionInvalidReasons":{
             "stringRegex":"Az érték nem felel meg a mintának!",
@@ -387,6 +399,8 @@
             "syntax":"Szintaxis",
             "originalName":"Eredeti Név",
             "newName":"Új Név",
+            "originalCategory":"Eredeti Kategória",
+            "newCategory":"Új Kategória",
             "until":"Amíg",
             "validOptions":"Érvényes Opciók",
             "validPanels":"Érvényes Panelek",
@@ -408,6 +422,8 @@
             "participants":"Résztvevők",
             "yes":"Igen",
             "no":"Nem",
+            "accept":"Elfogadás",
+            "cancel":"Mégse",
             "option":"Opció",
             "topic":"Téma",
             "uptime":"Rendszer üzemidő",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Szeretnéd, hogy ez a panel automatikusan frissüljön szerkesztéskor?",
         "ticket":"Azonnal hozz létre egy jegyet.",
         "ticketId":"Az azonosítója annak a jegynek, amelyet létre szeretnél hozni.",
+        "ticketOtherUser":"Jegy létrehozása egy másik felhasználó számára.",
         "close":"Zárjon be egy jegyet.",
         "delete":"Jegy törlése.",
         "deleteNoTranscript":"Töröld ezt a jegyet átirat nélkül.",
@@ -504,7 +521,9 @@
         "priorityGet":"Kapja meg a jegy prioritását.",
         "priorityList":"Az összes jegy listája a prioritásukkal.",
         "transfer":"Átadja a jegy tulajdonjogát egyik felhasználótól a másikhoz.",
-        "transferUser":"A felhasználó, akinek át kell adni."
+        "transferUser":"A felhasználó, akinek át kell adni.",
+        "transcripts":"Egy felhasználó jegy átirat előzményeinek megtekintése.",
+        "transcriptsUser":"A megtekintendő felhasználó."
     },
     "helpMenu":{
         "help":"Parancsok listájának megtekintése.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Válassza ki a jegyét",
         "selectRole":"Válassza ki a szerepkörét",
-        "selectOption":"Válassza ki a lehetőségét"
+        "selectOption":"Válassza ki a lehetőségét",
+        "selectPriorityLevel":"Prioritási szint kiválasztása"
     },
     "priorities":{
         "urgent":"Sürgős",

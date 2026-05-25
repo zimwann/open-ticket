@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.2.0",
         "translators":["me.october"],
-        "lastedited":"10/03/2026",
+        "lastedited":"25/05/2026",
         "language":"Traditional Chinese",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"此按鈕必須至少有一個{0}或{1}！",
             "unusedOption":"選項{0}未在任何地方使用！",
             "unusedQuestion":"問題{0}未在任何地方使用！",
-            "dropdownOption":"啟用下拉菜單的麵闆隻能包含“ticket”類型的選項！",
+            "dropdownOption":"帶有下拉選單的面板只能包含以下類型的選項：'ticket'、'role' 或 'sub-panel'。",
             "customInvalidVersion":"配置文件中指定的版本不匹配！請確保您已將配置更新至最新版本！"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"檢視文本命令",
             "helpPage":"第{0}頁",
             "withReason":"帶原因",
-            "withoutTranscript":"不帶記錄"
+            "withoutTranscript":"不帶記錄",
+            "blacklistAdd":"加入黑名單使用者",
+            "blacklistRemove":"解除使用者封鎖"
         },
         "titles":{
             "created":"工單已創建",
@@ -156,7 +158,8 @@
             "topicSet":"主題已更改",
             "prioritySet":"優先級已更改",
             "priorityGet":"工單優先級",
-            "transfer":"工單已轉移"
+            "transfer":"工單已轉移",
+            "transcripts":"轉錄歷史"
         },
         "descriptions":{
             "create":"您的工單已創建。點選下方按鈕訪問！",
@@ -249,7 +252,9 @@
             "prioritySetLog":"此工單的優先級已由 {1} 更改為 {0}！",
             "prioritySetDm":"您在服務器中的工單優先級已更改為 {0}！",
             "roleUpdateLog":"{0} 已更新其角色！",
-            "roleUpdateDm":"您在服務器中的角色已更新！"
+            "roleUpdateDm":"您在服務器中的角色已更新！",
+            "topicSetLog":"此工單的優先級已由 {1} 設為 {0}。",
+            "topicSetDm":"你的工單優先級已設為 {0}。"
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"刪除無記錄",
             "backup":"創建備份記錄",
             "error":"創建記錄時出錯。\n您想怎麼做？\n\n在您點選以下按鈕之前，此工單不會被刪除。",
-            "title":"記錄錯誤"
+            "title":"記錄錯誤",
+            "noHistory":"此使用者目前沒有任何轉錄記錄。",
+            "historyNotSupported":"目前僅支援 HTML Transcripts 的轉錄歷史。\n文字轉錄歷史將在未來版本提供。"
         },
         "text":{
             "messagesTitle":"消息",
@@ -298,6 +305,7 @@
             "unknownPanel":"未知麵闆",
             "notInGuild":"不在服務器中",
             "channelRename":"無法重命名頻道",
+            "channelCategory":"無法更改分類",
             "busy":"工單繁忙",
             "permissionError":"權限錯誤"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"當前頻道不是有效工單！可能是舊版Open Ticket的工單！",
             "notInGuild":"此{0}在私信中無效！請在服務器中重試！",
             "channelRename":"由於Discord速率限製，機器人目前無法重命名頻道。如果機器人未重啟，頻道將在10分鍾後自動重命名。",
+            "channelCategory":"由於 Discord 速率限制，頻道分類無法立即更改。如果機器人保持在線，將在10分鐘內自動更新。",
             "channelRenameSource":"此錯誤的來源是：{0}",
             "busy":"無法使用此{0}！\n工單當前正在被機器人處理。\n\n請幾秒後重試！",
             "closeBeforeMessage":"用戶發送消息之前，無法關閉或刪除此工單。",
             "closeBeforeAdminMessage":"工單管理員或支援成員發送消息之前，無法關閉或刪除此工單。",
-            "unableToCreateTicket":"您無法創建工單。"
+            "unableToCreateTicket":"您無法創建工單。",
+            "messageMissing":"無法找到互動訊息。請改用指令 `{0}`。",
+            "stateExpired":"此互動已無效或已過期。請改用指令 `{0}`。在 Open Ticket 大型更新後出現此錯誤是正常的。",
+            "panelStateExpired":"此面板已無效或已過期。請使用 `{0}` 建立新面板以解決問題。在 Open Ticket 大型更新後出現此錯誤是正常的。"
         },
         "optionInvalidReasons":{
             "stringRegex":"值不符合模式！",
@@ -387,6 +399,8 @@
             "syntax":"文法",
             "originalName":"原名稱",
             "newName":"新名稱",
+            "originalCategory":"原始分類",
+            "newCategory":"新分類",
             "until":"直到",
             "validOptions":"有效選項",
             "validPanels":"有效麵闆",
@@ -408,6 +422,8 @@
             "participants":"參與者",
             "yes":"是",
             "no":"否",
+            "accept":"接受",
+            "cancel":"取消",
             "option":"選項",
             "topic":"主題",
             "uptime":"係統運行時間",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"您希望此麵闆在編輯時自動更新嗎？",
         "ticket":"立即創建一個工單。",
         "ticketId":"您想要創建的工單的標識符。",
+        "ticketOtherUser":"為其他使用者建立工單。",
         "close":"關閉一個工單。",
         "delete":"刪除一個工單。",
         "deleteNoTranscript":"刪除此工單而不創建記錄。",
@@ -504,7 +521,9 @@
         "priorityGet":"獲取工單的優先級。",
         "priorityList":"獲取所有工單的優先級狀態列錶。",
         "transfer":"將工單所有權從一位用戶轉移至另一位用戶。",
-        "transferUser":"要轉移給的用戶。"
+        "transferUser":"要轉移給的用戶。",
+        "transcripts":"查看使用者的工單轉錄歷史。",
+        "transcriptsUser":"要查看的使用者。"
     },
     "helpMenu":{
         "help":"獲取所有可用命令的列錶。",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"選擇您的工單",
         "selectRole":"選擇您的角色",
-        "selectOption":"選擇您的選項"
+        "selectOption":"選擇您的選項",
+        "selectPriorityLevel":"選擇優先級"
     },
     "priorities":{
         "urgent":"緊急",
