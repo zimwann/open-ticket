@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["palestinian"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Turkish",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Bu buton en az bir {0} veya {1} içermelidir!",
             "unusedOption":"Seçenek {0} hiçbir yerde kullanılmıyor!",
             "unusedQuestion":"Soru {0} hiçbir yerde kullanılmıyor!",
-            "dropdownOption":"Dropdown etkin olan bir panel yalnızca 'ticket' türündeki seçenekleri içerebilir!",
+            "dropdownOption":"Açılır menülü bir panel yalnızca şu türlerde seçenekler içerebilir: 'ticket', 'role' veya 'sub-panel'.",
             "customInvalidVersion":"Yapılandırmanızda belirtilen sürüm eşleşmiyor! Yapılandırmayı en son sürüme güncellediğinizden emin olun!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Metin Komutlarını Görüntüle",
             "helpPage":"Sayfa {0}",
             "withReason":"Sebep ile",
-            "withoutTranscript":"Transkript Olmadan"
+            "withoutTranscript":"Transkript Olmadan",
+            "blacklistAdd":"Kullanıcıyı Kara Listeye Al",
+            "blacklistRemove":"Kullanıcıyı Serbest Bırak"
         },
         "titles":{
             "created":"Ticket Oluşturuldu",
@@ -156,7 +158,8 @@
             "topicSet":"Konu Değiştirildi",
             "prioritySet":"Öncelik Değiştirildi",
             "priorityGet":"Ticket Önceliği",
-            "transfer":"Ticket Aktarıldı"
+            "transfer":"Ticket Aktarıldı",
+            "transcripts":"Transkript Geçmişi"
         },
         "descriptions":{
             "create":"Ticket'iniz oluşturuldu. Aşağıdaki düğmeye tıklayarak erişebilirsiniz!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Bu ticketin önceliği {1} tarafından {0} olarak değiştirildi!",
             "prioritySetDm":"Ticketinizin önceliği sunucumuzda {0} olarak değiştirildi!",
             "roleUpdateLog":"{0} rollerini güncelledi!",
-            "roleUpdateDm":"Sunucumuzdaki rolleriniz güncellendi!"
+            "roleUpdateDm":"Sunucumuzdaki rolleriniz güncellendi!",
+            "topicSetLog":"Bu ticket'ın önceliği {1} tarafından {0} olarak ayarlandı.",
+            "topicSetDm":"Ticket'ınızın önceliği {0} olarak ayarlandı."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Transkript Olmadan Sil",
             "backup":"Yedek Transkript Oluştur",
             "error":"Transkript oluşturulurken bir sorun oluştu.\nNe yapmak istersiniz?\n\nBu ticket silinmeyecek, bu butonlardan birine tıklamadan önce.",
-            "title":"Transkript Hatası"
+            "title":"Transkript Hatası",
+            "noHistory":"Bu kullanıcının henüz hiçbir transkripti yok.",
+            "historyNotSupported":"Transkript geçmişi şu anda yalnızca HTML Transcripts ile desteklenmektedir.\nMetin transkript geçmişi gelecekteki sürümlerde kullanılabilir olacaktır."
         },
         "text":{
             "messagesTitle":"MESAJLAR",
@@ -298,6 +305,7 @@
             "unknownPanel":"Bilinmeyen Panel",
             "notInGuild":"Sunucuda Değil",
             "channelRename":"Kanal Yeniden Adlandırılamadı",
+            "channelCategory":"Kategori Değiştirilemiyor",
             "busy":"Ticket Meşgul",
             "permissionError":"Yetki Hatası"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Mevcut kanal geçerli bir ticket değil! Bu, eski bir Open Ticket sürümünden kalmış olabilir!",
             "notInGuild":"Bu {0} DM'de çalışmaz! Lütfen bunu bir sunucuda tekrar deneyin!",
             "channelRename":"Discord hız limitleri nedeniyle, botun kanal adını değiştirmesi şu anda mümkün değil. Bot yeniden başlatılmazsa kanal 10 dakika içinde otomatik olarak yeniden adlandırılacaktır.",
+            "channelCategory":"Discord oran sınırları nedeniyle kanal kategorisi hemen değiştirilemedi. Bot çevrimiçi kalırsa 10 dakika içinde otomatik olarak değiştirilecektir.",
             "channelRenameSource":"Bu hatanın kaynağı: {0}",
             "busy":"Bu {0} işlemini kullanamıyorsunuz!\nTicket şu anda bot tarafından işleniyor.\n\nLütfen birkaç saniye içinde tekrar deneyin!",
             "closeBeforeMessage":"Bir kullanıcı tarafından mesaj gönderilmeden bu ticket kapatılamaz/silinemez.",
             "closeBeforeAdminMessage":"Bir ticket yöneticisi veya destek üyesi tarafından mesaj gönderilmeden bu ticket kapatılamaz/silinemez.",
-            "unableToCreateTicket":"Ticket oluşturamazsınız."
+            "unableToCreateTicket":"Ticket oluşturamazsınız.",
+            "messageMissing":"Etkileşim mesajı bulunamadı. Bunun yerine `{0}` komutunu kullanın.",
+            "stateExpired":"Bu etkileşim artık geçerli değil veya süresi doldu. Bunun yerine `{0}` komutunu kullanın. Büyük bir Open Ticket güncellemesinden sonra bu hatayı almak normaldir.",
+            "panelStateExpired":"Bu panel artık geçerli değil veya süresi doldu. Sorunu çözmek için `{0}` kullanarak yeni bir panel oluşturun. Büyük bir Open Ticket güncellemesinden sonra bu hatayı almak normaldir."
         },
         "optionInvalidReasons":{
             "stringRegex":"Değer desenle eşleşmiyor!",
@@ -387,6 +399,8 @@
             "syntax":"Sözdizimi",
             "originalName":"Orijinal İsim",
             "newName":"Yeni İsim",
+            "originalCategory":"Orijinal Kategori",
+            "newCategory":"Yeni Kategori",
             "until":"Kadar",
             "validOptions":"Geçerli Seçenekler",
             "validPanels":"Geçerli Paneller",
@@ -408,6 +422,8 @@
             "participants":"KATILIMCILAR",
             "yes":"EVET",
             "no":"HAYIR",
+            "accept":"Kabul Et",
+            "cancel":"İptal Et",
             "option":"SEÇENEK",
             "topic":"KONU",
             "uptime":"SİSTEM ÇALIŞMA SÜRESİ",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Bu panelin düzenlendiğinde otomatik olarak güncellenmesini ister misiniz?",
         "ticket":"Anında bir ticket oluştur.",
         "ticketId":"Oluşturmak istediğiniz ticket'ın kimliği.",
+        "ticketOtherUser":"Başka bir kullanıcı için ticket oluştur.",
         "close":"Bir ticket'ı kapat.",
         "delete":"Bir ticket'ı sil.",
         "deleteNoTranscript":"Bu ticket'ı transkript oluşturmadan sil.",
@@ -504,7 +521,9 @@
         "priorityGet":"Ticket önceliğini al.",
         "priorityList":"Tüm ticketleri öncelik durumlarıyla birlikte listele.",
         "transfer":"Ticket sahipliğini bir kullanıcıdan diğerine aktar.",
-        "transferUser":"Aktarılacak kullanıcı."
+        "transferUser":"Aktarılacak kullanıcı.",
+        "transcripts":"Bir kullanıcının ticket transkript geçmişini görüntüle.",
+        "transcriptsUser":"Görüntülenecek kullanıcı."
     },
     "helpMenu":{
         "help":"Tüm mevcut komutların bir listesini alın.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Ticketinizi seçin",
         "selectRole":"Rolünüzü seçin",
-        "selectOption":"Seçeneğinizi seçin"
+        "selectOption":"Seçeneğinizi seçin",
+        "selectPriorityLevel":"Öncelik seviyesini seçin"
     },
     "priorities":{
         "urgent":"Acil",

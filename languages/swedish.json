@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["NoOneNook"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Svenska",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Denna knapp ska ha minst en {0} eller {1}!",
             "unusedOption":"Alternativet {0} används inte någonstans!",
             "unusedQuestion":"Frågan {0} används inte någonstans!",
-            "dropdownOption":"Ett panel med dropdown aktiverad kan endast innehålla alternativ av typen 'ärende'!",
+            "dropdownOption":"En panel med rullgardinsmeny kan endast innehålla alternativ av typerna: 'ticket', 'role' eller 'sub-panel'.",
             "customInvalidVersion":"Versionen som anges i din konfiguration matchar inte! Se till att du har uppdaterat konfigurationen till den senaste versionen!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Visa Textkommandon",
             "helpPage":"Sida {0}",
             "withReason":"Med Orsak",
-            "withoutTranscript":"Utan Utskrift"
+            "withoutTranscript":"Utan Utskrift",
+            "blacklistAdd":"Svartlista Användare",
+            "blacklistRemove":"Frigör Användare"
         },
         "titles":{
             "created":"Ärende Skapat",
@@ -156,7 +158,8 @@
             "topicSet":"Ämne Ändrat",
             "prioritySet":"Prioritet Ändrad",
             "priorityGet":"Ticketprioritet",
-            "transfer":"Ticket Överfört"
+            "transfer":"Ticket Överfört",
+            "transcripts":"Transkriptshistorik"
         },
         "descriptions":{
             "create":"Ditt ärende har skapats. Klicka på knappen nedan för att få tillgång till det!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Prioriteten för denna ticket har ändrats till {0} av {1}!",
             "prioritySetDm":"Prioriteten för din ticket har ändrats till {0} på vår server!",
             "roleUpdateLog":"{0} har uppdaterat sina roller!",
-            "roleUpdateDm":"Dina roller på vår server har uppdaterats!"
+            "roleUpdateDm":"Dina roller på vår server har uppdaterats!",
+            "topicSetLog":"Prioriteten för detta ärende har satts till {0} av {1}.",
+            "topicSetDm":"Prioriteten för ditt ärende har satts till {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Radera Utan Utskrift",
             "backup":"Skapa Säkerhetskopieringsutskrift",
             "error":"Något gick fel vid försöket att skapa utskriften.\nVad vill du göra?\n\nDetta ärende kommer inte att raderas förrän du klickar på en av dessa knappar.",
-            "title":"Transkriptionsfel"
+            "title":"Transkriptionsfel",
+            "noHistory":"Denna användare har ännu inga transkript.",
+            "historyNotSupported":"Transkriptshistorik stöds för närvarande endast med HTML Transcripts.\nTexttranskriptshistorik kommer att finnas tillgänglig i framtida versioner."
         },
         "text":{
             "messagesTitle":"MEDDELANDEN",
@@ -298,6 +305,7 @@
             "unknownPanel":"Okänt Panel",
             "notInGuild":"Inte På Server",
             "channelRename":"Kan Inte Döpa Om Kanal",
+            "channelCategory":"Kunde Inte Ändra Kategori",
             "busy":"Ärendet Är Upptaget",
             "permissionError":"Behörighetsfel"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Den nuvarande kanalen är inte ett giltigt ärende! Det kan ha varit ett ärende från en äldre version av Open Ticket!",
             "notInGuild":"Denna {0} fungerar inte i DM! Försök igen på en server!",
             "channelRename":"På grund av Discords hastighetsbegränsningar är det för närvarande omöjligt för botten att döpa om kanalen. Kanalen kommer automatiskt att döpas om inom 10 minuter om botten inte startas om.",
+            "channelCategory":"På grund av Discords hastighetsbegränsningar kunde kanalens kategori inte ändras omedelbart. Den kommer att ändras automatiskt inom 10 minuter om botten förblir online.",
             "channelRenameSource":"Källan till detta fel är: {0}",
             "busy":"Kan inte använda denna {0}!\nÄrendet behandlas för närvarande av botten.\n\nFörsök igen om några sekunder!",
             "closeBeforeMessage":"Denna ticket kan inte stängas/raderas innan ett meddelande har skickats av en användare.",
             "closeBeforeAdminMessage":"Denna ticket kan inte stängas/raderas innan ett meddelande har skickats av en ticketadministratör eller supportmedlem.",
-            "unableToCreateTicket":"Du kan inte skapa en ticket."
+            "unableToCreateTicket":"Du kan inte skapa en ticket.",
+            "messageMissing":"Kunde inte hitta meddelandet för interaktionen. Använd kommandot `{0}` istället.",
+            "stateExpired":"Denna interaktion är inte längre giltig eller har gått ut. Använd kommandot `{0}` istället. Det är normalt att få detta fel efter en större Open Ticket-uppdatering.",
+            "panelStateExpired":"Denna panel är inte längre giltig eller har gått ut. Skapa en ny panel med `{0}` för att lösa problemet. Det är normalt att få detta fel efter en större Open Ticket-uppdatering."
         },
         "optionInvalidReasons":{
             "stringRegex":"Värdet matchar inte mönstret!",
@@ -387,6 +399,8 @@
             "syntax":"Syntax",
             "originalName":"Ursprungligt Namn",
             "newName":"Nytt Namn",
+            "originalCategory":"Originalkategori",
+            "newCategory":"Ny Kategori",
             "until":"Till",
             "validOptions":"Giltiga Alternativ",
             "validPanels":"Giltiga Paneler",
@@ -408,6 +422,8 @@
             "participants":"DELTAGARE",
             "yes":"JA",
             "no":"NEJ",
+            "accept":"Acceptera",
+            "cancel":"Avbryt",
             "option":"ALTERNATIV",
             "topic":"ÄMNE",
             "uptime":"SYSTEMETS DRIFTTID",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Vill du att denna panel ska uppdateras automatiskt när den redigeras?",
         "ticket":"Skapa ett ärende direkt.",
         "ticketId":"Identifieraren för ärendet du vill skapa.",
+        "ticketOtherUser":"Skapa ett ärende för en annan användare.",
         "close":"Stäng ett ärende.",
         "delete":"Radera ett ärende.",
         "deleteNoTranscript":"Radera detta ärende utan att skapa en utskrift.",
@@ -504,7 +521,9 @@
         "priorityGet":"Hämta prioriteten för ticketen.",
         "priorityList":"Hämta en lista över alla tickets med deras prioritetsstatus.",
         "transfer":"Överför ticketens ägarskap från en användare till en annan.",
-        "transferUser":"Användaren att överföra till."
+        "transferUser":"Användaren att överföra till.",
+        "transcripts":"Visa en användares ärendetranskriptshistorik.",
+        "transcriptsUser":"Användaren att visa."
     },
     "helpMenu":{
         "help":"Få en lista över alla tillgängliga kommandon.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Välj din ticket",
         "selectRole":"Välj din roll",
-        "selectOption":"Välj ditt alternativ"
+        "selectOption":"Välj ditt alternativ",
+        "selectPriorityLevel":"Välj prioritetsnivå"
     },
     "priorities":{
         "urgent":"Brådskande",

@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["the_gamer"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Danish",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Denne knap skal have mindst en {0} eller {1}!",
             "unusedOption":"Muligheden {0} bruges ikke nogen steder!",
             "unusedQuestion":"Spørgsmålet {0} bruges ikke nogen steder!",
-            "dropdownOption":"Et panel med dropdown aktiveret kan kun indeholde muligheder af typen 'ticket'!",
+            "dropdownOption":"Et panel med rullemenu kan kun indeholde muligheder af typerne: 'ticket', 'role' eller 'sub-panel'.",
             "customInvalidVersion":"Den version, der er angivet i din konfiguration, matcher ikke! Sørg for, at du har opdateret konfigurationen til den nyeste version!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Vis Tekst Kommandoer",
             "helpPage":"Side {0}",
             "withReason":"Med Årsag",
-            "withoutTranscript":"Uden Transkript"
+            "withoutTranscript":"Uden Transkript",
+            "blacklistAdd":"Blacklist Bruger",
+            "blacklistRemove":"Frigiv Bruger"
         },
         "titles":{
             "created":"Ticket Oprettet",
@@ -156,7 +158,8 @@
             "topicSet":"Emne Ændret",
             "prioritySet":"Prioritet Ændret",
             "priorityGet":"Ticket Prioritet",
-            "transfer":"Ticket Overført"
+            "transfer":"Ticket Overført",
+            "transcripts":"Transskript Historik"
         },
         "descriptions":{
             "create":"Din ticket er blevet oprettet. Klik på knappen nedenfor for at få adgang til den!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Prioriteten af denne ticket er blevet ændret til {0} af {1}!",
             "prioritySetDm":"Prioriteten af din ticket er blevet ændret til {0} på vores server!",
             "roleUpdateLog":"{0} har opdateret deres roller!",
-            "roleUpdateDm":"Dine roller på vores server er blevet opdateret!"
+            "roleUpdateDm":"Dine roller på vores server er blevet opdateret!",
+            "topicSetLog":"Prioriteten for denne ticket er blevet sat til {0} af {1}.",
+            "topicSetDm":"Prioriteten for din ticket er blevet sat til {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Slet uden transkript",
             "backup":"Opret backup-transkript",
             "error":"Noget gik galt, da vi forsøgte at oprette transkriptet.\nHvad vil du gerne gøre?\n\nDenne ticket bliver ikke slettet, før du klikker på en af disse knapper.",
-            "title":"Transkriptfejl"
+            "title":"Transkriptfejl",
+            "noHistory":"Denne bruger har endnu ingen transskripter.",
+            "historyNotSupported":"Transskript historik understøttes i øjeblikket kun med HTML Transcripts.\nTeksttransskript historik vil være tilgængelig i fremtidige versioner."
         },
         "text":{
             "messagesTitle":"BESKEDER",
@@ -298,6 +305,7 @@
             "unknownPanel":"Ukendt panel",
             "notInGuild":"Ikke på server",
             "channelRename":"Kan ikke omdøbe kanalen",
+            "channelCategory":"Kan Ikke Ændre Kategori",
             "busy":"Ticket er optaget",
             "permissionError":"Tilladelsesfejl"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Den aktuelle kanal er ikke en gyldig ticket! Det kan være en ticket fra en ældre version af Open Ticket!",
             "notInGuild":"Denne {0} virker ikke i DM! Prøv igen på en server!",
             "channelRename":"På grund af Discord-ratelimits er det i øjeblikket umuligt for botten at omdøbe kanalen. Kanalen vil automatisk blive omdøbt inden for 10 minutter, hvis botten ikke genstartes.",
+            "channelCategory":"På grund af Discord rate limits kunne kanalens kategori ikke ændres med det samme. Den vil automatisk blive ændret inden for 10 minutter, hvis botten forbliver online.",
             "channelRenameSource":"Kilden til denne fejl er: {0}",
             "busy":"Kan ikke bruge denne {0}!\nTicketen bliver i øjeblikket behandlet af botten.\n\nPrøv igen om et par sekunder!",
             "closeBeforeMessage":"Denne ticket kan ikke lukkes/slettes, før en bruger har sendt en besked.",
             "closeBeforeAdminMessage":"Denne ticket kan ikke lukkes/slettes, før en ticket-admin eller supportmedlem har sendt en besked.",
-            "unableToCreateTicket":"Du kan ikke oprette en ticket."
+            "unableToCreateTicket":"Du kan ikke oprette en ticket.",
+            "messageMissing":"Kunne ikke finde interaktionsbeskeden. Brug kommandoen `{0}` i stedet.",
+            "stateExpired":"Denne interaktion er ikke længere gyldig eller er udløbet. Brug kommandoen `{0}` i stedet. Det er normalt at modtage denne fejl efter en større Open Ticket-opdatering.",
+            "panelStateExpired":"Dette panel er ikke længere gyldigt eller er udløbet. Opret et nyt panel med `{0}` for at løse problemet. Det er normalt at modtage denne fejl efter en større Open Ticket-opdatering."
         },
         "optionInvalidReasons":{
             "stringRegex":"Værdien matcher ikke mønsteret!",
@@ -387,6 +399,8 @@
             "syntax":"Syntaks",
             "originalName":"Originalt navn",
             "newName":"Nyt navn",
+            "originalCategory":"Original Kategori",
+            "newCategory":"Ny Kategori",
             "until":"Indtil",
             "validOptions":"Gyldige indstillinger",
             "validPanels":"Gyldige paneler",
@@ -408,6 +422,8 @@
             "participants":"DELTAGERE",
             "yes":"Ja",
             "no":"Nej",
+            "accept":"Accepter",
+            "cancel":"Annuller",
             "option":"Mulighed",
             "topic":"Emne",
             "uptime":"System Oppetid",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Vil du have, at dette panel automatisk opdateres, når det redigeres?",
         "ticket":"Opret en ticket med det samme.",
         "ticketId":"Identifikatoren for ticketen, som du vil oprette.",
+        "ticketOtherUser":"Opret en ticket for en anden bruger.",
         "close":"Luk en ticket.",
         "delete":"Slet en ticket.",
         "deleteNoTranscript":"Slet denne ticket uden at oprette et transkript.",
@@ -504,7 +521,9 @@
         "priorityGet":"Få prioritet for ticketen.",
         "priorityList":"Få en liste over alle tickets med deres prioritet.",
         "transfer":"Overfør ticket-ejerskab fra en bruger til en anden.",
-        "transferUser":"Brugeren der skal overføres til."
+        "transferUser":"Brugeren der skal overføres til.",
+        "transcripts":"Se en brugers ticket transskript historik.",
+        "transcriptsUser":"Brugeren der skal vises."
     },
     "helpMenu":{
         "help":"Få en liste over alle de tilgængelige kommandoer.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Vælg din ticket",
         "selectRole":"Vælg din rolle",
-        "selectOption":"Vælg dit valg"
+        "selectOption":"Vælg dit valg",
+        "selectPriorityLevel":"Vælg prioritetsniveau"
     },
     "priorities":{
         "urgent":"Haster",

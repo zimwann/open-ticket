@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["fraden1mvp.","imperatorix_17"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Italian",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Questo pulsante deve avere almeno un {0} o {1}!",
             "unusedOption":"L'opzione {0} non è utilizzata da nessuna parte!",
             "unusedQuestion":"La domanda {0} non è utilizzata da nessuna parte!",
-            "dropdownOption":"Un pannello con il dropdown attivato può contenere solo opzioni di tipo 'ticket'!",
+            "dropdownOption":"Un pannello con menu a discesa può contenere solo opzioni dei tipi: 'ticket', 'role' o 'sub-panel'.",
             "customInvalidVersion":"La versione specificata nella tua configurazione non corrisponde! Assicurati di aver aggiornato la configurazione all'ultima versione!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Visualizza Comandi Testo",
             "helpPage":"Pagina {0}",
             "withReason":"Con Motivo",
-            "withoutTranscript":"Senza Trascrizione"
+            "withoutTranscript":"Senza Trascrizione",
+            "blacklistAdd":"Metti Utente in Blacklist",
+            "blacklistRemove":"Rilascia Utente"
         },
         "titles":{
             "created":"Ticket Creato",
@@ -156,7 +158,8 @@
             "topicSet":"Argomento Cambiato",
             "prioritySet":"Priorità Cambiata",
             "priorityGet":"Priorità Ticket",
-            "transfer":"Ticket Trasferito"
+            "transfer":"Ticket Trasferito",
+            "transcripts":"Cronologia Trascrizioni"
         },
         "descriptions":{
             "create":"Il tuo ticket è stato creato. Clicca il pulsante qui sotto per accedervi!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"La priorità di questo ticket è stata cambiata in {0} da {1}!",
             "prioritySetDm":"La priorità del tuo ticket è stata cambiata in {0} nel nostro server!",
             "roleUpdateLog":"{0} ha aggiornato i propri ruoli!",
-            "roleUpdateDm":"I tuoi ruoli nel nostro server sono stati aggiornati!"
+            "roleUpdateDm":"I tuoi ruoli nel nostro server sono stati aggiornati!",
+            "topicSetLog":"La priorità di questo ticket è stata impostata su {0} da {1}.",
+            "topicSetDm":"La priorità del tuo ticket è stata impostata su {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Elimina Senza Trascrizione",
             "backup":"Crea Trascrizione di Backup",
             "error":"Qualcosa è andato storto durante la creazione della trascrizione.\nCosa vuoi fare?\n\nQuesto ticket non sarà eliminato finché non clicchi su uno di questi pulsanti.",
-            "title":"Errore nel Transcript"
+            "title":"Errore nel Transcript",
+            "noHistory":"Questo utente non ha ancora alcuna trascrizione.",
+            "historyNotSupported":"La cronologia delle trascrizioni è attualmente supportata solo con HTML Transcripts.\nLa cronologia delle trascrizioni testuali sarà disponibile nelle versioni future."
         },
         "text":{
             "messagesTitle":"MESSAGGI",
@@ -298,6 +305,7 @@
             "unknownPanel":"Pannello Sconosciuto",
             "notInGuild":"Non nel Server",
             "channelRename":"Impossibile Rinominare il Canale",
+            "channelCategory":"Impossibile Cambiare Categoria",
             "busy":"Ticket Occupato",
             "permissionError":"Errore di Permesso"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Il canale attuale non è un ticket valido! Potrebbe essere un ticket di una vecchia versione di Open Ticket!",
             "notInGuild":"Questo {0} non funziona in DM! Riprova in un server!",
             "channelRename":"A causa dei limiti di Discord, al momento non è possibile rinominare il canale. Il canale verrà automaticamente rinominato in oltre 10 minuti se il bot non viene riavviato.",
+            "channelCategory":"A causa dei limiti di frequenza di Discord, la categoria del canale non può essere modificata immediatamente. Verrà modificata automaticamente entro 10 minuti se il bot rimane online.",
             "channelRenameSource":"La fonte di questo errore è: {0}",
             "busy":"Impossibile utilizzare questo {0}!\nIl ticket è attualmente in fase di elaborazione dal bot.\n\nPer favore riprova tra pochi secondi!",
             "closeBeforeMessage":"Questo ticket non può essere chiuso/eliminato prima che un messaggio sia stato inviato da un utente.",
             "closeBeforeAdminMessage":"Questo ticket non può essere chiuso/eliminato prima che un messaggio sia stato inviato da un admin del ticket o da un membro del supporto.",
-            "unableToCreateTicket":"Non puoi creare un ticket."
+            "unableToCreateTicket":"Non puoi creare un ticket.",
+            "messageMissing":"Impossibile trovare il messaggio dell'interazione. Usa invece il comando `{0}`.",
+            "stateExpired":"Questa interazione non è più valida o è scaduta. Usa invece il comando `{0}`. È normale ricevere questo errore dopo un importante aggiornamento di Open Ticket.",
+            "panelStateExpired":"Questo pannello non è più valido o è scaduto. Crea un nuovo pannello usando `{0}` per risolvere il problema. È normale ricevere questo errore dopo un importante aggiornamento di Open Ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Il valore non corrisponde al modello!",
@@ -387,6 +399,8 @@
             "syntax":"Sintassi",
             "originalName":"Nome Originale",
             "newName":"Nuovo Nome",
+            "originalCategory":"Categoria Originale",
+            "newCategory":"Nuova Categoria",
             "until":"Fino a",
             "validOptions":"Opzioni Valide",
             "validPanels":"Pannelli Validi",
@@ -408,6 +422,8 @@
             "participants":"Partecipanti",
             "yes":"Si",
             "no":"No",
+            "accept":"Accetta",
+            "cancel":"Annulla",
             "option":"Opzione",
             "topic":"Argomento",
             "uptime":"Uptime Sistema",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Vuoi che questo pannello si aggiorni automaticamente quando viene modificato?",
         "ticket":"Crea istantaneamente un ticket.",
         "ticketId":"L'identificatore del ticket che vuoi creare.",
+        "ticketOtherUser":"Crea un ticket per un altro utente.",
         "close":"Chiudi un ticket.",
         "delete":"Elimina un ticket.",
         "deleteNoTranscript":"Elimina questo ticket senza creare una trascrizione.",
@@ -504,7 +521,9 @@
         "priorityGet":"Ottieni la priorità del ticket.",
         "priorityList":"Ottieni una lista di tutti i ticket con il loro stato di priorità.",
         "transfer":"Trasferisci la proprietà da un utente ad un'altro.",
-        "transferUser":"L'utente al quale trasferire."
+        "transferUser":"L'utente al quale trasferire.",
+        "transcripts":"Visualizza la cronologia delle trascrizioni dei ticket di un utente.",
+        "transcriptsUser":"L'utente da visualizzare."
     },
     "helpMenu":{
         "help":"Ottieni un elenco di tutti i comandi disponibili.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Seleziona il tuo Ticket",
         "selectRole":"Seleziona il tuo ruolo",
-        "selectOption":"Seleziona la tua opzione"
+        "selectOption":"Seleziona la tua opzione",
+        "selectPriorityLevel":"Seleziona livello di priorità"
     },
     "priorities":{
         "urgent":"Urgente",

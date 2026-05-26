@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["ngocdiep2006"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Vietnamese",
         "automated":true
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Nút này cần có ít nhất một {0} hoặc {1}!",
             "unusedOption":"Tùy chọn {0} không được sử dụng ở bất kỳ đâu!",
             "unusedQuestion":"Câu hỏi {0} không được sử dụng ở bất kỳ đâu!",
-            "dropdownOption":"Bảng điều khiển có bật dropdown chỉ có thể chứa các tùy chọn thuộc loại 'ticket'!",
+            "dropdownOption":"Một bảng có menu thả xuống chỉ có thể chứa các tùy chọn loại: 'ticket', 'role' hoặc 'sub-panel'.",
             "customInvalidVersion":"Phiên bản được chỉ định trong cấu hình của bạn không khớp! Hãy đảm bảo bạn đã cập nhật cấu hình lên phiên bản mới nhất!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Xem Lệnh Văn Bản",
             "helpPage":"Trang {0}",
             "withReason":"Có Lý Do",
-            "withoutTranscript":"Không Có Bản Ghi"
+            "withoutTranscript":"Không Có Bản Ghi",
+            "blacklistAdd":"Thêm người dùng vào danh sách đen",
+            "blacklistRemove":"Giải phóng người dùng"
         },
         "titles":{
             "created":"Ticket Đã Tạo",
@@ -156,7 +158,8 @@
             "topicSet":"Đã thay đổi chủ đề",
             "prioritySet":"Đã thay đổi mức ưu tiên",
             "priorityGet":"Mức ưu tiên của vé",
-            "transfer":"Đã chuyển vé"
+            "transfer":"Đã chuyển vé",
+            "transcripts":"Lịch sử bản ghi"
         },
         "descriptions":{
             "create":"Ticket của bạn đã được tạo. Nhấp vào nút bên dưới để truy cập!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Mức ưu tiên của vé này đã được {1} thay đổi thành {0}!",
             "prioritySetDm":"Mức ưu tiên của vé của bạn đã được thay đổi thành {0} trong máy chủ của chúng tôi!",
             "roleUpdateLog":"{0} đã cập nhật vai trò của họ!",
-            "roleUpdateDm":"Vai trò của bạn trong máy chủ của chúng tôi đã được cập nhật!"
+            "roleUpdateDm":"Vai trò của bạn trong máy chủ của chúng tôi đã được cập nhật!",
+            "topicSetLog":"Ưu tiên của ticket này đã được đặt thành {0} bởi {1}.",
+            "topicSetDm":"Ưu tiên ticket của bạn đã được đặt thành {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Xóa Không Có Bản Ghi",
             "backup":"Tạo Bản Ghi Dự Phòng",
             "error":"Đã xảy ra lỗi khi cố gắng tạo bản ghi.\nBạn muốn làm gì?\n\nTicket này sẽ không bị xóa cho đến khi bạn nhấp vào một trong các nút này.",
-            "title":"Lỗi bản ghi"
+            "title":"Lỗi bản ghi",
+            "noHistory":"Người dùng này chưa có bản ghi nào.",
+            "historyNotSupported":"Lịch sử bản ghi hiện chỉ được hỗ trợ với HTML Transcripts.\nLịch sử bản ghi văn bản sẽ có trong các phiên bản tương lai."
         },
         "text":{
             "messagesTitle":"TIN NHẮN",
@@ -298,6 +305,7 @@
             "unknownPanel":"Bảng Điều Khiển Không Xác Định",
             "notInGuild":"Không Ở Trong Máy Chủ",
             "channelRename":"Không Thể Đổi Tên Kênh",
+            "channelCategory":"Không thể thay đổi danh mục",
             "busy":"Ticket Đang Bận",
             "permissionError":"Lỗi quyền hạn"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Kênh hiện tại không phải là ticket hợp lệ! Nó có thể là một ticket từ phiên bản Open Ticket cũ!",
             "notInGuild":"{0} này không hoạt động trong DM! Vui lòng thử lại trong máy chủ!",
             "channelRename":"Do giới hạn tốc độ của discord, hiện tại bot không thể đổi tên kênh. Kênh sẽ tự động được đổi tên trong 10 phút nếu bot không được khởi động lại.",
+            "channelCategory":"Do giới hạn tốc độ của Discord, danh mục kênh không thể thay đổi ngay lập tức. Nó sẽ tự động được thay đổi trong vòng 10 phút nếu bot vẫn trực tuyến.",
             "channelRenameSource":"Nguồn gốc của lỗi này là: {0}",
             "busy":"Không thể sử dụng {0} này!\nTicket hiện đang được bot xử lý.\n\nVui lòng thử lại sau vài giây!",
             "closeBeforeMessage":"Không thể đóng/xóa vé này trước khi người dùng gửi tin nhắn.",
             "closeBeforeAdminMessage":"Không thể đóng/xóa vé này trước khi quản trị viên vé hoặc thành viên hỗ trợ gửi tin nhắn.",
-            "unableToCreateTicket":"Bạn không thể tạo vé."
+            "unableToCreateTicket":"Bạn không thể tạo vé.",
+            "messageMissing":"Không thể tìm thấy tin nhắn tương tác. Hãy sử dụng lệnh `{0}` thay thế.",
+            "stateExpired":"Tương tác này không còn hợp lệ hoặc đã hết hạn. Hãy sử dụng lệnh `{0}` thay thế. Điều này là bình thường sau bản cập nhật lớn của Open Ticket.",
+            "panelStateExpired":"Bảng này không còn hợp lệ hoặc đã hết hạn. Hãy tạo bảng mới bằng `{0}` để khắc phục sự cố. Điều này là bình thường sau bản cập nhật lớn của Open Ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Giá trị không khớp với mẫu!",
@@ -387,6 +399,8 @@
             "syntax":"Cú Pháp",
             "originalName":"Tên Gốc",
             "newName":"Tên Mới",
+            "originalCategory":"Danh mục gốc",
+            "newCategory":"Danh mục mới",
             "until":"Đến",
             "validOptions":"Tùy Chọn Hợp Lệ",
             "validPanels":"Bảng Điều Khiển Hợp Lệ",
@@ -408,6 +422,8 @@
             "participants":"Người tham gia",
             "yes":"Có",
             "no":"Không",
+            "accept":"Chấp nhận",
+            "cancel":"Hủy",
             "option":"Tùy chọn",
             "topic":"Chủ đề",
             "uptime":"Thời gian hoạt động hệ thống",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Bạn có muốn bảng điều khiển này tự động cập nhật khi được chỉnh sửa không?",
         "ticket":"Tạo ticket ngay lập tức.",
         "ticketId":"Mã định danh của ticket bạn muốn tạo.",
+        "ticketOtherUser":"Tạo ticket cho người dùng khác.",
         "close":"Đóng ticket.",
         "delete":"Xóa ticket.",
         "deleteNoTranscript":"Xóa ticket này mà không tạo bản ghi.",
@@ -504,7 +521,9 @@
         "priorityGet":"Lấy mức ưu tiên của vé.",
         "priorityList":"Lấy danh sách tất cả vé cùng với trạng thái ưu tiên.",
         "transfer":"Chuyển quyền sở hữu vé từ người dùng này sang người dùng khác.",
-        "transferUser":"Người dùng để chuyển đến."
+        "transferUser":"Người dùng để chuyển đến.",
+        "transcripts":"Xem lịch sử bản ghi ticket của người dùng.",
+        "transcriptsUser":"Người dùng cần xem."
     },
     "helpMenu":{
         "help":"Nhận danh sách tất cả các lệnh có sẵn.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Chọn vé của bạn",
         "selectRole":"Chọn vai trò của bạn",
-        "selectOption":"Chọn tùy chọn của bạn"
+        "selectOption":"Chọn tùy chọn của bạn",
+        "selectPriorityLevel":"Chọn mức độ ưu tiên"
     },
     "priorities":{
         "urgent":"Khẩn cấp",

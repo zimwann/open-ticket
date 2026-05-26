@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["HanumeshGupta","ChatGPT"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Kurdish",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Ev bişkok divê bi qasî {0} an {1} hebe!",
             "unusedOption":"Vebijarka {0} li ku derê nayê bikar anîn!",
             "unusedQuestion":"Pirsiyara {0} li ku derê nayê bikar anîn!",
-            "dropdownOption":"Panelê ku bi dropdownê çalak e tenê dikare vebijarkên ji tîpa 'ticket' dihewîne!",
+            "dropdownOption":"Panela ku drop-down heye tenê dikare vebijêrkên celebên 'ticket', 'role' an 'sub-panel' hebe.",
             "customInvalidVersion":"Wersiyona ku di configê te de hate qeyd kirin ne hevrû ye! Pêwîste ku configê xwe bi dawîna nûvekirî nûve bikin!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Fermana Nivîsê Bibînin",
             "helpPage":"Rûpel {0}",
             "withReason":"Bi Sedem",
-            "withoutTranscript":"Bê Transcript"
+            "withoutTranscript":"Bê Transcript",
+            "blacklistAdd":"Bikarhênerê Lîsteya Reş Zêde Bike",
+            "blacklistRemove":"Bikarhêner Azad Bike"
         },
         "titles":{
             "created":"Tiket Hate Afirandin",
@@ -156,7 +158,8 @@
             "topicSet":"Mijar Guherî",
             "prioritySet":"Pêşî Guherî",
             "priorityGet":"Pêşîya Ticket",
-            "transfer":"Ticket Veguhastin"
+            "transfer":"Ticket Veguhastin",
+            "transcripts":"Dîroka Transkriptan"
         },
         "descriptions":{
             "create":"Tiketa we hate afirandin. Ji bo têketinê bişkoka jêrîn bikar bînin!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Pêşîya vê ticketê ji {1} bo {0} hate guhertin!",
             "prioritySetDm":"Pêşîya ticketê te di serverê me de hate guhertin bo {0}!",
             "roleUpdateLog":"{0} rolên xwe nûve kir!",
-            "roleUpdateDm":"Rolên te di serverê me de nûve kirin!"
+            "roleUpdateDm":"Rolên te di serverê me de nûve kirin!",
+            "topicSetLog":"Pêşengiya vê ticketê ji hêla {1} ve wek {0} hate danîn.",
+            "topicSetDm":"Pêşengiya ticketê te wek {0} hate danîn."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Bê Transcript Jê Bike",
             "backup":"Transcripta Backupê Afirîne",
             "error":"Tiştek çewt çû dema ku transcript hate afirandin.\nHûn çi dixwazin bikin?\n\nEv tiket dê neyê jêkirin heta ku hûn yek ji van bişkokan bikar bînin.",
-            "title":"Xeletiya Transkriptê"
+            "title":"Xeletiya Transkriptê",
+            "noHistory":"Ev bikarhêner hêj tu transkriptên tune ye.",
+            "historyNotSupported":"Dîroka transkriptan niha tenê bi HTML Transcripts tê piştgirî kirin.\nDîroka transkriptên nivîsê di guhertoyên pêşerojê de dê hebin."
         },
         "text":{
             "messagesTitle":"PEYAMAN",
@@ -298,6 +305,7 @@
             "unknownPanel":"Panela Nenas",
             "notInGuild":"Ne Di Serverê De",
             "channelRename":"Nikare Qenalê Nav Lê Bike",
+            "channelCategory":"Nekare Kategorî Biguherîne",
             "busy":"Tiketê Şixul E",
             "permissionError":"Xeletiya Destûrê"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Qenala niha tiketeke derbasdar nîne! Dibe ku ji versiyonek kevn a Open Ticketê be!",
             "notInGuild":"Ev {0} di DM de naxebite! Ji kerema xwe dîsa di serverekê de biceribînin!",
             "channelRename":"Ji ber sînorên discordê, niha ne mimkûn e ku bot qenalê nav lê bike. Qenal dê bixweber ji bo zêdetirî 10 deqîqan were nav lê kirin ger bot neyê nûvekirin.",
+            "channelCategory":"Ji ber sînorkirinên leza Discord, kategorîya kanalê nayê guhertin bi rastî. Heke bot online bimîne, di 10 deqîqan de wê bixweber were guhertin.",
             "channelRenameSource":"Çavkaniya vê xetê: {0}",
             "busy":"Nikare vê {0} bikar bîne!\nTiket niha ji aliyê botê ve tê pêvajokirin.\n\nJi kerema xwe di çend saniyeyan de dîsa biceribînin!",
             "closeBeforeMessage":"Ev ticket nikare were girtin/jêbirin berî ku bikarhêner peyamê şandibe.",
             "closeBeforeAdminMessage":"Ev ticket nikare were girtin/jêbirin berî ku adminê ticket an endamê piştgirî peyamê şandibe.",
-            "unableToCreateTicket":"Tu nikarî ticket çê bikî."
+            "unableToCreateTicket":"Tu nikarî ticket çê bikî.",
+            "messageMissing":"Nikarî mesajê têkildarê peywendiyê bibîne. Li şûna wê fermanê `{0}` bikar bîne.",
+            "stateExpired":"Ev peywendî êdî ne derbasdar e an qediya ye. Li şûna wê fermanê `{0}` bikar bîne. Ev çewtî piştî nûvekirina mezin a Open Ticket normal e.",
+            "panelStateExpired":"Ev panel êdî ne derbasdar e an qediya ye. Ji bo çareserkirina pirsgirêkê panelê nû bi `{0}` biafirîne. Ev çewtî piştî nûvekirina mezin a Open Ticket normal e."
         },
         "optionInvalidReasons":{
             "stringRegex":"Nirx li şablonê nagire!",
@@ -387,6 +399,8 @@
             "syntax":"Sîntaks",
             "originalName":"Navê Orjînal",
             "newName":"Navê Nû",
+            "originalCategory":"Kategoriya Bingehîn",
+            "newCategory":"Kategoriya Nû",
             "until":"Heta",
             "validOptions":"Vebijarkên Derbasdar",
             "validPanels":"Panelên Derbasdar",
@@ -408,6 +422,8 @@
             "participants":"Beşdar",
             "yes":"Erê",
             "no":"Na",
+            "accept":"Qebûl Bike",
+            "cancel":"Betal Bike",
             "option":"Vebijêrk",
             "topic":"Mijar",
             "uptime":"Demjimêra Sistêmê",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Ma hûn dixwazin ev panel xweber were nûvekirin dema ku hate guhertin?",
         "ticket":"Bilez tîketek çêbike.",
         "ticketId":"Nasnameya tîketê ku hûn dixwazin çêbikin.",
+        "ticketOtherUser":"Ji bo bikarhênerek din ticket çêbike.",
         "close":"Tîketek bigire.",
         "delete":"Tîketek jê bike.",
         "deleteNoTranscript":"Vê tîketê bêyî çêkirina transcriptê jê bike.",
@@ -504,7 +521,9 @@
         "priorityGet":"Pêşîya ticketê bistînin.",
         "priorityList":"Lîsteya hemû ticketan bi rewşa pêşîyan bistînin.",
         "transfer":"Mulkê ticketê ji yek bikarhêner bo yê din veguherîn.",
-        "transferUser":"Bikarhêner ku divê veguherîn."
+        "transferUser":"Bikarhêner ku divê veguherîn.",
+        "transcripts":"Dîroka transkriptên ticketên bikarhêner bibîne.",
+        "transcriptsUser":"Bikarhênerê ku were nîşandan."
     },
     "helpMenu":{
         "help":"Lîsteyê hemû fermanên berdest bistînin.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Ticketê xwe hilbijêrin",
         "selectRole":"Rolê xwe hilbijêrin",
-        "selectOption":"Vebijêrka xwe hilbijêrin"
+        "selectOption":"Vebijêrka xwe hilbijêrin",
+        "selectPriorityLevel":"Asta pêşengiyê hilbijêre"
     },
     "priorities":{
         "urgent":"Zû",

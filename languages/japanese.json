@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["HanumeshGupta","ChatGPT"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Japanese",
         "automated":true
     },
@@ -99,7 +99,7 @@
             "invalidButton":"このボタンには少なくとも「{0}」または「{1}」が必要です！",
             "unusedOption":"オプション「{0}」はどこでも使用されていません！",
             "unusedQuestion":"質問「{0}」はどこでも使用されていません！",
-            "dropdownOption":"ドロップダウンが有効なパネルには「ticket」タイプのオプションのみ含めることができます！",
+            "dropdownOption":"ドロップダウン付きパネルには次の種類のオプションのみ含めることができます：'ticket'、'role'、または'sub-panel'。",
             "customInvalidVersion":"設定ファイルに指定されたバージョンが一致しません！ 設定を最新バージョンに更新してください！"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"テキストコマンドを表示",
             "helpPage":"ページ {0}",
             "withReason":"理由を付ける",
-            "withoutTranscript":"トランスクリプトなし"
+            "withoutTranscript":"トランスクリプトなし",
+            "blacklistAdd":"ユーザーをブラックリストに追加",
+            "blacklistRemove":"ユーザーのブラックリスト解除"
         },
         "titles":{
             "created":"チケットが作成されました",
@@ -156,7 +158,8 @@
             "topicSet":"トピックが変更されました",
             "prioritySet":"優先度が変更されました",
             "priorityGet":"チケットの優先度",
-            "transfer":"チケットが転送されました"
+            "transfer":"チケットが転送されました",
+            "transcripts":"トランスクリプト履歴"
         },
         "descriptions":{
             "create":"チケットが作成されました。下のボタンをクリックしてアクセスしてください！",
@@ -249,7 +252,9 @@
             "prioritySetLog":"このチケットの優先度は {1} により {0} に変更されました！",
             "prioritySetDm":"あなたのチケットの優先度はサーバー内で {0} に変更されました！",
             "roleUpdateLog":"{0} がロールを更新しました！",
-            "roleUpdateDm":"サーバー内のあなたのロールが更新されました！"
+            "roleUpdateDm":"サーバー内のあなたのロールが更新されました！",
+            "topicSetLog":"このチケットの優先度は {1} により {0} に設定されました。",
+            "topicSetDm":"あなたのチケットの優先度は {0} に設定されました。"
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"トランスクリプトなしで削除",
             "backup":"バックアップトランスクリプトを作成",
             "error":"トランスクリプトの作成中にエラーが発生しました。\nどうしますか？\n\nいずれかのボタンをクリックするまでチケットは削除されません。",
-            "title":"トランスクリプトエラー"
+            "title":"トランスクリプトエラー",
+            "noHistory":"このユーザーにはまだトランスクリプトがありません。",
+            "historyNotSupported":"トランスクリプト履歴は現在HTML Transcriptsのみ対応しています。\nテキストトランスクリプト履歴は今後のバージョンで利用可能になります。"
         },
         "text":{
             "messagesTitle":"メッセージ",
@@ -298,6 +305,7 @@
             "unknownPanel":"不明なパネル",
             "notInGuild":"サーバー内にいません",
             "channelRename":"チャンネル名を変更できません",
+            "channelCategory":"カテゴリを変更できません",
             "busy":"チケットは使用中です",
             "permissionError":"権限エラー"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"現在のチャンネルは有効なチケットではありません！旧バージョンのチケットかもしれません！",
             "notInGuild":"この{0}はDMでは動作しません！サーバー内で再試行してください！",
             "channelRename":"Discordのレートリミットにより、現在チャンネル名を変更できません。10分以内に自動的に変更されます。",
+            "channelCategory":"Discordのレート制限のため、チャンネルカテゴリをすぐに変更できません。ボットがオンラインであれば10分以内に自動で変更されます。",
             "channelRenameSource":"エラーの原因：{0}",
             "busy":"この{0}は使用できません！\nチケットは現在処理中です。\n\n数秒後にもう一度お試しください！",
             "closeBeforeMessage":"ユーザーがメッセージを送信する前に、このチケットを閉じたり削除したりすることはできません。",
             "closeBeforeAdminMessage":"チケット管理者またはサポートメンバーがメッセージを送信する前に、このチケットを閉じたり削除したりすることはできません。",
-            "unableToCreateTicket":"チケットを作成することはできません。"
+            "unableToCreateTicket":"チケットを作成することはできません。",
+            "messageMissing":"インタラクションのメッセージを見つけられませんでした。代わりにコマンド `{0}` を使用してください。",
+            "stateExpired":"このインタラクションは無効または期限切れです。代わりにコマンド `{0}` を使用してください。Open Ticketの大規模アップデート後にはこのエラーは正常です。",
+            "panelStateExpired":"このパネルは無効または期限切れです。問題を解決するには `{0}` を使用して新しいパネルを作成してください。Open Ticketの大規模アップデート後にはこのエラーは正常です。"
         },
         "optionInvalidReasons":{
             "stringRegex":"値がパターンに一致しません！",
@@ -387,6 +399,8 @@
             "syntax":"構文",
             "originalName":"元の名前",
             "newName":"新しい名前",
+            "originalCategory":"元のカテゴリ",
+            "newCategory":"新しいカテゴリ",
             "until":"期限",
             "validOptions":"有効なオプション",
             "validPanels":"有効なパネル",
@@ -408,6 +422,8 @@
             "participants":"参加者",
             "yes":"はい",
             "no":"いいえ",
+            "accept":"承認",
+            "cancel":"キャンセル",
             "option":"オプション",
             "topic":"トピック",
             "uptime":"システム稼働時間",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"編集時にこのパネルを自動更新しますか？",
         "ticket":"すぐにチケットを作成します。",
         "ticketId":"作成したいチケットの識別子。",
+        "ticketOtherUser":"別のユーザーのチケットを作成します。",
         "close":"チケットを閉じます。",
         "delete":"チケットを削除します。",
         "deleteNoTranscript":"トランスクリプトを作成せずにチケットを削除します。",
@@ -504,7 +521,9 @@
         "priorityGet":"チケットの優先度を取得します。",
         "priorityList":"すべてのチケットを優先度ステータス付きで一覧表示します。",
         "transfer":"チケットの所有権を別のユーザーに転送します。",
-        "transferUser":"転送先のユーザー。"
+        "transferUser":"転送先のユーザー。",
+        "transcripts":"ユーザーのチケットトランスクリプト履歴を表示します。",
+        "transcriptsUser":"表示するユーザー。"
     },
     "helpMenu":{
         "help":"利用可能なすべてのコマンドのリストを表示します。",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"チケットを選択してください",
         "selectRole":"ロールを選択してください",
-        "selectOption":"オプションを選択してください"
+        "selectOption":"オプションを選択してください",
+        "selectPriorityLevel":"優先度レベルを選択"
     },
     "priorities":{
         "urgent":"緊急",

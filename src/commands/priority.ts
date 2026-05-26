@@ -1,44 +1,30 @@
 ///////////////////////////////////////
 //PRIORITY COMMAND
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
-export const registerCommandResponders = async () => {
+export async function registerCommandResponders(){
     //PRIORITY COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:priority",generalConfig.data.prefix,"priority"))
     opendiscord.responders.commands.get("opendiscord:priority").workers.add([
-        new api.ODWorker("opendiscord:priority",0,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:priority",0,async (instance,params,origin,cancel) => {
             const {guild,channel,user,member} = instance
-                                    
-            //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.priority,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
-                return cancel()
-            }
-
-            //check is in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                return cancel()
-            }
-
-            //check if ticket exists
-            const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
-                return cancel()
-            }
-
-            //return when busy
-            if (ticket.get("opendiscord:busy").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
-                return cancel()
-            }
+            
+            //responder checks
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"priority")
+            if (!hasPerms) return cancel()
+            
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+            
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
+            if (!ticket) return cancel()
+            
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
+            if (!isAvailable) return cancel()
 
             //subcommands
             const scope = instance.options.getSubCommand()
@@ -56,22 +42,67 @@ export const registerCommandResponders = async () => {
 
                 //start changing ticket priority
                 await instance.defer(false)
-                await opendiscord.actions.get("opendiscord:update-ticket-priority").run(source,{guild,channel,user,ticket,newPriority:priority,sendMessage:false,reason})
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build(source,{guild,channel,user,ticket,priority,reason}))
+                await opendiscord.actions.get("opendiscord:update-ticket-priority").run(origin,{guild,channel,user,ticket,newPriority:priority,sendMessage:false,reason})
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build(origin,{guild,channel,user,ticket,priority,reason}))
             
             }else if (scope == "get"){
                 const priority = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value)
-                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-get").build(source,{guild,channel,user,ticket,priority}))
+                await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-get").build(origin,{guild,channel,user,ticket,priority}))
             }
         }),
-        new api.ODWorker("opendiscord:logs",-1,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",-1,(instance,params,origin,cancel) => {
             const scope = instance.options.getSubCommand()
             opendiscord.log(instance.user.displayName+" used the 'priority "+scope+"' command!","info",[
                 {key:"user",value:instance.user.username},
                 {key:"userid",value:instance.user.id,hidden:true},
                 {key:"channelid",value:instance.channel.id,hidden:true},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])
+}
+
+export async function registerDropdownResponders(){
+    //PRIORITY DROPDOWN RESPONDER
+    opendiscord.responders.dropdowns.add(new api.ODDropdownResponder("opendiscord:priority-dropdown",/^od:priority-dropdown/))
+    opendiscord.responders.dropdowns.get("opendiscord:priority-dropdown").workers.add(
+        new api.ODWorker("opendiscord:priority-dropdown",0,async (instance,params,origin,cancel) => {
+            const {guild,channel,user,message} = instance
+
+            const match = /^od:select-priority\|([^|]+)/.exec(instance.values.getStringValues()[0])
+            if (!match) return
+            const priorityName = match[1]
+
+            const priority = opendiscord.priorities.getAll().find((lvl) => lvl.rawName === priorityName) ?? null
+            if (!priority){
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"Please select a valid priority level.",customTitle:"Unknown Priority Level"}))
+                return cancel()
+            }
+
+            //responder checks
+            const hasPerms = await openticketUtils.replyHasPermissions(instance,origin,"priority")
+            if (!hasPerms) return cancel()
+            
+            const isInGuild = await openticketUtils.replyIsInGuild(instance,origin)
+            if (!isInGuild || !guild || channel.isDMBased()) return cancel()
+
+            const state = await openticketUtils.replyInteractiveMessageState(instance,origin,channel,message,"/priority")
+            if (!state) return cancel()
+            
+            const ticket = await openticketUtils.replyIsTicket(instance,origin)
+            if (!ticket) return cancel()
+            
+            const isAvailable = await openticketUtils.replyTicketIsAvailable(instance,origin,ticket)
+            if (!isAvailable) return cancel()
+
+            //fetch state details
+            const originalMsgOrigin = state.data.messageOrigin
+            const originalMsgType = state.data.messageType
+
+            //start changing ticket priority
+            await instance.defer("reply",false)
+            await opendiscord.actions.get("opendiscord:update-ticket-priority").run("other",{guild,channel,user,ticket,newPriority:priority,sendMessage:false,reason:null})
+            await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build("other",{guild,channel,user,ticket,priority,reason:null}))
+        })
+    )
 }

@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["DJj123dj"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Dutch",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Deze knop moet een {0} of {1} hebben!",
             "unusedOption":"De optie {0} wordt nergens gebruikt!",
             "unusedQuestion":"The vraag {0} wordt nergens gebruikt!",
-            "dropdownOption":"Een paneel met dropdown mag alleen opties bevaten van het 'ticket' type!",
+            "dropdownOption":"Een paneel met dropdown kan alleen opties bevatten van de types: 'ticket', 'role' of 'sub-panel'.",
             "customInvalidVersion":"De versie gespecificeerd in u configbestand komt niet overeen! Zorg dat u het configbestand geüpdatet heeft naar de laatste versie!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Bekijk Text Commands",
             "helpPage":"Pagina {0}",
             "withReason":"Met Reden",
-            "withoutTranscript":"Zonder Transcript"
+            "withoutTranscript":"Zonder Transcript",
+            "blacklistAdd":"Gebruiker Blacklisten",
+            "blacklistRemove":"Gebruiker Vrijgeven"
         },
         "titles":{
             "created":"Ticket Gecreëerd",
@@ -156,7 +158,8 @@
             "topicSet":"Onderwerp Veranderd",
             "prioritySet":"Prioriteit Veranderd",
             "priorityGet":"Ticket Prioriteit",
-            "transfer":"Ticket Overgedragen"
+            "transfer":"Ticket Overgedragen",
+            "transcripts":"Transcript Geschiedenis"
         },
         "descriptions":{
             "create":"Je ticket is aangemaakt. Klik op de knop hier onder om er naar toe te gaan!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"De prioriteit van dit ticket is veranderd naar {0} door {1}!",
             "prioritySetDm":"De prioriteit van u ticket is veranderd naar {0} in onze server!",
             "roleUpdateLog":"{0} heeft zijn/haar rollen bewerkt!",
-            "roleUpdateDm":"U rollen in onze server zijn veranderd!"
+            "roleUpdateDm":"U rollen in onze server zijn veranderd!",
+            "topicSetLog":"De prioriteit van dit ticket is ingesteld op {0} door {1}.",
+            "topicSetDm":"De prioriteit van je ticket is ingesteld op {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Verwijder Zonder Transcript",
             "backup":"Maak Backup Transcript",
             "error":"Er is iets misgegaan bij het maken van het transcript.\nWat wil je doen?\n\nDit ticket wordt niet meer verwijderd to je een van de onderstaande knoppen gebruikt.",
-            "title":"Transcript Error"
+            "title":"Transcript Error",
+            "noHistory":"Deze gebruiker heeft nog geen transcripts.",
+            "historyNotSupported":"Transcriptgeschiedenis wordt momenteel alleen ondersteund met HTML Transcripts.\nGeschiedenis van teksttranscripts zal beschikbaar zijn in toekomstige versies."
         },
         "text":{
             "messagesTitle":"BERICHTEN",
@@ -298,6 +305,7 @@
             "unknownPanel":"Onbekend Paneel",
             "notInGuild":"Niet In Server",
             "channelRename":"Kan Kanaal Niet Hernoemen",
+            "channelCategory":"Kan Categorie Niet Wijzigen",
             "busy":"Ticket Is Bezig",
             "permissionError":"Permission Error"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Het huidige kanaal is geen geldig ticket! Het is misschien een ticket van een oudere Open Ticket versie!",
             "notInGuild":"Deze {0} werkt niet in DM! Probeer het opnieuw in een server!",
             "channelRename":"Door discord ratelimits is het op dit moment onmogelijk voor de bot om het kanaal te hernoemen. Het kanaal zal automatisch hernoemd worden over 10 min als de bot niet herstart wordt.",
+            "channelCategory":"Vanwege Discord rate limits kon de kanaalcategorie niet onmiddellijk worden gewijzigd. Deze wordt automatisch binnen 10 minuten gewijzigd als de bot online blijft.",
             "channelRenameSource":"De bron van deze error is: {0}",
             "busy":"Kan deze {0} niet gebruiken!\nHet ticket wordt op dit moment verwerkt door de bot.\n\nProbeer het opnieuw binnen een paar seconden!",
             "closeBeforeMessage":"Dit ticket kan niet gesloten/verwijderd worden vooraleer er een bericht door een gebruiker verstuurd is.",
             "closeBeforeAdminMessage":"Dit ticket kan niet gesloten/verwijderd worden vooraleer er een bericht door een ticket admin of supportlid verstuurd is.",
-            "unableToCreateTicket":"U kunt geen ticket aanmaken."
+            "unableToCreateTicket":"U kunt geen ticket aanmaken.",
+            "messageMissing":"Kan het bericht van de interactie niet vinden. Gebruik in plaats daarvan het commando `{0}`.",
+            "stateExpired":"Deze interactie is niet langer geldig of is verlopen. Gebruik in plaats daarvan het commando `{0}`. Het is normaal om deze fout te ontvangen na een grote Open Ticket-update.",
+            "panelStateExpired":"Dit paneel is niet langer geldig of is verlopen. Maak een nieuw paneel met `{0}` om het probleem op te lossen. Het is normaal om deze fout te ontvangen na een grote Open Ticket-update."
         },
         "optionInvalidReasons":{
             "stringRegex":"Waarde is niet gelijk aan het patroon!",
@@ -387,6 +399,8 @@
             "syntax":"Syntax",
             "originalName":"Originele Naam",
             "newName":"Nieuwe Naam",
+            "originalCategory":"Originele Categorie",
+            "newCategory":"Nieuwe Categorie",
             "until":"Tot",
             "validOptions":"Geldige Opties",
             "validPanels":"Geldige Panelen",
@@ -408,6 +422,8 @@
             "participants":"Deelnemers",
             "yes":"Ja",
             "no":"Nee",
+            "accept":"Accepteren",
+            "cancel":"Annuleren",
             "option":"Optie",
             "topic":"Onderwerp",
             "uptime":"Systeem Uptime",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Wil je dat dit paneel automatisch bijwerkt wanneer het aangepast wordt?",
         "ticket":"Maak een instant ticket.",
         "ticketId":"Het id van het ticket dat je wilt aanmaken.",
+        "ticketOtherUser":"Maak een ticket aan voor een andere gebruiker.",
         "close":"Sluit een ticket, dit schakelt schrijven in het kanaal uit.",
         "delete":"Verwijder een ticket, dit maakt een transcript waneer ingeschakeld.",
         "deleteNoTranscript":"Verwijder dit ticket zonder een transcript aan te maken.",
@@ -504,7 +521,9 @@
         "priorityGet":"Bekijk de prioriteit van een ticket.",
         "priorityList":"Bekijk een lijst van alle tickets met hun prioriteit.",
         "transfer":"Draag het ticket eigendom over van de ene naar de andere gebruiker.",
-        "transferUser":"De user om naar over te dragen."
+        "transferUser":"De user om naar over te dragen.",
+        "transcripts":"Bekijk de ticket transcriptgeschiedenis van een gebruiker.",
+        "transcriptsUser":"De gebruiker om te bekijken."
     },
     "helpMenu":{
         "help":"Krijg een lijst van alle beschikbare commands.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Selecteer u ticket",
         "selectRole":"Selecteer u rol",
-        "selectOption":"Selecteer u optie"
+        "selectOption":"Selecteer u optie",
+        "selectPriorityLevel":"Selecteer prioriteitsniveau"
     },
     "priorities":{
         "urgent":"Urgent",

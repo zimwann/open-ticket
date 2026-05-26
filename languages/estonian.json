@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["iamnotmega","ChatGPT"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Estonian",
         "automated":true
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Sellel nupul peab olema vähemalt {0} või {1}!",
             "unusedOption":"Valik {0} ei ole kusagil kasutusel!",
             "unusedQuestion":"Küsimust {0} ei kasutata kuskil!",
-            "dropdownOption":"Lubatud rippmenüüga paneel võib sisaldada ainult \"pileti\" tüüpi valikuid!",
+            "dropdownOption":"Rippmenüüga paneel võib sisaldada ainult järgmisi valikuid: 'ticket', 'role' või 'sub-panel'.",
             "customInvalidVersion":"Teie konfiguratsioonis määratud versioon ei ühti! Veenduge, et olete konfiguratsiooni uuendanud uusimale versioonile!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Vaadake tekstikäske",
             "helpPage":"Leht {0}",
             "withReason":"Põhjusega",
-            "withoutTranscript":"Ilma ärakirjata"
+            "withoutTranscript":"Ilma ärakirjata",
+            "blacklistAdd":"Lisa kasutaja musta nimekirja",
+            "blacklistRemove":"Vabasta kasutaja"
         },
         "titles":{
             "created":"Pilet loodud",
@@ -156,7 +158,8 @@
             "topicSet":"Teema Muudetud",
             "prioritySet":"Prioriteet Muudetud",
             "priorityGet":"Pileti Prioriteet",
-            "transfer":"Pilet Üle Antud"
+            "transfer":"Pilet Üle Antud",
+            "transcripts":"Transkripti ajalugu"
         },
         "descriptions":{
             "create":"Teie pilet on loodud. Sellele juurdepääsuks klõpsake alloleval nupul!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Selle pileti prioriteet on muudetud väärtuseks {0} kasutaja {1} poolt!",
             "prioritySetDm":"Teie pileti prioriteet on muudetud väärtuseks {0} meie serveris!",
             "roleUpdateLog":"{0} uuendas oma rolle!",
-            "roleUpdateDm":"Teie rolle meie serveris on uuendatud!"
+            "roleUpdateDm":"Teie rolle meie serveris on uuendatud!",
+            "topicSetLog":"Selle pileti prioriteedi määras {1} väärtusele {0}.",
+            "topicSetDm":"Sinu pileti prioriteet on seatud väärtusele {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Kustuta ilma ärakirjata",
             "backup":"Loo varukoopia ärakirjast",
             "error":"Midagi läks ärakirja loomisel valesti.\nMida sa teha tahaksid?\n\nSeda piletit ei kustutata enne, kui klõpsate ühel neist nuppudest.",
-            "title":"Transkriptsiooniviga"
+            "title":"Transkriptsiooniviga",
+            "noHistory":"Sellel kasutajal ei ole veel ühtegi transkripti.",
+            "historyNotSupported":"Transkripti ajalugu on praegu toetatud ainult HTML Transcriptsiga.\nTekstiliste transkriptide ajalugu on saadaval tulevastes versioonides."
         },
         "text":{
             "messagesTitle":"SÕNUMID",
@@ -298,6 +305,7 @@
             "unknownPanel":"Tundmatu paneel",
             "notInGuild":"Pole serveris",
             "channelRename":"Kanalit ei saa ümber nimetada",
+            "channelCategory":"Kategooriat ei saa muuta",
             "busy":"Pilet on kinni",
             "permissionError":"Õiguste Viga"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Praegune kanal ei ole kehtiv pilet! See võis olla pilet vanast Open Ticketi versioonist!",
             "notInGuild":"See {0} ei tööta DM-is! Palun proovi uuesti serveris!",
             "channelRename":"Ebakõlaliste kiiruspiirangute tõttu on robotil praegu võimatu kanalit ümber nimetada. Kui robotit ei taaskäivitata, nimetatakse kanal 10 minuti jooksul automaatselt ümber.",
+            "channelCategory":"Discordi kiiruspiirangute tõttu ei saanud kanali kategooriat kohe muuta. Kui bot jääb võrgus, muudetakse see automaatselt 10 minuti jooksul.",
             "channelRenameSource":"Selle vea allikas on: {0}",
             "busy":"Seda {0} ei saa kasutada!\nPiletit töötleb praegu bot.\n\nPalun proovige mõne sekundi pärast uuesti!",
             "closeBeforeMessage":"Seda piletit ei saa sulgeda/kustutada enne, kui kasutaja on sõnumi saatnud.",
             "closeBeforeAdminMessage":"Seda piletit ei saa sulgeda/kustutada enne, kui piletihaldur või tugiliige on sõnumi saatnud.",
-            "unableToCreateTicket":"Te ei saa piletit luua."
+            "unableToCreateTicket":"Te ei saa piletit luua.",
+            "messageMissing":"Interaktsiooni sõnumit ei leitud. Kasuta selle asemel käsku `{0}`.",
+            "stateExpired":"See interaktsioon ei ole enam kehtiv või on aegunud. Kasuta selle asemel käsku `{0}`. See on tavaline pärast Open Ticket suurt uuendust.",
+            "panelStateExpired":"See paneel ei ole enam kehtiv või on aegunud. Loo uus paneel kasutades `{0}`, et probleem lahendada. See on tavaline pärast Open Ticket suurt uuendust."
         },
         "optionInvalidReasons":{
             "stringRegex":"Väärtus ei vasta mustrile!",
@@ -387,6 +399,8 @@
             "syntax":"Süntaks",
             "originalName":"Algne nimi",
             "newName":"Uus nimi",
+            "originalCategory":"Algne kategooria",
+            "newCategory":"Uus kategooria",
             "until":"Kuni",
             "validOptions":"Kehtivad valikud",
             "validPanels":"Kehtivad paneelid",
@@ -408,6 +422,8 @@
             "participants":"Osalejad",
             "yes":"Jah",
             "no":"Ei",
+            "accept":"Nõustu",
+            "cancel":"Tühista",
             "option":"Valik",
             "topic":"Teema",
             "uptime":"Süsteemi Töötamise Aeg",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Kas soovite seda paneeli redigeerimisel automaatselt värskendada?",
         "ticket":"Looge pilet koheselt.",
         "ticketId":"Pileti identifikaator, mille soovite luua.",
+        "ticketOtherUser":"Loo pilet teisele kasutajale.",
         "close":"Sulgege pilet.",
         "delete":"Kustuta pilet.",
         "deleteNoTranscript":"Kustutage see pilet ilma ärakirja loomata.",
@@ -504,7 +521,9 @@
         "priorityGet":"Hangi pileti prioriteet.",
         "priorityList":"Hangi nimekiri kõigist piletitest ja nende prioriteedi olekust.",
         "transfer":"Anna pileti omand üle ühelt kasutajalt teisele.",
-        "transferUser":"Kasutaja, kellele omand üle anda."
+        "transferUser":"Kasutaja, kellele omand üle anda.",
+        "transcripts":"Vaata kasutaja piletite transkripti ajalugu.",
+        "transcriptsUser":"Kasutaja, keda vaadata."
     },
     "helpMenu":{
         "help":"Hankige kõigi saadaolevate käskude loend.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Vali oma pilet",
         "selectRole":"Vali oma roll",
-        "selectOption":"Vali oma valik"
+        "selectOption":"Vali oma valik",
+        "selectPriorityLevel":"Vali prioriteeditase"
     },
     "priorities":{
         "urgent":"Kiireloomuline",

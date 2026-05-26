@@ -1,6 +1,6 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllOptions = async () => {
+export async function loadAllOptions(){
     const optionConfig = opendiscord.configs.get("opendiscord:options")
     if (!optionConfig) return
     
@@ -9,11 +9,9 @@ export const loadAllOptions = async () => {
             const loadedOption = loadTicketOption(option)
             opendiscord.options.add(loadedOption)
             opendiscord.options.suffix.add(loadTicketOptionSuffix(loadedOption))
-        }else if (option.type == "website"){
-            opendiscord.options.add(loadWebsiteOption(option))
-        }else if (option.type == "role"){
-            opendiscord.options.add(loadRoleOption(option))
-        }
+        }else if (option.type == "website") opendiscord.options.add(loadWebsiteOption(option))
+        else if (option.type == "role") opendiscord.options.add(loadRoleOption(option))
+        else if (option.type == "sub-panel") opendiscord.options.add(loadSubPanelOption(option))
     })
 
     //update options on config reload
@@ -23,17 +21,15 @@ export const loadAllOptions = async () => {
         await opendiscord.options.suffix.loopAll((data,id) => {opendiscord.options.suffix.remove(id)})
 
         //add new options
-        optionConfig.data.forEach((option) => {
+        for (const option of optionConfig.data){
             if (option.type == "ticket"){
                 const loadedOption = loadTicketOption(option)
                 opendiscord.options.add(loadedOption)
                 opendiscord.options.suffix.add(loadTicketOptionSuffix(loadedOption))
-            }else if (option.type == "website"){
-                opendiscord.options.add(loadWebsiteOption(option))
-            }else if (option.type == "role"){
-                opendiscord.options.add(loadRoleOption(option))
-            }
-        })
+            }else if (option.type == "website") opendiscord.options.add(loadWebsiteOption(option))
+            else if (option.type == "role") opendiscord.options.add(loadRoleOption(option))
+            else if (option.type == "sub-panel") opendiscord.options.add(loadSubPanelOption(option))
+        }
 
         //update options in tickets
         await opendiscord.tickets.loopAll((ticket) => {
@@ -54,7 +50,7 @@ export const loadAllOptions = async () => {
     })
 }
 
-export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType): api.ODTicketOption => {
+export const loadTicketOption = (option:api.ODOptionsJsonConfig_TicketOption): api.ODTicketOption => {
     return new api.ODTicketOption(option.id,[
         new api.ODOptionData("opendiscord:name",option.name),
         new api.ODOptionData("opendiscord:description",option.description),
@@ -71,9 +67,6 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
         new api.ODOptionData("opendiscord:channel-prefix",option.channel.prefix),
         new api.ODOptionData("opendiscord:channel-suffix",option.channel.suffix),
         new api.ODOptionData("opendiscord:channel-category",option.channel.category),
-        new api.ODOptionData("opendiscord:channel-category-closed",option.channel.closedCategory),
-        new api.ODOptionData("opendiscord:channel-category-backup",option.channel.backupCategory),
-        new api.ODOptionData("opendiscord:channel-categories-claimed",option.channel.claimedCategory),
         new api.ODOptionData("opendiscord:channel-topic",option.channel.topic),
         
         new api.ODOptionData("opendiscord:dm-message-enabled",option.dmMessage.enabled),
@@ -107,7 +100,7 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
     ])
 }
 
-export const loadWebsiteOption = (opt:api.ODJsonConfig_DefaultOptionWebsiteType): api.ODWebsiteOption => {
+export const loadWebsiteOption = (opt:api.ODOptionsJsonConfig_WebsiteOption): api.ODWebsiteOption => {
     return new api.ODWebsiteOption(opt.id,[
         new api.ODOptionData("opendiscord:name",opt.name),
         new api.ODOptionData("opendiscord:description",opt.description),
@@ -119,7 +112,7 @@ export const loadWebsiteOption = (opt:api.ODJsonConfig_DefaultOptionWebsiteType)
     ])
 }
 
-export const loadRoleOption = (opt:api.ODJsonConfig_DefaultOptionRoleType): api.ODRoleOption => {
+export const loadRoleOption = (opt:api.ODOptionsJsonConfig_RoleOption): api.ODRoleOption => {
     return new api.ODRoleOption(opt.id,[
         new api.ODOptionData("opendiscord:name",opt.name),
         new api.ODOptionData("opendiscord:description",opt.description),
@@ -132,6 +125,19 @@ export const loadRoleOption = (opt:api.ODJsonConfig_DefaultOptionRoleType): api.
         new api.ODOptionData("opendiscord:mode",opt.mode),
         new api.ODOptionData("opendiscord:remove-roles-on-add",opt.removeRolesOnAdd),
         new api.ODOptionData("opendiscord:add-on-join",opt.addOnMemberJoin)
+    ])
+}
+
+export const loadSubPanelOption = (opt:api.ODOptionsJsonConfig_SubPanelOption): api.ODSubPanelOption => {
+    return new api.ODSubPanelOption(opt.id,[
+        new api.ODOptionData("opendiscord:name",opt.name),
+        new api.ODOptionData("opendiscord:description",opt.description),
+
+        new api.ODOptionData("opendiscord:button-emoji",opt.button.emoji),
+        new api.ODOptionData("opendiscord:button-label",opt.button.label),
+        new api.ODOptionData("opendiscord:button-color",opt.button.color),
+
+        new api.ODOptionData("opendiscord:panel-id",opt.subPanelId)
     ])
 }
 

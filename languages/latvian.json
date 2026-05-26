@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["NoOneNook"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Latvian",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Šai pogai jābūt vismaz {0} vai {1}!",
             "unusedOption":"Opcija {0} nekur netiek izmantota!",
             "unusedQuestion":"Jautājums {0} nekur netiek izmantots!",
-            "dropdownOption":"Panelim ar iespējotu izvēlni var būt tikai 'ticket' tipa opcijas!",
+            "dropdownOption":"Panelis ar nolaižamo izvēlni var saturēt tikai šāda tipa opcijas: 'ticket', 'role' vai 'sub-panel'.",
             "customInvalidVersion":"Konfigurācijā norādītā versija nesakrīt! Pārliecinieties, ka esat atjauninājis konfigurāciju uz jaunāko versiju!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Skatīt teksta komandas",
             "helpPage":"Lapa {0}",
             "withReason":"Ar iemeslu",
-            "withoutTranscript":"Bez transkripta"
+            "withoutTranscript":"Bez transkripta",
+            "blacklistAdd":"Pievienot lietotāju melnajam sarakstam",
+            "blacklistRemove":"Atbrīvot lietotāju"
         },
         "titles":{
             "created":"Biļete izveidota",
@@ -156,7 +158,8 @@
             "topicSet":"Tēma mainīta",
             "prioritySet":"Prioritāte mainīta",
             "priorityGet":"Biļetes prioritāte",
-            "transfer":"Biļete pārsūtīta"
+            "transfer":"Biļete pārsūtīta",
+            "transcripts":"Transkriptu vēsture"
         },
         "descriptions":{
             "create":"Jūsu biļete ir izveidota. Noklikšķiniet uz pogas zemāk, lai tai piekļūtu!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Šīs biļetes prioritāte tika mainīta uz {0} lietotāja {1} dēļ!",
             "prioritySetDm":"Jūsu biļetes prioritāte tika mainīta uz {0} mūsu serverī!",
             "roleUpdateLog":"{0} ir atjauninājis savas lomas!",
-            "roleUpdateDm":"Jūsu lomas mūsu serverī ir atjauninātas!"
+            "roleUpdateDm":"Jūsu lomas mūsu serverī ir atjauninātas!",
+            "topicSetLog":"Šī biļete prioritāte tika iestatīta uz {0} no {1}.",
+            "topicSetDm":"Jūsu biļetes prioritāte tika iestatīta uz {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Dzēst bez transkripta",
             "backup":"Izveidot rezerves transkriptu",
             "error":"Kaut kas nogāja greizi, mēģinot izveidot transkriptu.\nKo jūs vēlaties darīt?\n\nŠī biļete netiks dzēsta, kamēr jūs nenoklikšķināsiet uz vienas no šīm pogām.",
-            "title":"Transkripta kļūda"
+            "title":"Transkripta kļūda",
+            "noHistory":"Šim lietotājam vēl nav transkriptu.",
+            "historyNotSupported":"Transkriptu vēsture pašlaik tiek atbalstīta tikai ar HTML Transcripts.\nTeksta transkriptu vēsture būs pieejama nākamajās versijās."
         },
         "text":{
             "messagesTitle":"ZIŅOJUMI",
@@ -298,6 +305,7 @@
             "unknownPanel":"Nezināms panelis",
             "notInGuild":"Nav serverī",
             "channelRename":"Nevar pārdēvēt kanālu",
+            "channelCategory":"Nevar mainīt kategoriju",
             "busy":"Biļete ir aizņemta",
             "permissionError":"Atļauju kļūda"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Pašreizējais kanāls nav derīga biļete! Tas varētu būt biļete no vecas Open Ticket versijas!",
             "notInGuild":"Šis {0} nedarbojas DM! Lūdzu, mēģiniet vēlreiz serverī!",
             "channelRename":"Discord ierobežojumu dēļ bots pašlaik nevar pārdēvēt kanālu. Kanāls tiks automātiski pārdēvēts 10 minūšu laikā, ja bots netiks restartēts.",
+            "channelCategory":"Discord ātruma ierobežojumu dēļ kanāla kategoriju nevar uzreiz mainīt. Tā tiks automātiski mainīta 10 minūšu laikā, ja bots paliks tiešsaistē.",
             "channelRenameSource":"Šīs kļūdas avots ir: {0}",
             "busy":"Nevar izmantot šo {0}!\nBiļete pašlaik tiek apstrādāta ar botu.\n\nLūdzu, mēģiniet vēlreiz pēc dažām sekundēm!",
             "closeBeforeMessage":"Šo biļeti nevar aizvērt/dzēst, pirms lietotājs ir nosūtījis ziņojumu.",
             "closeBeforeAdminMessage":"Šo biļeti nevar aizvērt/dzēst, pirms biļetes administrators vai atbalsta dalībnieks ir nosūtījis ziņojumu.",
-            "unableToCreateTicket":"Jūs nevarat izveidot biļeti."
+            "unableToCreateTicket":"Jūs nevarat izveidot biļeti.",
+            "messageMissing":"Neizdevās atrast mijiedarbības ziņojumu. Tā vietā izmantojiet komandu `{0}`.",
+            "stateExpired":"Šī mijiedarbība vairs nav derīga vai ir beigusies. Tā vietā izmantojiet komandu `{0}`. Tas ir normāli pēc lieliem Open Ticket atjauninājumiem.",
+            "panelStateExpired":"Šis panelis vairs nav derīgs vai ir beidzies. Izveidojiet jaunu paneli, izmantojot `{0}`, lai atrisinātu problēmu. Tas ir normāli pēc lieliem Open Ticket atjauninājumiem."
         },
         "optionInvalidReasons":{
             "stringRegex":"Vērtība neatbilst šablonam!",
@@ -387,6 +399,8 @@
             "syntax":"Sintakse",
             "originalName":"Sākotnējais nosaukums",
             "newName":"Jaunais nosaukums",
+            "originalCategory":"Sākotnējā kategorija",
+            "newCategory":"Jaunā kategorija",
             "until":"Līdz",
             "validOptions":"Derīgas opcijas",
             "validPanels":"Derīgi paneļi",
@@ -408,6 +422,8 @@
             "participants":"Dalībnieki",
             "yes":"Jā",
             "no":"Nē",
+            "accept":"Pieņemt",
+            "cancel":"Atcelt",
             "option":"Opcija",
             "topic":"Tēma",
             "uptime":"Sistēmas darbības laiks",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Vai vēlaties, lai šis panelis automātiski atjauninātos, kad tas tiek rediģēts?",
         "ticket":"Nekavējoties izveidojiet biļeti.",
         "ticketId":"Biļetes identifikators, kuru vēlaties izveidot.",
+        "ticketOtherUser":"Izveidot biļeti citam lietotājam.",
         "close":"Aizveriet biļeti.",
         "delete":"Dzēsiet biļeti.",
         "deleteNoTranscript":"Dzēsiet šo biļeti, neizveidojot transkriptu.",
@@ -504,7 +521,9 @@
         "priorityGet":"Iegūt biļetes prioritāti.",
         "priorityList":"Iegūt visu biļešu sarakstu ar to prioritātes statusu.",
         "transfer":"Pārsūtīt biļetes īpašumtiesības no viena lietotāja citam.",
-        "transferUser":"Lietotājs, kuram pārsūtīt."
+        "transferUser":"Lietotājs, kuram pārsūtīt.",
+        "transcripts":"Skatīt lietotāja biļešu transkriptu vēsturi.",
+        "transcriptsUser":"Lietotājs apskatei."
     },
     "helpMenu":{
         "help":"Iegūstiet visu pieejamo komandu sarakstu.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Izvēlieties savu biļeti",
         "selectRole":"Izvēlieties savu lomu",
-        "selectOption":"Izvēlieties savu opciju"
+        "selectOption":"Izvēlieties savu opciju",
+        "selectPriorityLevel":"Izvēlieties prioritātes līmeni"
     },
     "priorities":{
         "urgent":"Steidzama",

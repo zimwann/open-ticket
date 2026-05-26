@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["spyeye_"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Czech",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Toto tlačítko musí mít alespoň {0} nebo {1}!",
             "unusedOption":"Možnost {0} se nikde nepoužívá!",
             "unusedQuestion":"Otázka {0} není nikde použita!",
-            "dropdownOption":"Panel s povoleným rozevíracím seznamem může obsahovat pouze možnosti typu „ticketu“!",
+            "dropdownOption":"Panel s rozbalovací nabídkou může obsahovat pouze možnosti typu: 'ticket', 'role' nebo 'sub-panel'.",
             "customInvalidVersion":"Verze uvedená ve vaší konfiguraci neodpovídá! Ujistěte se, že jste konfiguraci aktualizovali na nejnovější verzi!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Zobrazit textové příkazy",
             "helpPage":"Strana {0}",
             "withReason":"S důvodem",
-            "withoutTranscript":"Bez důvodu"
+            "withoutTranscript":"Bez důvodu",
+            "blacklistAdd":"Přidat Uživatele na Blacklist",
+            "blacklistRemove":"Uvolnit Uživatele"
         },
         "titles":{
             "created":"Ticket vytvořen",
@@ -156,7 +158,8 @@
             "topicSet":"Téma změněno",
             "prioritySet":"Priorita změněna",
             "priorityGet":"Priorita tiketu",
-            "transfer":"Ticket přenesen"
+            "transfer":"Ticket přenesen",
+            "transcripts":"Historie Přepisů"
         },
         "descriptions":{
             "create":"Tvůj ticket byl vytvořen. Klikni na tlačítko pod zprávou pro zobrazení!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Priorita tohoto tiketu byla změněna na {0} {1}!",
             "prioritySetDm":"Priorita vašeho tiketu byla změněna na {0} na našem serveru!",
             "roleUpdateLog":"{0} aktualizoval své role!",
-            "roleUpdateDm":"Vaše role na našem serveru byly aktualizovány!"
+            "roleUpdateDm":"Vaše role na našem serveru byly aktualizovány!",
+            "topicSetLog":"Priorita tohoto ticketu byla nastavena na {0} uživatelem {1}.",
+            "topicSetDm":"Priorita vašeho ticketu byla nastavena na {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Vymazat bez přepisu",
             "backup":"Vytvořit záložní přepis",
             "error":"Při pokusu o vytvoření přepisu se něco pokazilo.\nCo chcete udělat?\n\nTento ticket nebude smazán, dokud nekliknete na jedno z těchto tlačítek.",
-            "title":"Chyba přepisu"
+            "title":"Chyba přepisu",
+            "noHistory":"Tento uživatel zatím nemá žádné přepisy.",
+            "historyNotSupported":"Historie přepisů je momentálně podporována pouze s HTML Transcripts.\nHistorie textových přepisů bude dostupná v budoucích verzích."
         },
         "text":{
             "messagesTitle":"ZPRÁVY",
@@ -298,6 +305,7 @@
             "unknownPanel":"Neznámý panel",
             "notInGuild":"Nejsi na serveru",
             "channelRename":"Nepodařilo se přejmenovat kanál",
+            "channelCategory":"Nelze Změnit Kategorii",
             "busy":"Ticket je zaneprázdněn",
             "permissionError":"Chyba oprávnění"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Aktuální kanál není platný ticket! Může se jednat o ticket ze starší verze Open Ticketu!",
             "notInGuild":"Tento {0} nefunguje v DM! Zkus to znovu na serveru!",
             "channelRename":"Kvůli ratelimitům Discordu není momentálně možné, aby bot přejmenoval kanál. Kanál bude automaticky přejmenován do 10 minut, pokud nedojde k restartu bota.",
+            "channelCategory":"Kvůli omezením Discord rate limitů nebylo možné kategorii kanálu okamžitě změnit. Pokud bot zůstane online, bude automaticky změněna do 10 minut.",
             "channelRenameSource":"Zdroj této chyby je: {0}",
             "busy":"Nelze použít tento {0}!\nTicket je momentálně zpracováván botem.\n\nZkus to prosím znovu za několik sekund!",
             "closeBeforeMessage":"Tento tiket nelze uzavřít/smazat, dokud uživatel neodešle zprávu.",
             "closeBeforeAdminMessage":"Tento tiket nelze uzavřít/smazat, dokud admin tiketu nebo člen podpory neodešle zprávu.",
-            "unableToCreateTicket":"Nemůžete vytvořit tiket."
+            "unableToCreateTicket":"Nemůžete vytvořit tiket.",
+            "messageMissing":"Nepodařilo se najít zprávu interakce. Místo toho použijte příkaz `{0}`.",
+            "stateExpired":"Tato interakce již není platná nebo vypršela. Místo toho použijte příkaz `{0}`. Je normální obdržet tuto chybu po velké aktualizaci Open Ticket.",
+            "panelStateExpired":"Tento panel již není platný nebo vypršel. Vytvořte nový panel pomocí `{0}`, abyste problém vyřešili. Je normální obdržet tuto chybu po velké aktualizaci Open Ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Hodnota neodpovídá vzoru!",
@@ -387,6 +399,8 @@
             "syntax":"Syntaxe",
             "originalName":"Původní jméno",
             "newName":"Nové jméno",
+            "originalCategory":"Původní Kategorie",
+            "newCategory":"Nová Kategorie",
             "until":"Do",
             "validOptions":"Platné možnosti",
             "validPanels":"Platné panely",
@@ -408,6 +422,8 @@
             "participants":"ÚČASTNÍCI",
             "yes":"Ano",
             "no":"Ne",
+            "accept":"Přijmout",
+            "cancel":"Zrušit",
             "option":"Možnost",
             "topic":"Téma",
             "uptime":"Doba provozu systému",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Chceš, aby se tento panel automaticky aktualizoval při úpravách?",
         "ticket":"Okamžitě vytvoř ticket.",
         "ticketId":"Identifikátor ticketu, který chceš vytvořit.",
+        "ticketOtherUser":"Vytvořit ticket pro jiného uživatele.",
         "close":"Uzavři ticket.",
         "delete":"Smaž ticket.",
         "deleteNoTranscript":"Smaž tento ticket bez vytvoření přepisu.",
@@ -504,7 +521,9 @@
         "priorityGet":"Získejte prioritu tiketu.",
         "priorityList":"Získejte seznam všech tiketů s jejich prioritou.",
         "transfer":"Přeneste vlastnictví tiketu od jednoho uživatele k druhému.",
-        "transferUser":"Uživatel, na kterého se přenáší."
+        "transferUser":"Uživatel, na kterého se přenáší.",
+        "transcripts":"Zobrazit historii přepisů ticketů uživatele.",
+        "transcriptsUser":"Uživatel k zobrazení."
     },
     "helpMenu":{
         "help":"Získej seznam všech dostupných příkazů.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Vyberte svůj tiket",
         "selectRole":"Vyberte svou roli",
-        "selectOption":"Vyberte svou možnost"
+        "selectOption":"Vyberte svou možnost",
+        "selectPriorityLevel":"Vyberte úroveň priority"
     },
     "priorities":{
         "urgent":"Naléhavé",

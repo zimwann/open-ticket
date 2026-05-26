@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["erxg"],
-        "lastedited":"16/02/2026",
+        "lastedited":"25/05/2026",
         "language":"Indonesian",
         "automated":false
     },
@@ -99,7 +99,7 @@
             "invalidButton":"Tombol ini harus memiliki setidaknya {0} atau {1}!",
             "unusedOption":"Opsi {0} tidak digunakan di mana pun!",
             "unusedQuestion":"Pertanyaan {0} tidak digunakan di mana pun!",
-            "dropdownOption":"Panel dengan menu tarik-ulur yang diaktifkan hanya dapat berisi opsi dengan tipe 'tiket'!",
+            "dropdownOption":"Panel dengan dropdown hanya dapat berisi opsi dengan tipe: 'ticket', 'role' atau 'sub-panel'.",
             "customInvalidVersion":"Versi yang ditetapkan dalam konfigurasi tidak sesuai! Pastikan konfigurasi Anda telah diperbarui ke versi terbaru!"
         }
     },
@@ -118,7 +118,9 @@
             "helpSwitchText":"Lihat Perintah Teks",
             "helpPage":"Halaman {0}",
             "withReason":"Dengan Alasan",
-            "withoutTranscript":"Tanpa Transkrip"
+            "withoutTranscript":"Tanpa Transkrip",
+            "blacklistAdd":"Masukkan Pengguna ke Daftar Hitam",
+            "blacklistRemove":"Lepaskan Pengguna"
         },
         "titles":{
             "created":"Tiket Dibuat",
@@ -156,7 +158,8 @@
             "topicSet":"Topik Diganti",
             "prioritySet":"Prioritas Berganti",
             "priorityGet":"Prioritas Tiket",
-            "transfer":"Tiket Ditransfer"
+            "transfer":"Tiket Ditransfer",
+            "transcripts":"Riwayat Transkrip"
         },
         "descriptions":{
             "create":"Tiket kamu telah dibuat. Klik tombol di bawah ini untuk mengaksesnya!",
@@ -249,7 +252,9 @@
             "prioritySetLog":"Prioritas tiket ini telah diubah menjadi {0} oleh {1}!",
             "prioritySetDm":"Prioritas tiket kamu telah diubah menjadi {0} di server kami!",
             "roleUpdateLog":"{0} telah memperbarui status mereka!",
-            "roleUpdateDm":"Status kamu di server kami telah diperbarui!"
+            "roleUpdateDm":"Status kamu di server kami telah diperbarui!",
+            "topicSetLog":"Prioritas tiket ini telah diatur ke {0} oleh {1}.",
+            "topicSetDm":"Prioritas tiket Anda telah diatur ke {0}."
         }
     },
     "transcripts":{
@@ -271,7 +276,9 @@
             "continue":"Hapus Tanpa Transkrip",
             "backup":"Membuat Transkrip Cadangan",
             "error":"Terjadi kesalahan saat mencoba membuat transkrip.\nApa yang ingin Anda lakukan?\n\nTiket ini tidak akan dihapus hingga Anda mengeklik salah satu tombol ini.",
-            "title":"Kesalahan Dalam Pembuatan Transkrip"
+            "title":"Kesalahan Dalam Pembuatan Transkrip",
+            "noHistory":"Pengguna ini belum memiliki transkrip.",
+            "historyNotSupported":"Riwayat transkrip saat ini hanya didukung dengan HTML Transcripts.\nRiwayat transkrip teks akan tersedia di versi mendatang."
         },
         "text":{
             "messagesTitle":"PESAN",
@@ -298,6 +305,7 @@
             "unknownPanel":"Panel Tidak Diketahui",
             "notInGuild":"Tidak Berada Di Dalam Server",
             "channelRename":"Tidak Dapat Mengganti Nama Saluran",
+            "channelCategory":"Tidak Dapat Mengubah Kategori",
             "busy":"Tidak Sedang Sibuk",
             "permissionError":"Terjadi Kesalahan Hak Akses"
         },
@@ -321,11 +329,15 @@
             "deprecatedTicket":"Saluran saat ini bukanlah tiket yang valid! Ini mungkin merupakan tiket dari versi Open Tiket yang lama!",
             "notInGuild":"Ini {0} tidak berfungsi di DM! Silakan coba lagi di server!",
             "channelRename":"Karena batasan rasio Discord, saat ini bot tidak mungkin mengganti nama saluran. Saluran akan secara otomatis diganti namanya dalam waktu 10 menit jika bot tidak di-boot ulang.",
+            "channelCategory":"Karena batas rate Discord, kategori channel tidak dapat diubah segera. Kategori akan diubah secara otomatis dalam 10 menit jika bot tetap online.",
             "channelRenameSource":"Sumber dari masalah: {0}",
             "busy":"Dapat dapat menggunakan {0}!\nTiket sedang diproses oleh bot.\n\nMohon coba beberapa saat lagi!",
             "closeBeforeMessage":"Tiket ini tidak dapat ditutup ataupun dihapus sebelum pesan dikirim oleh seseorang.",
             "closeBeforeAdminMessage":"Tiket ini tidak dapat ditutup ataupun dihapus sebelum admin tiket atau anggota tim dukungan mengirimkan pesan.",
-            "unableToCreateTicket":"Anda tidak dapat membuat tiket.."
+            "unableToCreateTicket":"Anda tidak dapat membuat tiket..",
+            "messageMissing":"Tidak dapat menemukan pesan interaksi. Gunakan perintah `{0}` sebagai gantinya.",
+            "stateExpired":"Interaksi ini sudah tidak valid atau telah kedaluwarsa. Gunakan perintah `{0}` sebagai gantinya. Kesalahan ini normal terjadi setelah pembaruan besar Open Ticket.",
+            "panelStateExpired":"Panel ini sudah tidak valid atau telah kedaluwarsa. Buat panel baru menggunakan `{0}` untuk menyelesaikan masalah. Kesalahan ini normal terjadi setelah pembaruan besar Open Ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Nilai tidak sesuai pola!",
@@ -387,6 +399,8 @@
             "syntax":"Sintaks",
             "originalName":"Nama asli",
             "newName":"Nama Yang Baru",
+            "originalCategory":"Kategori Asli",
+            "newCategory":"Kategori Baru",
             "until":"Hingga",
             "validOptions":"Opsi Yang Valid",
             "validPanels":"Panel Yang Valid",
@@ -408,6 +422,8 @@
             "participants":"Para Partisipan",
             "yes":"Ya",
             "no":"Tidak",
+            "accept":"Terima",
+            "cancel":"Batal",
             "option":"Opsi",
             "topic":"Topik",
             "uptime":"Waktu Aktif Sistem",
@@ -439,6 +455,7 @@
         "panelAutoUpdate":"Apa Anda ingin panel ini diperbarui secara otomatis ketika diubah?",
         "ticket":"Buat tiket secara instan.",
         "ticketId":"Penanda tiket yang ingin anda buat.",
+        "ticketOtherUser":"Buat tiket untuk pengguna lain.",
         "close":"Tutup tiket.",
         "delete":"Hapus tiket.",
         "deleteNoTranscript":"Hapus tiket tanpa membuat transkrip.",
@@ -504,7 +521,9 @@
         "priorityGet":"Dapatkan prioritas tiket.",
         "priorityList":"Dapatkan daftar semua tiket beserta status prioritasnya.",
         "transfer":"Alihkan kepemilikan tiket dari satu pengguna ke pengguna lain..",
-        "transferUser":"Pengguna yang akan ditransferkan."
+        "transferUser":"Pengguna yang akan ditransferkan.",
+        "transcripts":"Lihat riwayat transkrip tiket pengguna.",
+        "transcriptsUser":"Pengguna yang ingin dilihat."
     },
     "helpMenu":{
         "help":"Dapatkan daftar perintah yang tersedia.",
@@ -594,7 +613,8 @@
     "panel":{
         "selectTicket":"Pilih tiket kamu",
         "selectRole":"Pilih status kamu",
-        "selectOption":"Pilih opsi kamu"
+        "selectOption":"Pilih opsi kamu",
+        "selectPriorityLevel":"Pilih tingkat prioritas"
     },
     "priorities":{
         "urgent":"Sangat Penting",

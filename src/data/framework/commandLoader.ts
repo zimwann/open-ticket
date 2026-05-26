@@ -1,19 +1,9 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 import * as discord from "discord.js"
 
 const lang = opendiscord.languages
 
-/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
- * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
- * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
- * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
- * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
- * - Update the Open Ticket Documentation.
- * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
- * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
- */
-
-export const loadAllSlashCommands = async () => {
+export async function loadAllSlashCommands(){
     const commands = opendiscord.client.slashCommands
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     if (!generalConfig) return
@@ -24,8 +14,8 @@ export const loadAllSlashCommands = async () => {
     if (!generalConfig.data.slashCommands) return
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     //HELP
@@ -68,7 +58,21 @@ export const loadAllSlashCommands = async () => {
         description:lang.getTranslation("commands.ticket"),
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
-        options:[
+        options:(generalConfig.data.ticketSystem.enableCreateTicketForOtherUser) ? [
+            {
+                name:"id",
+                description:lang.getTranslation("commands.ticketId"),
+                type:acot.String,
+                required:true,
+                autocomplete:true
+            },
+            {
+                name:"user",
+                description:lang.getTranslation("commands.ticketOtherUser"),
+                type:acot.User,
+                required:false,
+            }
+        ] : [
             {
                 name:"id",
                 description:lang.getTranslation("commands.ticketId"),
@@ -97,13 +101,13 @@ export const loadAllSlashCommands = async () => {
     }))
 
     //DELETE
-    if (allowedCommands.includes("delete") && generalConfig.data.system.enableDeleteWithoutTranscript) commands.add(new api.ODSlashCommand("opendiscord:delete",{
+    if (allowedCommands.includes("delete")) commands.add(new api.ODSlashCommand("opendiscord:delete",{
         type:act.ChatInput,
         name:"delete",
         description:lang.getTranslation("commands.delete"),
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
-        options:[
+        options:(generalConfig.data.ticketSystem.enableDeleteWithoutTranscript) ? [
             {
                 name:"reason",
                 description:lang.getTranslation("commands.reason"),
@@ -116,15 +120,7 @@ export const loadAllSlashCommands = async () => {
                 type:acot.Boolean,
                 required:false
             }
-        ]
-    }))
-    else if (allowedCommands.includes("delete")) commands.add(new api.ODSlashCommand("opendiscord:delete",{
-        type:act.ChatInput,
-        name:"delete",
-        description:lang.getTranslation("commands.delete"),
-        contexts:[discord.InteractionContextType.Guild],
-        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
-        options:[
+        ] : [
             {
                 name:"reason",
                 description:lang.getTranslation("commands.reason"),
@@ -640,9 +636,26 @@ export const loadAllSlashCommands = async () => {
             }
         ]
     }))
+
+    //TRANSCRIPTS
+    if (allowedCommands.includes("transcripts")) commands.add(new api.ODSlashCommand("opendiscord:transcripts",{
+        type:act.ChatInput,
+        name:"transcripts",
+        description:lang.getTranslation("commands.transcripts"),
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"user",
+                description:lang.getTranslation("commands.transcriptsUser"),
+                type:acot.User,
+                required:true
+            }
+        ]
+    }))
 }
 
-export const loadAllTextCommands = async () => {
+export async function loadAllTextCommands(){
     const commands = opendiscord.client.textCommands
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     if (!generalConfig) return
@@ -664,8 +677,8 @@ export const loadAllTextCommands = async () => {
     })
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     //HELP
@@ -1214,9 +1227,25 @@ export const loadAllTextCommands = async () => {
             }
         ]
     }))
+
+    //TRANSCRIPTS
+    if (allowedCommands.includes("transcripts")) commands.add(new api.ODTextCommand("opendiscord:transcripts",{
+        name:"transcripts",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"user",
+                type:"user",
+                required:true
+            }
+        ]
+    }))
 }
 
-export const loadAllContextMenus = async () => {
+export async function loadAllContextMenus(){
     const menus = opendiscord.client.contextMenus
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     if (!generalConfig) return
