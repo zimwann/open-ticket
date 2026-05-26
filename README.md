@@ -111,10 +111,13 @@ The bot is fully translated into <b>38+ languages</b> and has been battle-tested
 > - **A VPS (Virtual Private Server)** - Extra customisation & more stability. Recommended for most servers.
 > - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
 
-## 📸 Preview
-<img alt="An example of a panel." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-examples.png">
-<img alt="An example of a ticket message." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/ticket-example.png">
-<img alt="Examples of built-in commands." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/command-examples.png">
+## 📸 Previews
+<img alt="Preview of: Advanced Ticket Management" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-1.png">
+<img alt="Preview of: Customisable Ticket Panels" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-2.png">
+<img alt="Preview of: Modal Questions & Forms" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-3.png">
+<img alt="Preview of: Detailed Statistics & Insights" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-4.png">
+<img alt="Preview of: 30+ Powerful Commands" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-5.png">
+<img alt="Preview of: Buttons, Transcripts, Limits & More!" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-6.png">
 
 ## 💬 Translations
 With the amazing support of our translators, we've been able to translate Open Ticket in more than **38 languages**!
